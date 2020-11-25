@@ -1,8 +1,10 @@
-package com.example.rma;
+package com.example.rma.controller;
 
 import com.example.rma.domain.Message;
+import com.example.rma.domain.User;
 import com.example.rma.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class GreetingController {
+public class MainController {
     @Autowired
     private MessageRepository messageRepository;
 
@@ -29,11 +31,12 @@ public class GreetingController {
     }
 
     @PostMapping("/main")
-    public String addMessage(@RequestPart String text,
+    public String addMessage(@AuthenticationPrincipal User user,
+            @RequestPart String text,
                              @RequestPart String tag,
                              Map<String, Object> model)
     {
-        Message message =  new Message(text, tag);
+        Message message =  new Message(text, tag, user );
         messageRepository.save(message);
         return "main";
     }
