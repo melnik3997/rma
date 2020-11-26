@@ -1,5 +1,6 @@
-<html>
-<body>
+<#import "parts/common.ftlh" as c >
+<#import "parts/login.ftlh" as l >
+<@c.page>
     <div>
         <form action="/logout" method="post" enctype='multipart/form-data'>
             <input type="submit" value="Sign Out"/>
@@ -28,6 +29,4 @@
            <strong>{{AuthorName}}</strong>
         </div>
     {{/messages}}
-</body>
-
-</html>
+</@c.page>
