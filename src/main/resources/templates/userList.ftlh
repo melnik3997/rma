@@ -11,11 +11,11 @@
     </tr>
     </thead>
     <tbody>
-<#list users as user>
+<#list userList as user>
     <tr>
         <td>${user.username}</td>
         <td><#list user.role as role> ${role}<#sep>, </#list> </td>
-        <td><a href="/user/${user.id}"> Редактировать</a>/td>
+        <td><a href="/user/${user.id}"> Редактировать </a></td>
     </tr>
 
 </#list>

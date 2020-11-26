@@ -14,9 +14,9 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String userName;
+    private String username;
 
-    private String userPassword;
+    private String password;
 
     private boolean active;
 
@@ -37,20 +37,18 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    @Override
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getUserPassword() {
-        return userPassword;
-    }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isActive() {
@@ -76,13 +74,9 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return getUserPassword();
+        return password;
     }
 
-    @Override
-    public String getUsername() {
-        return getUserName();
-    }
 
     @Override
     public boolean isAccountNonExpired() {

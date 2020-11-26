@@ -1,32 +1,35 @@
 <#import "parts/common.ftlh" as c >
 <#import "parts/login.ftlh" as l >
 <@c.page>
-    <div>
-        <form action="/logout" method="post" enctype='multipart/form-data'>
-            <input type="submit" value="Sign Out"/>
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        </form>
-    </div>
+<@l.logout />
+<span><a href="/user">Список пользователей</a></span>
     <div>
         <form method="post" enctype='multipart/form-data'>
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
             <input type="text" name="text" placeholder="Введите сообщение">
             <input type="text" name="tag" placeholder="tag">
+            <input type="file" name="file" >
             <button type="submit">Добавить</button>
         </form>
     </div>
     <div>Список сообщений</div>
-    <form method="post" action="filter" enctype='multipart/form-data'>
-        <input type="text" name="filter">
+    <form method="get" action="/main" enctype='multipart/form-data'>
+        <input type="text" name="filter" value="${filter!}">
         <button type="submit">Найти</button>
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     </form>
-    {{#messages}}
+    <#list messages as message>
         <div>
-          <b>{{id}}</b>
-          <span>{{text}}</span>
-           <i>{{tag}}</i>
-           <strong>{{AuthorName}}</strong>
+          <b>${message.id}</b>
+          <span>${message.text}</span>
+           <i>${message.tag}</i>
+           <strong>${message.authorName}</strong>
+           <div>
+                <#if message.fileName??>
+                    <img src="/img/${message.fileName}">
+                </#if>
+           </div>
         </div>
-    {{/messages}}
+    <#else>
+        Нет сообщений
+    </#list>
 </@c.page>

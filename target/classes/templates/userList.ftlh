@@ -1,0 +1,24 @@
+<#import "parts/common.ftlh" as c >
+<@c.page>
+Список пользователей
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+<#list userList as user>
+    <tr>
+        <td>${user.username}</td>
+        <td><#list user.role as role> ${role}<#sep>, </#list> </td>
+        <td><a href="/user/${user.id}"> Редактировать </a></td>
+    </tr>
+
+</#list>
+    </tbody>
+</table>
+</@c.page>

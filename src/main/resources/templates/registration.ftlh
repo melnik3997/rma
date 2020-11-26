@@ -2,9 +2,8 @@
 <#import "parts/login.ftlh" as l >
 <@c.page>
 Add new user
-{{#message}}
-    {{message}}
-{{/message}}
-    <@l.login "/registration"/>
+${message!}
+
+<@l.login "/registration"/>
 
 </@c.page>

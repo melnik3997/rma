@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 
 import java.util.Collections;
 import java.util.Map;
@@ -24,7 +23,7 @@ public class RegistrationController {
     }
     @PostMapping("/registration")
     public String addNewUsr(User user, Map<String, Object> model){
-        User userFromDb =  userRepo.findByUserName(user.getUserName());
+        User userFromDb =  userRepo.findByUsername(user.getUsername());
 
         if(userFromDb != null) {
             model.put("message", "Данный пользователь уже есть!");
