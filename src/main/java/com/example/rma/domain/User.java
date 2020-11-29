@@ -24,10 +24,11 @@ public class User implements UserDetails {
     @CollectionTable(name = "tUserRole", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> role;
-/*
-    public User() {
 
-    }*/
+    public boolean isAdmin(){
+
+        return role.contains(Role.ADMIN);
+    }
 
     public Long getId() {
         return id;
