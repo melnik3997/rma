@@ -20,9 +20,32 @@
         </li>
       </#if>
     </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
     <#if isAut>
-        <div class="navbar-text mr-3">${name}</div>
-        <@l.logout />
+        <div class=" mr-2 float-right">
+       <ul class="navbar-nav mr-auto float-right">
+        <li class="nav-item dropdown ml-10">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            ${name}
+          </a>
+          <div class="dropdown-menu  dropdown-menu-right" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/user/profile">Профиль</a>
+            <div class="dropdown-divider"></div>
+            <div><@l.logout /></div>
+          </div>
+        </li>
+        </div>
+ </ul>
+    <#else>
+    <div class="float-right">
+        <a class="nav-link-primary ml-2 float-right" href="/login">Авторизация</a>
+        </div>
     </#if>
+
+
   </div>
 </nav>
