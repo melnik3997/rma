@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Set;
 
@@ -14,12 +16,16 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "Имя пользователя не должно быть пустым")
     private String username;
 
+    @NotBlank(message = "Пароль не может быть пустым")
     private String password;
 
     private boolean active;
 
+    @Email(message = "Email не корректный")
+    @NotBlank(message = "Email не может быть пустым")
     private String email;
     private String activationCode;
 
@@ -27,6 +33,15 @@ public class User implements UserDetails {
     @CollectionTable(name = "tUserRole", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> role;
+
+    public User() {
+    }
+
+    public User(@NotBlank(message = "Имя пользователя не должно быть пустым") String username, @NotBlank(message = "Пароль не может быть пустым") String password, @Email(message = "Email не корректный") @NotBlank(message = "Email не может быть пустым") String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 
     public boolean isAdmin(){
 
@@ -117,4 +132,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return isActive();
     }
+
 }

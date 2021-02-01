@@ -9,20 +9,23 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="/">Home</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="/main">Сообщения</a>
       </li>
       <#if isAdmin>
         <li class="nav-item">
           <a class="nav-link" href="/user">Список пользователей</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/userCreate">Добавление пользователя</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/enterprise">Предприятия</a>
+        </li>
       </#if>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
     </form>
 
     <#if isAut>
@@ -38,8 +41,9 @@
             <div><@l.logout /></div>
           </div>
         </li>
+         </ul>
         </div>
- </ul>
+
     <#else>
     <div class="float-right">
         <a class="nav-link-primary ml-2 float-right" href="/login">Авторизация</a>

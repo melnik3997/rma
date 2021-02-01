@@ -2,6 +2,7 @@ package com.example.rma.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,18 @@ public class MailSender {
     private String username;
 
     public void send(String emailTo, String subject, String messages){
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        try {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-        mailMessage.setFrom(username);
-        mailMessage.setTo(emailTo);
-        mailMessage.setSubject(subject);
-        mailMessage.setText(messages);
+            mailMessage.setFrom(username);
+            mailMessage.setTo(emailTo);
+            mailMessage.setSubject(subject);
+            mailMessage.setText(messages);
 
-        mailSender.send(mailMessage);
+            mailSender.send(mailMessage);
+        } catch (MailAuthenticationException e) {
+            System.out.println("Ошибка аунтификации");
+        }
     }
 
 }

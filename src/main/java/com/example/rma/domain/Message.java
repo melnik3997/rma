@@ -1,6 +1,9 @@
 package com.example.rma.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Message {
@@ -12,6 +15,8 @@ public class Message {
     @JoinColumn(name= "user_id")
     private User author;
 
+    @NotBlank(message = "Заполните поле сообщения")
+    @Length(max=2048 , message = "Максимальная длина 2048 символов")
     private String text;
     private String tag;
 

@@ -4,9 +4,11 @@ import com.example.rma.domain.Role;
 import com.example.rma.domain.User;
 import com.example.rma.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,6 +21,8 @@ public class UserService implements UserDetailsService {
     private UserRepo userRepo;
     @Autowired
     private MailSender mailSender;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String userName)
@@ -27,26 +31,57 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean addUser(User user){
-        User userFromDb =  userRepo.findByUsername(user.getUsername());
-
-        if(userFromDb != null) {
+        if (checkUserName(user.getUsername()))
             return false;
-        }
+
         user.setActive(true);
         user.setRole(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
-
-        sendMailActivation(user);
-
+        if(!StringUtils.isEmpty(user.getEmail())) {
+            sendMailActivation(user);
+        }
         return true;
 
     }
 
+    public boolean checkUserName(String userName) {
+        User userFromDb =  userRepo.findByUsername(userName);
+
+        if(userFromDb != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public Map<String, String> addUserForAdmin(String userName, String email){
+        Map<String, String> send = new HashMap<>();
+
+        if(StringUtils.isEmpty(userName)){
+            send.put("userNameError", "Имя пользователя не должно быть пустым");
+        }
+        if(StringUtils.isEmpty(email)){
+            send.put("emailError", "Email не должен быть пустым");
+        }
+        if(checkUserName(userName))
+            send.put("userNameError", "Пользователь с таким имененм уже есть");
+
+        if(send.size() == 0){
+           User user =  new User(userName,"123456",email );
+           boolean result = addUser(user);
+           if(!result){
+               send.put("errorCreate", "Ошибка создания пользователя");
+           }
+        }
+        return send;
+    }
+
     public void sendMailActivation(User user) {
-        if(!StringUtils.isEmpty(user.getEmail())){
+
+        if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
-                    "Hello %s! \n"+
+                    "Hello %s! \n" +
                             " http://localhost:8080/activate/%s",
                     user.getUsername(), user.getActivationCode()
 
@@ -54,6 +89,7 @@ public class UserService implements UserDetailsService {
             mailSender.send(user.getEmail(), "Activation code RMA", message);
 
         }
+
     }
 
     public boolean activateUser(String code) {
@@ -105,7 +141,7 @@ public class UserService implements UserDetailsService {
         }
 
         if(!StringUtils.isEmpty(password)) {
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
         }
 
         userRepo.save(user);
