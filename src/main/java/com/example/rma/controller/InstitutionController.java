@@ -54,9 +54,10 @@ public class InstitutionController {
                                   BindingResult bindingResult,
                                   @RequestParam Map<String, String> form,
                                   @RequestParam("enterpriseId") Enterprise enterprise,
+                                  @RequestParam(required = false, name = "institutionId" ) Long institutionId,
                                   String dateOfBirth,
                                   Model model)  {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
         boolean error = false;
         try {
             institution.setDateOfBirth(formatter.parse(dateOfBirth));
@@ -83,6 +84,9 @@ public class InstitutionController {
             return "institutionForm";
         }
         institution.setEnterprise(enterprise);
+        if (institutionId != null)
+            institution.setId(institutionId);
+
         institutionRepo.save(institution);
 
         return "redirect:/user";

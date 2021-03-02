@@ -39,9 +39,10 @@ public class UserService implements UserDetailsService {
         user.setActivationCode(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
-        if(!StringUtils.isEmpty(user.getEmail())) {
+        //TODO  отправка почты
+       /* if(!StringUtils.isEmpty(user.getEmail())) {
             sendMailActivation(user);
-        }
+        }*/
         return true;
 
     }

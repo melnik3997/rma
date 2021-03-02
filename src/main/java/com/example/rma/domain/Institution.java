@@ -24,11 +24,16 @@ public class Institution {
 
     private String secondName;
 
+    @Column(name = "date_Of_Birth", columnDefinition = "DATE")
     private Date dateOfBirth;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "enterprise_id")
     private Enterprise enterprise;
+
+    private String phoneNumber;
+
+    private String skypeName;
 
     public String getLastName() {
         return lastName;
@@ -85,4 +90,26 @@ public class Institution {
     public void setEnterprise(Enterprise enterprise) {
         this.enterprise = enterprise;
     }
+
+    public Long getEnterpriseID (){
+        return enterprise.getId();
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getSkypeName() {
+        return skypeName;
+    }
+
+    public void setSkypeName(String skypeName) {
+        this.skypeName = skypeName;
+    }
+
+    public String getEnterpriseBrief(){return enterprise.getBrief();}
 }
