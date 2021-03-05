@@ -3,7 +3,10 @@ package com.example.rma.repository;
 import com.example.rma.domain.Settings;
 import com.example.rma.domain.dto.SettingsDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,4 +33,28 @@ public interface SettingsRepo extends JpaRepository<Settings, Long> {
             "\t\tVal varchar\n" +
             "\t)", nativeQuery = true)
     public List<Object[]> findAllSettings();
+
+    @Transactional
+    @Modifying
+    @Query("delete from Settings  where sId = :seId")
+    public void deleteBySID(@Param("seId") final Long sId);
+
+    @Query(value ="select s1.sId, s1.sysName, s1.value \n" +
+            "\t\t\t      from Settings  s \n" +
+            "\t\t\t     inner join Settings s1\n" +
+            "\t\t\t             on s1.sId = s.sId\n" +
+            "\t\t\t     where s.sysName = :sysName\n" +
+            "\t\t\t       and s.value = :value")
+    public List<Object[]>  findSettingsByValue(@Param("sysName") String sysName , @Param("value") String value);
+
+    @Query(value ="select s.sId, s.sysName, s.value \n" +
+            "\t\t\t  from Settings  s \n" +
+            "\t\t\t where s.sId = :sId")
+    public List<Object[]>  findSettingsBySId(@Param("sId") final Long sId);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("update Settings set value = :value   where sId = :sId and sysName = :sysName")
+    public void editBySIdAndSysName(@Param("sId") final Long sId, @Param("sysName") String sysName, @Param("value") String value);
 }
+

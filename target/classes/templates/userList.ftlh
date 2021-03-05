@@ -23,7 +23,6 @@
            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
              <a class="dropdown-item" href="/user/${user.id}">Редактировать</a>
              <a class="dropdown-item" href="/institution/${user.id}">Основная информация</a>
-             <a class="dropdown-item" href="#">Something else here</a>
            </div>
           </div>
         </td>
