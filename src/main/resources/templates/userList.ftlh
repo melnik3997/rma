@@ -5,8 +5,8 @@
 <table class="table table-hover mb-3">
     <thead>
     <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Role</th>
+        <th scope="col">Логин</th>
+        <th scope="col">Роль</th>
         <th scope="col"></th>
     </tr>
     </thead>

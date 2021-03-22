@@ -89,6 +89,15 @@
         </#if>
       </div>
     </div>
+<div class="form-group  row">
+  <label class="col-sm-2 col-form-label">Фото</label>
+  <div class="col-sm-8">
+  <div class="custom-file">
+    <input class="custom-file-input" type="file" name="file" id="customFile">
+    <label class="custom-file-label" for="customFile">Добавить изображение</label>
+  </div>
+  </div>
+</div>
   <button class="btn btn-primary" type="submit">Сохранить</button>
 </form>
 </@c.page>

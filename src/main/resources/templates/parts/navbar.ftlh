@@ -13,11 +13,16 @@
                 <a class="nav-link" href="/main">Сообщения</a>
             </li>
             <#if isAdmin>
-            <li class="nav-item">
-                <a class="nav-link" href="/user">Список пользователей</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/userCreate">Добавление пользователя</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Пользователи
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/user">Список пользователей</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/userCreate">Добавление пользователя</a>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/enterprise">Предприятия</a>

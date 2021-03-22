@@ -3,6 +3,7 @@ package com.example.rma.controller;
 import com.example.rma.domain.Message;
 import com.example.rma.domain.User;
 import com.example.rma.repository.MessageRepository;
+import com.example.rma.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +28,9 @@ import java.util.stream.Collectors;
 public class MainController {
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private FileService fileService;
 
     @Value("${upload.path}")
     private String pathFile;
@@ -66,17 +70,9 @@ public class MainController {
             message.setAuthor(user);
 
             if (file != null && !file.getOriginalFilename().isEmpty()) {
-                File uploadDir = new File(pathFile);
+                String resultFileName = fileService.saveFile(file);
 
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-                String uuidFile = UUID.randomUUID().toString();
-                String resultFileName = uuidFile + "." + file.getOriginalFilename();
-
-                file.transferTo(new File(pathFile + "/" + resultFileName));
                 message.setFileName(resultFileName);
-
             }
             messageRepository.save(message);
         }

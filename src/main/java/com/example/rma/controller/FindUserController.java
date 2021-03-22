@@ -42,8 +42,7 @@ public class FindUserController {
 
         }
         else {
-            model.addAttribute("institutions", new ArrayList<Institution>() {
-            });
+            model.addAttribute("institutions", institutionRepo.findAll());
         }
 
         return "/findUser";

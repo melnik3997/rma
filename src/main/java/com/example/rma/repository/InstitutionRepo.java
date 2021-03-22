@@ -11,4 +11,5 @@ public interface InstitutionRepo extends JpaRepository<Institution, Long> {
     Institution findByUser(User user);
 
     List<Institution> findByLastName(String lastName);
+
 }

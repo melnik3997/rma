@@ -4,11 +4,12 @@
     <#list institutions as institution>
     <div class="card my-3">
         <#if institution.fileName??>
-        <img class="card-img-top" src="/img/${message.fileName}">
+        <img class="card-img-top" src="/img/${institution.fileName}">
     </#if>
     <div class="m-2">
         <h5 class="card-title">${institution.lastName} ${institution.firstName} <#if institution.secondName??> ${institution.secondName} </#if> </h5>
-        <p class="card-text">${institution.phoneNumber}</p>
+        <p class="card-text">Тел.  ${institution.phoneNumber} <br>
+        Skype  ${institution.skypeName}</p>
     </div>
 
     <div class="card-footer text-muted">
