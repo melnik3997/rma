@@ -1,7 +1,10 @@
 package com.example.rma.service;
 
+import com.example.rma.domain.Enterprise;
+import com.example.rma.domain.Institution;
 import com.example.rma.domain.Role;
 import com.example.rma.domain.User;
+import com.example.rma.repository.InstitutionRepo;
 import com.example.rma.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
@@ -23,6 +26,8 @@ public class UserService implements UserDetailsService {
     private MailSender mailSender;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private InstitutionRepo institutionRepo;
 
     @Override
     public UserDetails loadUserByUsername(String userName)
@@ -45,6 +50,11 @@ public class UserService implements UserDetailsService {
         }*/
         return true;
 
+    }
+
+    public List<Institution> getByEnterprise(Enterprise enterprise){
+
+        return institutionRepo.findByEnterprise(enterprise);
     }
 
     public boolean checkUserName(String userName) {

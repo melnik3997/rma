@@ -49,6 +49,10 @@ public class Institution {
         return lastName;
     }
 
+    public String getFullName() {
+        return lastName + " " + firstName + " " + secondName;
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -67,6 +71,10 @@ public class Institution {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getUserId() {
+        return user.getId();
     }
 
     public String getFirstName() {

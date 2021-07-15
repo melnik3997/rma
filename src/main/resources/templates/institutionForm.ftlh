@@ -38,7 +38,7 @@
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Дата рождения</label>
       <div class="col-sm-8">
-        <input class="form-control ${(dateOfBirthError??)?string('is-invalid','')}" type="text" name="dateOfBirth" placeholder="Дата рождения"  id="exampleDateOfBirth" >
+        <input class="form-control ${(dateOfBirthError??)?string('is-invalid','')}" type="text" name="dateOfBirthS" placeholder="Дата рождения"  id="exampleDateOfBirth" >
       </div>
       <#if dateOfBirthError??>
         <div class="invalid-feedback">${dateOfBirthError}</div>
@@ -49,7 +49,7 @@
                    timepicker: false,
                    datepicker: true,
                    format: 'd.m.Y'
-                   <#if institution??>,value: '${institution.dateOfBirth}' <#else> <#if dateOfBirth??> value="${dateOfBirth}" </#if> </#if>
+                   <#if institution??>,value: '${institution.dateOfBirth?datetime}' <#else> <#if dateOfBirth??> ,value:"${dateOfBirth?datetime}" </#if> </#if>
                    ,mask: true
                });
       </script>

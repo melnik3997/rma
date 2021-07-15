@@ -16,7 +16,18 @@
     <tr>
         <td>${enterprise.name}</td>
         <td>${enterprise.brief}</td>
-        <td><a href="/enterprise/${enterprise.id}"> Редактировать </a></td>
+        <td>
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Опции
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="/enterprise/${enterprise.id}">Редактировать</a>
+                    <a class="dropdown-item" href="/subdivisionEnterprise/${enterprise.id}">Подразделения</a>
+                    <a class="dropdown-item" href="/subdivisionTree/${enterprise.id}">Дерево</a>
+                </div>
+            </div>
+        </td>
     </tr>
 
 </#list>

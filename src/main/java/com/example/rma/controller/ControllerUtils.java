@@ -26,7 +26,8 @@ public class ControllerUtils {
 
     static Map<String, Object> parsersAttribute(Object object) {
         Map<String,Object> model = new HashMap<>();
-        for (Field field : Institution.class.getDeclaredFields()) {
+
+        for (Field field : object.getClass().getDeclaredFields()){
             try {
                 Method fieldGetter = object.getClass().getMethod("get"+field.getName().substring(0,1).toUpperCase()+field.getName().substring(1) );
                 model.put(field.getName(),fieldGetter.invoke(object) );

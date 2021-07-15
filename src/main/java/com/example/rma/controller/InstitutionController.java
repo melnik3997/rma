@@ -64,7 +64,7 @@ public class InstitutionController {
                                   @RequestParam("enterpriseId") Enterprise enterprise,
                                   @RequestParam(required = false, name = "institutionId" ) Long institutionId,
                                   @RequestParam("file") MultipartFile file,
-                                  String dateOfBirth,
+                                  @RequestParam("dateOfBirthS") String dateOfBirth,
                                   Model model) throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
         boolean error = false;
@@ -90,6 +90,7 @@ public class InstitutionController {
             model.addAttribute("institution", institutionRepo.findByUser(user));
             model.addAttribute("enterpriseList", enterpriseRepo.findAll());
             model.addAllAttributes(ControllerUtils.parsersAttribute(institution));
+            System.out.println( "model " + model);
             return "institutionForm";
         }
         institution.setEnterprise(enterprise);
