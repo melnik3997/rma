@@ -69,6 +69,10 @@ public class Institution {
         return user;
     }
 
+    public String getUserName() {
+        return user.getUsername();
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -130,4 +134,21 @@ public class Institution {
     }
 
     public String getEnterpriseBrief(){return enterprise.getBrief();}
+
+
+    @Override
+    public String toString() {
+        return "Institution{" +
+                "id=" + id +
+                ", user=" + user +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", enterprise=" + enterprise +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", skypeName='" + skypeName + '\'' +
+                ", fileName='" + fileName + '\'' +
+                '}';
+    }
 }

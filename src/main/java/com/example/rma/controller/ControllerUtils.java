@@ -1,6 +1,7 @@
 package com.example.rma.controller;
 
 import com.example.rma.domain.Institution;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -22,6 +23,17 @@ public class ControllerUtils {
 
         Map<String, String> errorsMap = bindingResult.getFieldErrors().stream().collect(collector);
         return errorsMap;
+    }
+    public static boolean checkErrorBinding(BindingResult bindingResult, Model model ){
+        boolean error = false;
+        if(bindingResult.hasErrors()){
+            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
+            model.mergeAttributes(errorsMap);
+            if(errorsMap.size() != 0){
+                error = true;
+            }
+        }
+        return error;
     }
 
     static Map<String, Object> parsersAttribute(Object object) {

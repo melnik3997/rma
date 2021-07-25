@@ -1,5 +1,24 @@
 <#import "login.ftlh" as l >
 <#include "sec.ftlh">
+<style type="text/css">
+.dropdown-submenu {
+position: relative;
+}
+
+.dropdown-submenu a::after {
+transform: rotate(-90deg);
+position: absolute;
+right: 6px;
+top: .8em;
+}
+
+.dropdown-submenu .dropdown-menu {
+top: 0;
+left: 100%;
+margin-left: .1rem;
+margin-right: .1rem;
+}
+</style>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">RMA</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -27,8 +46,21 @@
             <li class="nav-item">
                 <a class="nav-link" href="/enterprise">Предприятия</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/settings">Настройки</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Настройки
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" href="/settings">Системные настройки</a></li>
+                    <li class="dropdown-divider"></li>
+                    <li class="dropdown-submenu">
+                        <a class="dropdown-item dropdown-toggle" href="#">Системные справочники</a>
+                        <ul class="dropdown-menu">
+                            <li> <a class="dropdown-item" href="/post">Должности</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </li>
         </#if>
         </ul>
@@ -59,7 +91,23 @@
             <a class="nav-link-primary ml-2 float-right" href="/login">Авторизация</a>
         </div>
     </#if>
-
-
     </div>
 </nav>
+
+<script>
+$('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+  if (!$(this).next().hasClass('show')) {
+    $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+  }
+  var $subMenu = $(this).next(".dropdown-menu");
+  $subMenu.toggleClass('show');
+
+
+  $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+    $('.dropdown-submenu .show').removeClass("show");
+  });
+
+
+  return false;
+});
+</script>

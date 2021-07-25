@@ -2,3 +2,4 @@
 /target/*
 /target/*
 /target/classes/**
+/node_modules/*

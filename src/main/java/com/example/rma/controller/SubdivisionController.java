@@ -36,13 +36,9 @@ public class SubdivisionController {
     @GetMapping("/subdivisionEnterprise/{enterprise}")
     public String getSubdivisionList(@PathVariable Enterprise enterprise,
                                      Model model) throws JsonProcessingException {
-        List<Subdivision> subdivisionList = subdivisionService.findAllByEnterprise(enterprise);
+        List<Subdivision> subdivisionList = subdivisionService.findByEnterprise(enterprise);
         model.addAttribute("subdivisionList",subdivisionList);
         model.addAttribute("enterprise",enterprise);
-
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(subdivisionService.findByEnterpriseAndParent(enterprise, null));
-        System.out.println(json);
         return "subdivisionList";
     }
 
@@ -73,6 +69,7 @@ public class SubdivisionController {
 
         getDataForAdd(enterprise, model);
         model.addAttribute("subdivisionModel", subdivision);
+        model.addAttribute("institutionLeader", subdivisionService.getInstitutionBySubdivision(subdivision));
         model.addAttribute("subdivisionModelId", subdivision.getId());
 
         return "subdivisionForm";
@@ -85,10 +82,10 @@ public class SubdivisionController {
         model.addAttribute("enterpriseList",enterpriseList);
         model.addAttribute("enterpriseDisabled",true);
 
-        model.addAttribute("parentList", subdivisionService.findAllByEnterprise(enterprise));
+        model.addAttribute("parentList", subdivisionService.findByEnterprise(enterprise));
         model.addAttribute("parentRequired",false);
 
-        model.addAttribute("institutionList",userService.getByEnterprise(enterprise));
+      //  model.addAttribute("institutionList",userService.getByEnterprise(enterprise));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -97,10 +94,11 @@ public class SubdivisionController {
                                    @Valid Subdivision subdivision,
                                    BindingResult bindingResult,
                                    @RequestParam(required = false, name = "parentId") Subdivision parent,
-                                   @RequestParam("leaderId") User leader,
+                                   @RequestParam(name = "leaderId", required = false) User leader,
                                    @RequestParam(required = false, name = "subdivisionId" ) Long subdivisionId,
                                    Model model)  {
-        boolean error = CheckErrorBinding(bindingResult, model);
+        boolean error = ControllerUtils.checkErrorBinding(bindingResult, model);
+
         subdivision.setLeader(leader);
         subdivision.setEnterprise(enterprise);
         subdivision.setParent(parent);
@@ -109,6 +107,7 @@ public class SubdivisionController {
             return "subdivisionForm";
         }
         Map<String, String> result = subdivisionService.addSubdivision(subdivision);
+
         if (result.size() > 0){
             model.mergeAttributes(result);
             getDataForError(enterprise, subdivision, model);
@@ -117,21 +116,16 @@ public class SubdivisionController {
         return "redirect:/subdivisionEnterprise/" + enterprise.getId() ;
     }
 
-    private boolean CheckErrorBinding(BindingResult bindingResult, Model model ){
-        boolean error = false;
-        if(bindingResult.hasErrors()){
-            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
-            model.mergeAttributes(errorsMap);
-            if(errorsMap.size() != 0){
-                error = true;
-            }
-        }
-        return error;
-    }
+
 
     private void getDataForError( Enterprise enterprise,  Subdivision subdivision, Model model) {
         getDataForAdd(enterprise, model);
-        model.addAllAttributes(ControllerUtils.parsersAttribute(subdivision));
+        model.addAttribute("institutionLeader", subdivisionService.getInstitutionBySubdivision(subdivision));
+        if(subdivision.getId() == null) {
+            model.addAllAttributes(ControllerUtils.parsersAttribute(subdivision));
+        }else{
+            model.addAttribute("subdivisionModel", subdivision);
+        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -143,7 +137,7 @@ public class SubdivisionController {
                                      @RequestParam(required = false, name = "parentId") Subdivision parent,
                                      @RequestParam("leaderId") User leader,
                                      Model model) {
-        boolean error = CheckErrorBinding(bindingResult, model);
+        boolean error = ControllerUtils.checkErrorBinding(bindingResult, model);
         subdivision.setLeader(leader);
         subdivision.setEnterprise(enterprise);
         subdivision.setParent(parent);
@@ -164,10 +158,16 @@ public class SubdivisionController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("subdivisionEnterprise/{enterprise}/delete/{subdivision}")
     public String deleteSubdivision( @PathVariable(name = "enterprise") Enterprise enterprise,
-                                   @PathVariable(name = "subdivision") Long subdivisionId,
+                                   @PathVariable(name = "subdivision") Subdivision subdivision,
                                    Model model) {
 
-        System.out.println("Вызов");
+        Map<String, String> result = subdivisionService.delete(subdivision);
+
+        if (result.size() > 0){
+            model.mergeAttributes(result);
+            getDataForError(enterprise, subdivision, model);
+            return "subdivisionForm";
+        }
         return "redirect:/subdivisionEnterprise/" + enterprise.getId() ;
     }
 

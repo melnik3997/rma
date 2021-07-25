@@ -1,5 +1,7 @@
-package com.example.rma.domain;
+package com.example.rma.domain.dto;
 
+
+import com.example.rma.domain.Subdivision;
 
 public class Node {
 

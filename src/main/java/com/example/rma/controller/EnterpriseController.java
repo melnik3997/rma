@@ -71,9 +71,9 @@ public class EnterpriseController {
 
         if(bindingResult.hasErrors()){
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
-            System.out.println(errorsMap);
+
             model.mergeAttributes(errorsMap);
-            model.addAttribute("message", enterprise);
+            model.addAttribute("enterprise", enterprise);
             return "enterpriseEdit";
         }
         else {
@@ -87,7 +87,13 @@ public class EnterpriseController {
     @PostMapping("/deleteEnterprise")
     public String saveDeleteEnterprise(@RequestParam("enterpriseId") Enterprise enterprise,
                                        Model model) {
-        enterpriseService.delete(enterprise);
+
+        Map<String, String> errorsMap =  enterpriseService.delete(enterprise);
+        if(errorsMap.size() != 0) {
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("enterprise", enterprise);
+            return "enterpriseEdit";
+        }
         return "redirect:/enterprise";
 
     }

@@ -5,13 +5,21 @@ import com.example.rma.repository.EnterpriseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EnterpriseService {
 
     @Autowired
     private EnterpriseRepo enterpriseRepo;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private SubdivisionService subdivisionService;
 
     public List<Enterprise> findAll(){
         return enterpriseRepo.findAll();
@@ -21,7 +29,29 @@ public class EnterpriseService {
         enterpriseRepo.save(enterprise);
     }
 
-    public void delete(Enterprise enterprise){
-        enterpriseRepo.delete(enterprise);
+    public Map<String, String> delete(Enterprise enterprise){
+        Map<String, String> errors = new HashMap<>();
+        boolean error = false;
+
+        if(checkInstitutionByEnterprise(enterprise)){
+            error = true;
+            errors.put("deleteError", "Не возможно удалить организацию так как в ней есть работники!");
+        }
+        if(checkSubdivisionByEnterprise(enterprise) && !error){
+            error = true;
+            errors.put("deleteError", "Не возможно удалить организацию так как в ней есть подразделения!");
+        }
+
+        if (!error)
+            enterpriseRepo.delete(enterprise);
+        return errors;
+    }
+
+    public boolean checkInstitutionByEnterprise(Enterprise enterprise){
+        return userService.getByEnterprise(enterprise).size() !=0;
+    }
+
+    public boolean checkSubdivisionByEnterprise(Enterprise enterprise) {
+        return subdivisionService.findByEnterprise(enterprise).size() !=0;
     }
 }

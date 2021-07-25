@@ -1,7 +1,11 @@
 <#import "parts/common.ftlh" as c >
 <@c.page>
 <h5 class=" mb-3 ">Подразделение</h5>
-
+<#if deleteError??>
+<div class="alert alert-danger" role="alert">
+  ${deleteError}
+</div>
+</#if>
 <form method="post" enctype='multipart/form-data' >
   <div class="form-group">
       <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
@@ -33,35 +37,20 @@
         <select class="custom-select"  name="parentId" <#if parentRequired == true> required </#if> <#if parentDisabled??> disabled </#if> >
           <option value="">Вышестоящее подразделение</option>
           <#if parentList??>
-          <#list parentList as parent>
-          <option <#if subdivisionModel??> <#if parent.id == subdivisionModel.getParentId()> selected </#if> </#if> value="${parent.id } ">${parent.name}</option>
+          <#list parentList as parentL>
+          <option <#if subdivisionModel??> <#if parentL.id == subdivisionModel.getParentId()> selected </#if> </#if>
+                    <#if parent??> <#if parentL.id == parent.id> selected </#if> </#if>
+                        value="${parentL.id } ">${parentL.name}</option>
           </#list>
            </#if>
         </select>
 
-       <#if institutionIdError??>
-         <div class="invalid-feedback">${institutionIdError}</div>
+       <#if parentIdError??>
+         <div class="invalid-feedback">${parentIdError}</div>
        </#if>
       </div>
     </div>
-
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Управляющий</label>
-      <div class="col-sm-8">
-        <select class="custom-select"  name="leaderId" required>
-          <option value="">Управляющий</option>
-          <#if institutionList??>
-          <#list institutionList as institution>
-          <option <#if subdivisionModel??> <#if institution.getUserId() == subdivisionModel.getUserId()> selected </#if> <#else> </#if> <#if leader??> <#if institution.getUserId() == leader.id> selected </#if> </#if>
-          value="${institution.getUserId() } ">${institution.getFullName()}</option>
-    </#list>
-    </#if>
-    </select>
-
-     <#if institutionIdError??>
-     <div class="invalid-feedback">${institutionIdError}</div>
-     </#if>
-     </div>
+    <div id="InstitutionLookup">
     </div>
 
     <div class="form-group row">
@@ -81,16 +70,28 @@
         </#if>
       </div>
     </div>
-
+<div class="form-group row">
   <button class="btn btn-primary" type="submit">Сохранить</button>
+</div>
 </form>
-<!--
-<#if subdivisionModelId??>
-<form method="post" enctype='multipart/form-data'  >
+<#if subdivisionModel??>
+<form method="post" enctype='multipart/form-data' action="/subdivisionEnterprise/${enterprise.id}/delete/${subdivisionModel.id}">
   <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-  <input type="hidden" name="subdivisionId" value="${subdivisionModelId}"/>
-  <button class="btn btn-secondary" type="submit">Удалить</button>
+  <input type="hidden" name="enterpriseId" value="${enterprise.id}"/>
+  <div class="form-group row">
+    <button class="btn btn-secondary " type="submit">Удалить    </button>
+  </div>
 </form>
 </#if>
--->
+<script>
+        var paramIn = new Map;
+        paramIn.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramIn.set("lookupName", 'leaderId');
+        paramIn.set("lookupLabel", 'Управляющий');
+        var t =  <#if leaderError??> "${leaderError}" <#else> null </#if>;
+        paramIn.set("institutionError", t);
+        paramIn.set("institutionSelectId",<#if institutionLeader??>  ${institutionLeader.id} <#else> 0 </#if> );
+</script>
+
+<script src="/js/institutionLookup.js"> </script>
 </@c.page>

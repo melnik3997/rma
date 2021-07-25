@@ -1,6 +1,11 @@
 var nodeAPI = Vue.resource( '/subdivisionNode/{pNode}/enterprise/{enterprise}');
 
-
+function param(patch){
+var url_string = window.location.href
+var ii = url_string.indexOf(patch)+patch.length +1
+var r2 = url_string.length - ii
+return url_string.substr( ii, r2);
+}
 
 const User = {
   template: `
@@ -44,9 +49,17 @@ template:
             data.forEach(node => this.nodes.push(node))
         )
        )
+      /*  $("#treeTable").treetable({
+                               expandable: true,
+                               initialState: "collapsed",
+                               clickableNodeNames: true,
+                               indent: 30
+                           });*/
     }
 }
 )
+
+
 
 var app = new Vue({
   el: '#app',
@@ -54,14 +67,6 @@ var app = new Vue({
   data:{
     nodes:[],
     pNode: 0,
-    enterprise: this.$route.params.entId
+    enterprise: param('subdivisionTree')
   }
 })
-  $(document).ready(function () {
-               $("#treeTable").treetable({
-                    expandable: true,
-                    initialState: "collapsed",
-                    clickableNodeNames: true,
-                    indent: 30
-                });
-    });

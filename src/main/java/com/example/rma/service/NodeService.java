@@ -1,13 +1,12 @@
 package com.example.rma.service;
 
-import com.example.rma.domain.Node;
+import com.example.rma.domain.dto.Node;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
-import org.apache.commons.collections4.ListUtils;
 
 @Service
 public class NodeService {

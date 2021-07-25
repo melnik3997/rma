@@ -26,4 +26,15 @@
 </div>
 
 <script src="/js/node.js"></script>
+<script>
+      $(document).ready(function () {
+  console.log(1);
+               $("#treeTable").treetable({
+                    expandable: true,
+                    initialState: "collapsed",
+                    clickableNodeNames: true,
+                    indent: 30
+                });
+    });
+</script>
 </@c.page>

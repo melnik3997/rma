@@ -1,10 +1,9 @@
 package com.example.rma.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.rma.domain.Enterprise;
-import com.example.rma.domain.Node;
+import com.example.rma.domain.dto.Node;
 import com.example.rma.service.NodeService;
 import com.example.rma.service.SubdivisionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,6 @@ public class NodesController {
 
     private List<Node> getSampleNodeList( Enterprise enterprise, Long nodeId) {
 
-        return nodeService.sortNode( subdivisionService.subdivisionToNode(subdivisionService.findAllByEnterprise(enterprise)), nodeId);
+        return nodeService.sortNode( subdivisionService.subdivisionToNode(subdivisionService.findByEnterprise(enterprise)), nodeId);
     }
 }
