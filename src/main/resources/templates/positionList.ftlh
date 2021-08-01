@@ -11,6 +11,7 @@
         <th scope="col">Основная</th>
         <th scope="col">Дата начала</th>
         <th scope="col">Дата окончания</th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -19,8 +20,18 @@
         <td>${position.getPostName()}</td>
         <td>${position.getSubdivisionName()}</td>
         <td><#if position.general> Да <#else> Нет </#if> </td>
-        <td>${position.dateStart}</td>
-        <td>${position.dateEnd}</td>
+        <td>${position.getDateStartString()}</td>
+        <td>${position.getDateEndString()}</td>
+        <td>
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Опции
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="/positionUser/${userId}/deletePosition/${position.id}">Снять должность</a>
+                </div>
+            </div>
+        </td>
     </tr>
 
     </#list>

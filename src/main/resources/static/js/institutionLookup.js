@@ -2,8 +2,8 @@ var institutionAPI = Vue.resource( '/institutionForLookup/{id}');
 
 var param = new Map;
 
-if (typeof paramIn !== 'undefined') {
-    param = paramIn;
+if (typeof paramInstitution !== 'undefined') {
+    param = paramInstitution;
 }
 var enterpriseId = param.get("enterpriseId");
 var institutionsSelectId = param.get("institutionSelectId");
@@ -11,7 +11,32 @@ var lookupName = param.get("lookupName");
 var lookupLabel = param.get("lookupLabel");
 var institutionError = param.get("institutionError");
 
-console.log(param);
+var institutionDisable = param.get("institutionDisable");
+
+
+
+if (institutionDisable == undefined ){
+  institutionDisable = false;
+  }
+
+var institutionRequired = param.get("institutionRequired");
+if (institutionRequired == undefined ){
+  institutionRequired = false;
+  }
+
+function getDisable(){
+  return institutionDisable ? 'disabled' : 'data-target="#exampleModal" v-on:click="findInst"';
+}
+
+console.log(institutionDisable);
+
+function getRequired(){
+  return institutionRequired ? 'required' : '';
+}
+
+console.log(getDisable());
+
+console.log(getRequired());
 
 Vue.component('institution-tbody',{
 props: ['institution', 'selectMethod'],
@@ -33,8 +58,8 @@ template:
 '<div class="form-group row">'+
  ' <label class="col-sm-2 col-form-label">'+lookupLabel+'</label>'+
   '<div class="col-sm-8">'+
-    '<select :class="`custom-select ${(institutionError != null ? `is-invalid`: ``)}`"  name="'+lookupName+'" data-toggle="modal" data-target="#exampleModal" v-on:click="findInst"  >'+
-        '<option class="invisible" v-if="institutionsSelect != null" selected :value="institutionsSelect.userId"> {{institutionsSelect.fullName}}</option>'+
+    '<select :class="`custom-select ${(institutionError != null ? `is-invalid`: ``)}`"  name="'+lookupName+'" data-toggle="modal"  '+getDisable()+' '+ getRequired() +'>'+
+        '<option class="invisible" v-if="institutionsSelect != null" selected :value="institutionsSelect.userId"> {{institutionsSelect.fullName}} </option>'+
      '</select>'+
      '<div  class="invalid-feedback">{{institutionError}}</div>'+
   '</div>'+
@@ -106,8 +131,7 @@ template:
               institutions:[],
               institutionsSelect: null,
               findText: '',
-              institutionError: '',
-              r:''
+              institutionError: ''
           }
         },
 }

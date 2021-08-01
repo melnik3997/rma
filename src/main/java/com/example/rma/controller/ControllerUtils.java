@@ -41,7 +41,12 @@ public class ControllerUtils {
 
         for (Field field : object.getClass().getDeclaredFields()){
             try {
-                Method fieldGetter = object.getClass().getMethod("get"+field.getName().substring(0,1).toUpperCase()+field.getName().substring(1) );
+                Method fieldGetter;
+                if (field.getType().getName().equals("boolean")){
+                    fieldGetter = object.getClass().getMethod("is"+field.getName().substring(0,1).toUpperCase()+field.getName().substring(1) );
+                }else {
+                    fieldGetter = object.getClass().getMethod("get"+field.getName().substring(0,1).toUpperCase()+field.getName().substring(1) );
+                }
                 model.put(field.getName(),fieldGetter.invoke(object) );
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

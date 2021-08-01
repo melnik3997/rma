@@ -124,11 +124,9 @@ public class PositionController {
     @GetMapping("/positionUser/{userId}")
     public String getPostByUser(@PathVariable(name = "userId") User user,
                                 Model model){
-
         model.addAttribute("positionList", positionService.findActiveByUser(user));
         model.addAttribute("institution", userService.findInstitutionByUser(user));
         model.addAttribute("userId", user.getId());
-
         return "positionList";
     }
 
@@ -136,12 +134,45 @@ public class PositionController {
     public String getPostByUserAdd(@PathVariable(name = "userId") User user,
                                 Model model){
 
-        model.addAttribute("postList", postService.findAll());
-        model.addAttribute("institution", userService.findInstitutionByUser(user));
-        model.addAttribute("userId", user.getId());
+        getDataPosition(user, model);
 
         return "positionForm";
     }
+
+    private void getDataPosition(@PathVariable(name = "userId") User user, Model model) {
+        model.addAttribute("postList", postService.findAll());
+        model.addAttribute("institution", userService.findInstitutionByUser(user));
+        model.addAttribute("userId", user.getId());
+    }
+
+
+    @PostMapping("/positionUser/{userId}/add")
+    public String savePosition(@PathVariable(name = "userId") User user,
+                               @Valid Position position,
+                               BindingResult bindingResult,
+                               Model model){
+        boolean error = ControllerUtils.checkErrorBinding(bindingResult, model);
+        position.setInstitution(userService.findInstitutionByUser(user));
+        Map<String, String> result = positionService.save(position);
+
+        if (result.size() > 0){
+            model.mergeAttributes(result);
+            getDataPosition(user, model);
+            model.addAllAttributes(ControllerUtils.parsersAttribute(position));
+
+            return "positionForm";
+        }
+        return "redirect:/positionUser/" + user.getId();
+    }
+
+    @GetMapping("/positionUser/{userId}/deletePosition/{position}")
+    public String deletePosition(@PathVariable(name = "userId") User user,
+                                 @PathVariable(name = "position")  Position position,
+                                 Model model){
+        positionService.delete(position);
+        return "redirect:/positionUser/" + user.getId();
+    }
+
 
 
 

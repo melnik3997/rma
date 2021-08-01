@@ -99,5 +99,9 @@ public class SubdivisionService {
 
         return userService.findInstitutionByUser(subdivision.getLeader());
     }
+
+    public List<Subdivision> findByParam (Long enterpriseId, String name){
+        return subdivisionRepo.findByParam(enterpriseId, name);
+    }
 }
 

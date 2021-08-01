@@ -1,7 +1,9 @@
 package com.example.rma.domain;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @Entity
 @Table(name = "tPosition")
@@ -102,12 +104,25 @@ public class Position {
         return dateStart;
     }
 
+    public String getDateStartString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+        return formatter.format(dateStart);
+    }
+
     public void setDateStart(Date dateStart) {
         this.dateStart = dateStart;
     }
 
     public Date getDateEnd() {
         return dateEnd;
+    }
+
+    public String getDateEndString() {
+        if(dateEnd != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+            return formatter.format(dateEnd);
+        }
+        return "";
     }
 
     public void setDateEnd(Date dateEnd) {

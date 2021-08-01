@@ -5,7 +5,6 @@ create table t_position (id int8 not null,
                          number int4 not null,
                          general boolean not null,
                          active boolean not null,
-                         name varchar(255) not null,
                          date_start date,
                          date_end date,
                          primary key (id)

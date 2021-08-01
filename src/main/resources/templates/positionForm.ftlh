@@ -15,7 +15,7 @@
 <div class="form-group row">
     <label class="col-sm-2 col-form-label">Название должности</label>
     <div class="col-sm-8">
-        <select class="custom-select"  name="postId" required  >
+        <select class="custom-select"  name="post" required  >
 <option value="">Название должности</option>
 <#if postList??>
 <#list postList as postL>
@@ -34,6 +34,19 @@ value="${postL.id } ">${postL.name}</option>
 
 <div id="InstitutionLookup">
 </div>
+
+<div id="subdivisionLookup">
+</div>
+
+<div class="form-group">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="general" name="general">
+        <label class="form-check-label" for="general">
+            Основная
+        </label>
+    </div>
+</div>
+
 <div class="form-group row">
 <button class="btn btn-primary" type="submit">Сохранить</button>
 </div>
@@ -50,13 +63,23 @@ value="${postL.id } ">${postL.name}</option>
 </#if>
 
 <script>
-        var paramIn = new Map;
-        paramIn.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
-        paramIn.set("lookupName", 'institution');
-        paramIn.set("lookupLabel", 'Сотрудник');
-        paramIn.set("institutionError", <#if leaderError??> "${institutionError}" <#else> null </#if>);
-        paramIn.set("institutionSelectId",<#if institution??>  ${institution.id} <#else> 0 </#if> );
+        var paramInstitution = new Map;
+        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramInstitution.set("lookupName", 'institution');
+        paramInstitution.set("lookupLabel", 'Сотрудник');
+        paramInstitution.set("institutionError", <#if leaderError??> "${institutionError}" <#else> null </#if>);
+        paramInstitution.set("institutionSelectId",<#if institution??>  ${institution.id} <#else> 0 </#if> );
+        paramInstitution.set("institutionDisable", true);
+
+        var paramSubdivision = new Map;
+        paramSubdivision.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramSubdivision.set("lookupName", 'subdivision');
+        paramSubdivision.set("lookupLabel", 'Подразделение');
+        paramSubdivision.set("subdivisionError", <#if subdivisionError??> "${subdivisionError}" <#else> null </#if>);
+        paramSubdivision.set("subdivisionSelectId",<#if subdivision??>  ${subdivision.id} <#else> 0 </#if> );
+        paramSubdivision.set("subdivisionRequired", true);
 </script>
 
 <script src="/js/institutionLookup.js"> </script>
+<script src="/js/subdivisionLookup.js"> </script>
 </@c.page>
