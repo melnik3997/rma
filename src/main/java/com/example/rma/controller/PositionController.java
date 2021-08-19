@@ -125,6 +125,7 @@ public class PositionController {
     public String getPostByUser(@PathVariable(name = "userId") User user,
                                 Model model){
         model.addAttribute("positionList", positionService.findActiveByUser(user));
+        model.addAttribute("positionListDis", positionService.findDisActiveByUser(user));
         model.addAttribute("institution", userService.findInstitutionByUser(user));
         model.addAttribute("userId", user.getId());
         return "positionList";

@@ -31,6 +31,8 @@ public class SubdivisionService {
         return subdivisionRepo.findByParent(subdivision);
     }
 
+
+
     public List<Subdivision> findByEnterpriseAndParent(Enterprise enterprise, Subdivision parent){
 
         return subdivisionRepo.findByEnterpriseAndParent(enterprise, parent);
@@ -99,6 +101,13 @@ public class SubdivisionService {
 
         return userService.findInstitutionByUser(subdivision.getLeader());
     }
+
+    public Subdivision findSubdivisionByInstitution(Institution institution){
+        return positionService.findActiveByInstitutionAndGeneral(institution).getSubdivision();
+    }
+
+
+
 
     public List<Subdivision> findByParam (Long enterpriseId, String name){
         return subdivisionRepo.findByParam(enterpriseId, name);

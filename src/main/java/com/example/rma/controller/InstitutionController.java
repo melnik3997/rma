@@ -64,6 +64,7 @@ public class InstitutionController {
                                   @RequestParam("dateOfBirthS") String dateOfBirth,
                                   Model model) throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+
         boolean error = false;
         try {
             institution.setDateOfBirth(formatter.parse(dateOfBirth));
@@ -112,6 +113,8 @@ public class InstitutionController {
 
 
     }
+
+
 
 
 

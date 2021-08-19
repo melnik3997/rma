@@ -1,12 +1,15 @@
 <#import "parts/common.ftlh" as c >
 <@c.page>
-Список пользователей
+<h5 class="mb-3">Список пользователей</h5>
+
 
 <table class="table table-hover mb-3">
     <thead>
     <tr>
         <th scope="col">Логин</th>
         <th scope="col">Роль</th>
+        <th scope="col">ФИО</th>
+        <th scope="col">Должность</th>
         <th scope="col"></th>
     </tr>
     </thead>
@@ -15,6 +18,8 @@
     <tr>
         <td>${user.username}</td>
         <td><#list user.role as role> ${role}<#sep>, </#list> </td>
+        <td>${user.getFullName()}</td>
+        <td>${user.getPositionName()}</td>
         <td>
           <div class="dropdown show">
            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

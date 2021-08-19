@@ -84,13 +84,13 @@
 </form>
 </#if>
 <script>
-        var paramIn = new Map;
-        paramIn.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
-        paramIn.set("lookupName", 'leaderId');
-        paramIn.set("lookupLabel", 'Управляющий');
+        var paramInstitution = new Map;
+        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramInstitution.set("lookupName", 'leaderId');
+        paramInstitution.set("lookupLabel", 'Управляющий');
         var t =  <#if leaderError??> "${leaderError}" <#else> null </#if>;
-        paramIn.set("institutionError", t);
-        paramIn.set("institutionSelectId",<#if institutionLeader??>  ${institutionLeader.id} <#else> 0 </#if> );
+        paramInstitution.set("institutionError", t);
+        paramInstitution.set("institutionSelectId",<#if institutionLeader??>  ${institutionLeader.id} <#else> 0 </#if> );
 </script>
 
 <script src="/js/institutionLookup.js"> </script>

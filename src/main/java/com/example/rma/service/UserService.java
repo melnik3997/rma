@@ -4,6 +4,7 @@ import com.example.rma.domain.Enterprise;
 import com.example.rma.domain.Institution;
 import com.example.rma.domain.Role;
 import com.example.rma.domain.User;
+import com.example.rma.domain.dto.UserDto;
 import com.example.rma.repository.InstitutionRepo;
 import com.example.rma.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,6 +30,8 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private InstitutionRepo institutionRepo;
+
+
 
     @Override
     public UserDetails loadUserByUsername(String userName)
@@ -123,6 +127,13 @@ public class UserService implements UserDetailsService {
         return userRepo.findAll();
 
     }
+
+    public List<UserDto> findAllUserDto() {
+        return userRepo.findUserDto();
+
+    }
+
+
 
     public void editUser(User user, Map<String, String> form, String username) {
         user.setUsername(username);

@@ -3,6 +3,7 @@ package com.example.rma.service;
 import com.example.rma.domain.*;
 import com.example.rma.repository.PositionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -23,8 +24,16 @@ public class PositionService {
         return findActiveByInstitution(userService.findInstitutionByUser(user));
     }
 
+    public List<Position> findDisActiveByUser(User user){
+
+        return findDisActiveByInstitution(userService.findInstitutionByUser(user));
+    }
+
     public List<Position> findActiveByInstitution(Institution institution){
-        return  positionRepo.findByInstitutionAndActive(institution, true);
+        return  positionRepo.findByInstitutionAndActive(institution, true, Sort.by(Sort.Direction.DESC, "general", "number"));
+    }
+    public List<Position> findDisActiveByInstitution(Institution institution){
+        return  positionRepo.findByInstitutionAndActive(institution, false, Sort.by(Sort.Direction.DESC,  "number"));
     }
     public Position findActiveByInstitutionAndGeneral(Institution institution){
         return findActiveByInstitution(institution).stream().filter(Position::isGeneral).findAny().orElse(null) ;

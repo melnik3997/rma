@@ -4,7 +4,9 @@ import com.example.rma.domain.Enterprise;
 import com.example.rma.domain.Message;
 import com.example.rma.domain.Role;
 import com.example.rma.domain.User;
+import com.example.rma.domain.calendar.CalendarType;
 import com.example.rma.service.EnterpriseService;
+import com.example.rma.service.calendar.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +25,9 @@ public class EnterpriseController {
 
     @Autowired
     private EnterpriseService enterpriseService;
+
+    @Autowired
+    private CalendarService calendarService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/enterprise")
@@ -59,6 +64,8 @@ public class EnterpriseController {
     @GetMapping("/enterprise/{enterprise}")
     public String editEnterprise(@PathVariable Enterprise enterprise, Model model){
         model.addAttribute("enterprise", enterprise);
+
+        calendarService.createCalendarEnterprise(enterprise, CalendarType.WORK, 2021);
         return "enterpriseEdit";
     }
 

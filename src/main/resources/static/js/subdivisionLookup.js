@@ -82,7 +82,7 @@ template:
             '<button class="btn btn-outline-secondary" type="button" @click="findSubdivision">Поиск</button>'+
           '</div>'+
         '</div>'+
-        '<table class="table table-hover m-3">'+
+        '<table class="table table-hover">'+
             '<thead>'+
                 '<tr>'+
                     '<th scope="col">Наименование</th>'+

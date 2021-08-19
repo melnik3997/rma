@@ -22,7 +22,8 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String getUserList(Model model){
-        model.addAttribute("userList",userService.findAll());
+       // model.addAttribute("userList",userService.findAll());
+        model.addAttribute("userList", userService.findAllUserDto());
         return "userList";
     }
 

@@ -63,6 +63,9 @@ margin-right: .1rem;
                 </ul>
             </li>
         </#if>
+        <li class="nav-item">
+            <a class="nav-link" href="/calendar">Календарь</a>
+        </li>
         </ul>
         <form action='/findUserByLastName' class="form-inline my-2 my-lg-0" method="get" enctype='multipart/form-data'>
             <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search" name="userName">

@@ -17,6 +17,7 @@ public interface SubdivisionRepo extends JpaRepository<Subdivision, Long> {
 
     List<Subdivision> findByEnterprise(Enterprise enterprise);
 
+
     List<Subdivision> findByEnterpriseAndParent(Enterprise enterprise, Subdivision parent);
 
     @Query(value = "select * from t_Subdivision p "+

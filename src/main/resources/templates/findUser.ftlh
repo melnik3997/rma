@@ -7,7 +7,14 @@
         <img class="card-img-top" src="/img/${institution.fileName}">
     </#if>
     <div class="m-2">
-        <h5 class="card-title">${institution.lastName} ${institution.firstName} <#if institution.secondName??> ${institution.secondName} </#if> </h5>
+        <h5 class="card-title">${institution.getFullName()} </h5>
+        <#if institution.getPositionName() != "">
+            <a class="card-title" href="/institutionChain/${institution.id}" >Должность: ${institution.getPositionName()}</a>
+            <br>
+        </#if>
+        <#if institution.getSubdivisionName() != "">
+            <h7 class="card-title">Подразделение: ${institution.getSubdivisionName()}</h7>
+        </#if>
         <p class="card-text">Тел.  ${institution.phoneNumber} <br>
         Skype  ${institution.skypeName}</p>
     </div>

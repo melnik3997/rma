@@ -25,6 +25,7 @@
                     <a class="dropdown-item" href="/enterprise/${enterprise.id}">Редактировать</a>
                     <a class="dropdown-item" href="/subdivisionEnterprise/${enterprise.id}">Подразделения</a>
                     <a class="dropdown-item" href="/subdivisionTree/${enterprise.id}">Дерево</a>
+                    <a class="dropdown-item" href="/calendarListEnterprise/${enterprise.id}">Календари</a>
                 </div>
             </div>
         </td>

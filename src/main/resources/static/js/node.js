@@ -1,11 +1,13 @@
 var nodeAPI = Vue.resource( '/subdivisionNode/{pNode}/enterprise/{enterprise}');
 
+
 function param(patch){
 var url_string = window.location.href
 var ii = url_string.indexOf(patch)+patch.length +1
 var r2 = url_string.length - ii
 return url_string.substr( ii, r2);
 }
+
 
 const User = {
   template: `
@@ -27,6 +29,14 @@ const router = new VueRouter({
 Vue.component('node-list',{
 props: ['nodes', 'pNode', 'enterprise'],
 template:
+'<table id="treeTable" class="table">'+
+                '<thead>'+
+                '<tr>'+
+                    '<th>Сокращение</th>'+
+                    '<th>Наименование</th>'+
+                    '<th></th>'+
+                '</tr>'+
+                '</thead>'+
     '<tbody>'+
       '<tr v-for="node in nodes" :data-tt-id ="node.nodeId" :data-tt-parent-id= "node.pid">'+
       '<td>{{node.brief}}</td>'+
@@ -42,24 +52,30 @@ template:
             '</div>'+
         '</td>'+
       ' </tr> ' +
-    '</tbody>',
+    '</tbody>'+
+    '</table>',
     created: function(){
     nodeAPI.get({pNode: this.pNode, enterprise: this.enterprise }).then(result=>
        result.json().then(data =>
             data.forEach(node => this.nodes.push(node))
         )
        )
-      /*  $("#treeTable").treetable({
-                               expandable: true,
-                               initialState: "collapsed",
-                               clickableNodeNames: true,
-                               indent: 30
-                           });*/
+
+      let j = jQuery.noConflict();
+      j("#treeTable").treeTable({
+                    expandable: true,
+                    initialState: "collapsed",
+                    clickableNodeNames: true//,
+                   // indent: 30
+                });
+
+
+    },
+    mounted : function(){
+
     }
 }
 )
-
-
 
 var app = new Vue({
   el: '#app',
@@ -70,3 +86,20 @@ var app = new Vue({
     enterprise: param('subdivisionTree')
   }
 })
+jQuery.noConflict();
+      jQuery(document).ready(function () {
+
+             $("#treeTable").treetable({
+                    expandable: true,
+                    initialState: "collapsed",
+                    clickableNodeNames: true//,
+                   // indent: 30
+                });
+                /*  $("#treeTable").treetable({
+                    //expandable: true,
+                    //initialState: "collapsed",
+                   // clickableNodeNames: true//,
+                   // indent: 30
+                });*/
+
+    });

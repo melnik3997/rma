@@ -1,3 +1,57 @@
 body {
 color: #133;
 }
+
+.border-table-radius{
+border-radius: 20px 20px 20px 20px;
+}
+
+.border-table-radius-top{
+border-radius: 20px 20px 0px 0px;
+}
+.border-top-none td, .border-top-none th  {
+border-top: 0px;
+}
+
+.border-table-radius-day{
+border-radius: 20px 20px 20px 20px;
+}
+
+.day-OUTPUT{
+background-color: #dc3545;
+}
+
+.day-WORK{
+
+}
+
+.day-PRE_HOLIDAY{
+background-color: #17a2b8;
+}
+
+.day-HOLIDAY{
+background-color: #28a745;
+}
+
+.day-SELECT{
+background-color: grey;
+}
+
+.front-small{
+front-size: 9px;
+}
+
+
+.btn {
+    margin: 5px;
+}
+
+.btn-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 19px;
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 16px;
+}
