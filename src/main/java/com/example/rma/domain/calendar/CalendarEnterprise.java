@@ -21,12 +21,15 @@ public class CalendarEnterprise {
 
     private Integer yearInt;
 
+    private boolean active;
+
     public CalendarEnterprise(){}
 
-    public CalendarEnterprise(Enterprise enterprise, CalendarType calendarType, Integer yearInt) {
+    public CalendarEnterprise(Enterprise enterprise, CalendarType calendarType, Integer yearInt, boolean active) {
         this.enterprise = enterprise;
         this.calendarType = calendarType;
         this.yearInt = yearInt;
+        this.active = active;
     }
 
     public Long getId() {
@@ -39,6 +42,10 @@ public class CalendarEnterprise {
 
     public Enterprise getEnterprise() {
         return enterprise;
+    }
+
+    public Long getEnterpriseId() {
+        return enterprise.getId();
     }
 
     public void setEnterprise(Enterprise enterprise) {
@@ -65,13 +72,21 @@ public class CalendarEnterprise {
         this.yearInt = yearInt;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "CalendarEnterprise{" +
                 "id=" + id +
-                ", enterprise=" + enterprise.getName() +
+                ", enterprise=" + enterprise.getId() +
                 ", calendarType=" + calendarType +
-                ", year=" + yearInt +
+                ", yearInt=" + yearInt +
                 '}';
     }
 }

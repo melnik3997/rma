@@ -80,16 +80,29 @@ public class CalendarService {
     }
 
     @Transactional
-    public Map<String, String> createCalendarEnterprise(Enterprise enterprise, CalendarType calendarType, Integer yearInt){
+    public Map<String, String> createCalendarEnterprise(Enterprise enterprise, CalendarType calendarType, Integer yearInt, boolean activeCalendar){
         Map<String, String> result = new HashMap<>();
         boolean checkCalendarEnterprise = checkCalendarEnterprise(enterprise, calendarType, yearInt);
         System.out.println(checkCalendarEnterprise);
+        if(yearInt < 2000 || yearInt > 2070){
+            result.put("errorYear", "Не корректное значение года" );
+            return result;
+        }
+
         if(checkCalendarEnterprise){
             result.put("errorCreate", "У данного предприятия уже есть календарь" );
             return result;
         }
-        CalendarEnterprise calendarEnterprise = new CalendarEnterprise(enterprise, calendarType, yearInt);
 
+        if(activeCalendar) {
+            CalendarEnterprise calendarEnterprise = findByEnterpriseAndCalendarTypeAndActive(enterprise, calendarType, true);
+            if(calendarEnterprise != null) {
+                calendarEnterprise.setActive(false);
+                calendarEnterpriseRepo.save(calendarEnterprise);
+            }
+        }
+
+        CalendarEnterprise calendarEnterprise = new CalendarEnterprise(enterprise, calendarType, yearInt, activeCalendar);
 
         calendarEnterprise = calendarEnterpriseRepo.save(calendarEnterprise);
         System.out.println(calendarEnterprise);
@@ -167,8 +180,12 @@ public class CalendarService {
         return calendarEnterpriseRepo.findByEnterpriseAndCalendarTypeAndYearInt(enterprise, calendarType, yearInt);
     }
 
+    public CalendarEnterprise findByEnterpriseAndCalendarTypeAndActive(Enterprise enterprise, CalendarType calendarType, boolean active){
+        return calendarEnterpriseRepo.findByEnterpriseAndCalendarTypeAndActive(enterprise, calendarType, active);
+    }
+
     public List<CalendarEnterprise> findCalendarEnterpriseByEnterprise(Enterprise enterprise){
-        return calendarEnterpriseRepo.findByEnterprise(enterprise, Sort.by(Sort.Direction.DESC, "yearInt"));
+        return calendarEnterpriseRepo.findByEnterprise(enterprise, Sort.by(Sort.Direction.DESC, "active","yearInt"));
     }
 
     public List<Calendar> findByCalendarEnterprise (CalendarEnterprise calendarEnterprise){

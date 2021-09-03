@@ -12,6 +12,8 @@ public interface CalendarEnterpriseRepo extends JpaRepository<CalendarEnterprise
 
     CalendarEnterprise findByEnterpriseAndCalendarTypeAndYearInt (Enterprise enterprise, CalendarType calendarType, Integer yearInt);
 
+    CalendarEnterprise findByEnterpriseAndCalendarTypeAndActive (Enterprise enterprise, CalendarType calendarType, boolean active);
+
     List<CalendarEnterprise> findByEnterprise (Enterprise enterprise, Sort sort);
 
 }

@@ -4,6 +4,7 @@ import com.example.rma.domain.Enterprise;
 import com.example.rma.domain.Institution;
 import com.example.rma.domain.User;
 import com.example.rma.domain.calendar.Calendar;
+import com.example.rma.domain.calendar.CalendarEnterprise;
 import com.example.rma.domain.calendar.CalendarType;
 import com.example.rma.domain.calendar.DayType;
 import com.example.rma.domain.calendar.dto.Day;
@@ -29,14 +30,21 @@ public class CalendarControllerRest {
     @Autowired
     private CalendarService calendarService;
 
-
     @GetMapping("/calendarEnterprise")
-    public List<Month> getCalendar(@AuthenticationPrincipal User user,
-                                   @RequestBody(required = false) RequestGetCalendar requestGetCalendar){
-
-        
+    public List<Month> getCalendar(@AuthenticationPrincipal User user){
         Institution institution = userService.findInstitutionByUser(user);
         List<Month> months = calendarService.getCalendarDtoForYear(institution.getEnterprise(), CalendarType.WORK, 2021);
+
+        return months;
+    }
+
+    @GetMapping("/calendarEnterprise/{calendarEnterprise}")
+    public List<Month> getCalendarById(@AuthenticationPrincipal User user,
+                                       @PathVariable CalendarEnterprise calendarEnterprise){
+
+        System.out.println("requestGetCalendar "+ calendarEnterprise);
+        Institution institution = userService.findInstitutionByUser(user);
+        List<Month> months = calendarService.getCalendarDtoForYear(calendarEnterprise.getEnterprise(), calendarEnterprise.getCalendarType(), calendarEnterprise.getYearInt());
 
         return months;
     }
@@ -92,6 +100,15 @@ public class CalendarControllerRest {
 
         public void setEnterpriseId(Long enterpriseId) {
             this.enterpriseId = enterpriseId;
+        }
+
+        @Override
+        public String toString() {
+            return "RequestGetCalendar{" +
+                    "year=" + year +
+                    ", calendarType=" + calendarType +
+                    ", enterpriseId=" + enterpriseId +
+                    '}';
         }
     }
 

@@ -82,6 +82,10 @@ public class UserDto {
         return institution;
     }
 
+    public Long getInstitutionID() {
+        return this.institution == null ? 0L : institution.getId();
+    }
+
     public void setInstitution(Institution institution) {
         this.institution = institution;
     }

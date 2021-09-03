@@ -13,4 +13,8 @@ public enum  CalendarType {
     public String getName() {
         return name;
     }
+
+    public static CalendarType getDefault(){
+        return WORK;
+    }
 }

@@ -1,6 +1,18 @@
-var calendarAPI = Vue.resource( '/calendarEnterprise');
+var calendarAPI = Vue.resource( '/calendarEnterprise{/id}');
 console.log(tocken);
 Vue.http.headers.common['X-CSRF-TOKEN'] = tocken;
+
+var param = new Map;
+var checkParam = false;
+
+if (typeof paramCalendar !== 'undefined') {
+console.log(paramCalendar);
+    param = paramCalendar;
+    checkParam = true;
+}
+console.log(checkParam);
+var calendarEnterpriseId = param.get("calendarEnterpriseId");
+
 
 function getIndex(list, id) {
     for (var i = 0; i < list.length; i++ ) {
@@ -106,7 +118,7 @@ template:
 '</div>'+
 '</div>',
     created: function(){
-            calendarAPI.get().then(result=>
+            calendarAPI.get({id:calendarEnterpriseId}).then(result=>
             result.json().then(data =>
                   data.forEach(mouth => this.mouthList.push(mouth))
                         )
@@ -130,13 +142,7 @@ template:
             this.componentKey += 1
           },
       editCalendar2: function(){
-
       if(this.dataII != null && this.selectDay.length > 0){
-      var message = { dayList: this.selectDay, dayType: this.dataII};
-      const config = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
-             // calendarAPI.save({},{dayList: this.selectDay, dayType:  this.dataII})
-
-             //calendarAPI.save({}, message, config)
              this.$http.post('/calendarEnterprise',  {dayList: this.selectDay, dayType: this.dataII} ).then(result=>
                     result.json().then(data => {
                           this.mouthList = []

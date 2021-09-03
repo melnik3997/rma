@@ -5,6 +5,7 @@ import com.example.rma.repository.EnterpriseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,5 +54,9 @@ public class EnterpriseService {
 
     public boolean checkSubdivisionByEnterprise(Enterprise enterprise) {
         return subdivisionService.findByEnterprise(enterprise).size() !=0;
+    }
+
+    public Enterprise findById(Long id){
+        return enterpriseRepo.findById(id).orElse(null);
     }
 }

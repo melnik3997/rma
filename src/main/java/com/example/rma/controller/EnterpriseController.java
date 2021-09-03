@@ -65,7 +65,7 @@ public class EnterpriseController {
     public String editEnterprise(@PathVariable Enterprise enterprise, Model model){
         model.addAttribute("enterprise", enterprise);
 
-        calendarService.createCalendarEnterprise(enterprise, CalendarType.WORK, 2021);
+
         return "enterpriseEdit";
     }
 
