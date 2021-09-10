@@ -42,18 +42,24 @@
     <tr>
         <td id="order${state.id?c}" class="card-body  collapse" colspan="6">
             <table class="table">
-
                 <tbody>
-                <tr>
-                    <td>Video 1</td>
-                    <td>Desc 1</td>
-                    <td>$20.00</td>
-                </tr>
-                <tr>
-                    <td>Video 2</td>
-                    <td>Desc 2</td>
-                    <td>$5.00</td>
-                </tr>
+                    <#list state.transitionList as transition>
+                        <tr>
+                            <td>${transition.actionName} (${transition.getActionTypeName()})</td>
+                            <td>→</td>
+                            <td>${transition.getTargetStateName()} (${transition.getTargetStateTypeName()})</td>
+                            <td>
+                                <div class="dropdown show">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Опции
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="">Открыть</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </#list>
                 </tbody>
             </table>
 

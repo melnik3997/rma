@@ -2,7 +2,10 @@ package com.example.rma.service.bidRule;
 
 import com.example.rma.domain.bidRule.BidRule;
 import com.example.rma.domain.bidRule.State;
+import com.example.rma.domain.bidRule.Transition;
+import com.example.rma.domain.dto.StateDto;
 import com.example.rma.repository.bidRule.StateRepo;
+import com.example.rma.repository.bidRule.TransitionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +19,15 @@ public class StateMachineService {
     @Autowired
     public StateRepo stateRepo;
 
-    public List<State> findByBidRule(BidRule bidRule){
+    @Autowired
+    public TransitionRepo transitionRepo;
+
+    public List<State> findStateByBidRule(BidRule bidRule){
         return stateRepo.findByBidRule(bidRule);
     }
 
     private int getMaxNumber(BidRule bidRule){
-        List<State> stateList = findByBidRule(bidRule);
+        List<State> stateList = findStateByBidRule(bidRule);
 
         if (stateList != null && !stateList.isEmpty()){
             return stateList.stream().max(State::compare).get().getNumber();
@@ -29,15 +35,15 @@ public class StateMachineService {
         return -1;
     }
 
-    public State findByBidRuleAndBrief(BidRule bidRule, String brief){
+    public State findStateByBidRuleAndBrief(BidRule bidRule, String brief){
         return stateRepo.findByBidRuleAndBrief(bidRule, brief);
     }
 
     public boolean checkStateBrief(BidRule bidRule, String brief) {
-        return !(findByBidRuleAndBrief(bidRule, brief) == null);
+        return !(findStateByBidRuleAndBrief(bidRule, brief) == null);
     }
 
-    public Map<String, String> create(State state){
+    public Map<String, String> createState(State state){
         Map<String, String> errors = new HashMap<>();
         boolean error = false;
 
@@ -48,12 +54,51 @@ public class StateMachineService {
         state.setNumber(getMaxNumber(state.getBidRule())+1);
 
         if(!error){
-            save(state);
+            saveState(state);
         }
         return errors;
     }
 
-    private State save(State state){
+    private State saveState(State state){
         return stateRepo.save(state);
+    }
+
+    private Transition saveTransition(Transition transition){
+        return transitionRepo.save(transition);
+    }
+
+    public Transition findTransitionByBidRuleAndActionName(BidRule bidRule, String actionName){
+
+        return transitionRepo.findByBidRuleAndActionName(bidRule, actionName);
+    }
+
+    public boolean checkTransitionActionName(BidRule bidRule, String actionName) {
+        return !(findTransitionByBidRuleAndActionName(bidRule, actionName) == null);
+    }
+
+
+    public Map<String, String> createTransition(Transition transition){
+        Map<String, String> errors = new HashMap<>();
+        boolean error = false;
+
+        if(checkTransitionActionName(transition.getBidRule(), transition.getActionName())){
+            errors.put("briefError", "У заявки уже есть действие с таким наименованием");
+            error = true;
+        }
+        if(!error){
+            saveTransition(transition);
+        }
+
+        return errors;
+    }
+
+    public List<StateDto> findStateDtoByBidRule(BidRule bidRule){
+        List<StateDto> stateDtoList = stateRepo.findStateDtoByBidRule(bidRule);
+
+        for (StateDto stateDto: stateDtoList) {
+            stateDto.setTransitionList(transitionRepo.findBySourceStateId(stateDto.getId()));
+
+        }
+        return stateDtoList;
     }
 }

@@ -4,7 +4,8 @@ public enum ActionType {
 
     VERIFY("верифицировать"),
     CREATE("создать"),
-    PROCESS("в обработку");
+    PROCESS("обработать"),
+    CLOSED("закрыть");
 
     private final String name;
 

@@ -35,10 +35,10 @@ import java.util.stream.Collectors;
 public class InstitutionController {
 
     @Autowired
-    InstitutionRepo institutionRepo;
+    private InstitutionRepo institutionRepo;
 
     @Autowired
-    EnterpriseRepo enterpriseRepo;
+    private EnterpriseRepo enterpriseRepo;
 
     @Autowired
     private FileService fileService;

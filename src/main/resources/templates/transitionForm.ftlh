@@ -39,9 +39,9 @@
                 <option value="">Состояние источник</option>
                 <#if sourceStateList??>
                     <#list sourceStateList as sourceStateFor>
-                        <option <#if transitionModel??> <#if sourceStateFor.id == transitionModel.getSourceStateId()> selected </#if> </#if>
-                        <#if sourceState??> <#if sourceStateFor.id == sourceState.id> selected </#if> </#if>
-                        value="${sourceStateFor.id}">${sourceStateFor.name}</option>
+                        <option <#if transitionModel??> <#if sourceStateFor.id?c == transitionModel.getSourceStateId()?c> selected </#if> </#if>
+                        <#if sourceState??> <#if sourceStateFor.id?c == sourceState.id?c> selected </#if> </#if>
+                        value="${sourceStateFor.id?c}">${sourceStateFor.name}</option>
                     </#list>
                 </#if>
                 </select>
@@ -90,9 +90,9 @@
                 <option value="">Целевое состояние</option>
                 <#if targetStateList??>
                     <#list targetStateList as targetStateFor>
-                        <option <#if transitionModel??> <#if targetStateFor.id == transitionModel.getTargetStateId()> selected </#if> </#if>
-                        <#if targetState??> <#if targetStateFor.id == targetState.id> selected </#if> </#if>
-                        value="${targetStateFor.id} ">${targetStateFor.name}</option>
+                        <option <#if transitionModel??> <#if targetStateFor.id?c == transitionModel.getTargetStateId()?c> selected </#if> </#if>
+                        <#if targetState??> <#if targetStateFor.id?c == targetState.id?c> selected </#if> </#if>
+                        value="${targetStateFor.id?c} ">${targetStateFor.name}</option>
                     </#list>
                 </#if>
             </select>
@@ -102,10 +102,26 @@
         </div>
     </div>
 
+    <div id="InstitutionLookup">
+    </div>
 
     <div class="form-group row">
         <button class="btn btn-primary" type="submit">Сохранить</button>
     </div>
 </form>
+
+
+<script>
+        var paramInstitution = new Map;
+        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramInstitution.set("lookupName", 'institution');
+        paramInstitution.set("lookupLabel", 'Ответственный за целевое состояние');
+        var t =  <#if institutionError??> "${institutionError}" <#else> null </#if>;
+        paramInstitution.set("institutionError", t);
+        paramInstitution.set("institutionSelectId",<#if institutionLeader??>  ${institutionLeader.id} <#else> 0 </#if> );
+        paramInstitution.set("institutionValueName", "id");
+</script>
+
+<script src="/js/institutionLookup.js"> </script>
 
 </@c.page>

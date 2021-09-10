@@ -87,6 +87,10 @@ public class Transition {
         return actionType;
     }
 
+    public String getActionTypeName() {
+        return actionType.getName();
+    }
+
     public void setActionType(ActionType actionType) {
         this.actionType = actionType;
     }
@@ -94,6 +98,15 @@ public class Transition {
     public State getTargetState() {
         return targetState;
     }
+
+    public String getTargetStateName() {
+        return targetState.getName();
+    }
+
+    public String getTargetStateTypeName() {
+        return targetState.getStateTypeName();
+    }
+
 
     public Long getTargetStateId() {
         return targetState.getId();

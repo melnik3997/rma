@@ -13,7 +13,11 @@ var institutionError = param.get("institutionError");
 
 var institutionDisable = param.get("institutionDisable");
 
+var institutionValueName = param.get("institutionValueName");
 
+if (institutionValueName == undefined ){
+  institutionValueName = "userId";
+  }
 
 if (institutionDisable == undefined ){
   institutionDisable = false;
@@ -59,7 +63,7 @@ template:
  ' <label class="col-sm-2 col-form-label">'+lookupLabel+'</label>'+
   '<div class="col-sm-8">'+
     '<select :class="`custom-select ${(institutionError != null ? `is-invalid`: ``)}`"  name="'+lookupName+'" data-toggle="modal"  '+getDisable()+' '+ getRequired() +'>'+
-        '<option class="invisible" v-if="institutionsSelect != null" selected :value="institutionsSelect.userId"> {{institutionsSelect.fullName}} </option>'+
+        '<option class="invisible" v-if="institutionsSelect != null" selected :value="institutionsSelect.'+institutionValueName+'"> {{institutionsSelect.fullName}} </option>'+
      '</select>'+
      '<div  class="invalid-feedback">{{institutionError}}</div>'+
   '</div>'+
