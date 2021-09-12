@@ -2,6 +2,7 @@ package com.example.rma.service.bidRule;
 
 import com.example.rma.domain.Enterprise;
 import com.example.rma.domain.bidRule.BidRule;
+import com.example.rma.domain.bidRule.State;
 import com.example.rma.repository.bidRule.BidRuleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,29 @@ public class BidRuleService {
 
     @Autowired
     private BidRuleRepo bidRuleRepo;
+
+    @Autowired
+    private StateMachineService stateMachineService;
+
+
+    public Map<String, String> activeBidRule(BidRule bidRule){
+        Map<String, String> errors = bidRule.getBidType().checkBidRuleByActive(bidRule);
+
+        if(errors.isEmpty()) {
+            bidRule.setActive(true);
+            save(bidRule);
+        }
+
+        return errors;
+    }
+
+    public Map<String, String> deactivateBidRule(BidRule bidRule){
+        Map<String, String> errors = new HashMap<>();
+
+        bidRule.setActive(false);
+        save(bidRule);
+        return errors;
+    }
 
     public Map<String, String> create(BidRule bidRule){
         Map<String, String> errors = new HashMap<>();

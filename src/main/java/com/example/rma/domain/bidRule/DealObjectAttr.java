@@ -19,6 +19,14 @@ public class DealObjectAttr {
 
     private String valueAttr;
 
+    public DealObjectAttr(DealObjectAttrType dealObjectAttrType, String valueAttr) {
+        this.dealObjectAttrType = dealObjectAttrType;
+        this.valueAttr = valueAttr;
+    }
+
+    public DealObjectAttr() {
+    }
+
     public Long getId() {
         return id;
     }

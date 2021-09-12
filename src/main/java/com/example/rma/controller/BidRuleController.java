@@ -66,6 +66,13 @@ public class BidRuleController {
     @GetMapping( "/enterprise/{enterprise}/bidRuleList")
     public String getBitRuleByEnterprise(@PathVariable Enterprise enterprise,
                                          Model model){
+        getBidRuleData(enterprise, model);
+
+
+        return "bidRuleListEnterprise";
+    }
+
+    private void getBidRuleData(@PathVariable Enterprise enterprise, Model model) {
         model.addAttribute("enterprise",enterprise);
 
         List<BidRule> bidRuleActiveList = bidRuleService.findByEnterpriseAndActive(enterprise, true);
@@ -73,10 +80,8 @@ public class BidRuleController {
 
         model.addAttribute("bidRuleActiveList", bidRuleActiveList);
         model.addAttribute("bidRuleUnActiveList", bidRuleUnActiveList);
-
-
-        return "bidRuleListEnterprise";
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(path = "/bidRule/{bidRule}/stateMachineList")
     public String getStateMachineList(@PathVariable BidRule bidRule,
@@ -168,5 +173,38 @@ public class BidRuleController {
         }
 
         return "redirect:/bidRule/"+bidRule.getId()+"/stateMachineList";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping(path = "/bidRule/{bidRule}/active")
+    public String setActiveBidRule(@PathVariable BidRule bidRule,
+                                   Model model){
+        Map<String, String> errors = bidRuleService.activeBidRule(bidRule);
+
+        if (!errors.isEmpty()){
+            getBidRuleData(bidRule.getEnterprise(), model);
+
+            model.mergeAttributes(errors);
+            return "bidRuleListEnterprise";
+        }
+
+        return "redirect:/enterprise/"+bidRule.getEnterprise().getId()+"/bidRuleList";
+
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping(path = "/bidRule/{bidRule}/deactivate")
+    public String setDeactivateBidRule(@PathVariable BidRule bidRule,
+                                       Model model) {
+        Map<String, String> errors = bidRuleService.deactivateBidRule(bidRule);
+
+        if (!errors.isEmpty()) {
+            getBidRuleData(bidRule.getEnterprise(), model);
+
+            model.mergeAttributes(errors);
+            return "bidRuleListEnterprise";
+        }
+
+        return "redirect:/enterprise/" + bidRule.getEnterprise().getId() + "/bidRuleList";
     }
 }

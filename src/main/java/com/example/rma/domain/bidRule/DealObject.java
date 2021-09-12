@@ -1,5 +1,7 @@
 package com.example.rma.domain.bidRule;
 
+import com.example.rma.domain.Institution;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,19 +12,26 @@ public class DealObject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long objectId;
-
-    @Enumerated(EnumType.STRING)
-    private BidType bidType;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "bid_rule_id")
     private BidRule bidRule;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name= "author_id")
+    private Institution author;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "protocol_id")
     private Protocol protocol;
 
+
+    public DealObject(BidRule bidRule, Institution author) {
+        this.bidRule = bidRule;
+        this.author = author;
+    }
+
+    public DealObject() {
+    }
 
     public Long getId() {
         return id;
@@ -32,20 +41,12 @@ public class DealObject {
         this.id = id;
     }
 
-    public Long getObjectId() {
-        return objectId;
+    public Institution getAuthor() {
+        return author;
     }
 
-    public void setObjectId(Long objectId) {
-        this.objectId = objectId;
-    }
-
-    public BidType getBidType() {
-        return bidType;
-    }
-
-    public void setBidType(BidType bidType) {
-        this.bidType = bidType;
+    public void setAuthor(Institution author) {
+        this.author = author;
     }
 
     public BidRule getBidRule() {

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CalendarRepo extends JpaRepository<Calendar, Long> {
@@ -34,6 +35,9 @@ public interface CalendarRepo extends JpaRepository<Calendar, Long> {
     List<Day> findDayByCalendarEnterpriseAndMonth(@Param("calendarEnterprise") CalendarEnterprise calendarEnterprise,
                                                   @Param("monthInt") Integer monthInt ,
                                                   @Param("numberWeek") Integer numberWeek);
+
+
+    Calendar findByCalendarEnterpriseAndDateD(CalendarEnterprise calendarEnterprise, LocalDate dateD);
 
 
 

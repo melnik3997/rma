@@ -6,9 +6,15 @@
         <h5 class="mb-3 ">Правила заявок <#if enterprise??> ${enterprise.name}</#if> </h5>
     </div>
     <div class="col-4">
-        <a type="button" class="btn btn-primary mb-3 float-right" href="/enterprise/bidRuleList/add/${enterprise.id?c}" >Добавить правило заявок</a>
+        <a type="button" class="btn btn-primary mb-3 float-right" href="/enterprise/${enterprise.id?c}/bidRuleList/add" >Добавить правило заявок</a>
     </div>
 </div>
+
+<#if activeError??>
+<div class="alert alert-danger" role="alert">
+    ${activeError}
+</div>
+</#if>
 
 <div class="row align-items-center">
     <table class="table table-hover mb-3">
@@ -30,8 +36,8 @@
                         Опции
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="">Модель состояний</a>
-                        <a class="dropdown-item" href="">Активировать</a>
+                        <a class="dropdown-item" href="/bidRule/${bidRule.id?c}/stateMachineList">Модель состояний</a>
+                        <a class="dropdown-item" href="/bidRule/${bidRule.id?c}/deactivate">Диактивировать</a>
                     </div>
                 </div>
             </td>
@@ -64,7 +70,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" href="/bidRule/${bidRule.id?c}/stateMachineList">Модель состояний</a>
-                            <a class="dropdown-item" href="">Активировать</a>
+                            <a class="dropdown-item" href="/bidRule/${bidRule.id?c}/active">Активировать</a>
                         </div>
                     </div>
                 </td>

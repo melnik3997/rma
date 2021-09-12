@@ -1,6 +1,7 @@
 package com.example.rma.service.calendar;
 
 import com.example.rma.domain.Enterprise;
+import com.example.rma.domain.Institution;
 import com.example.rma.domain.calendar.*;
 import com.example.rma.domain.calendar.Calendar;
 import com.example.rma.domain.calendar.dto.Day;
@@ -240,6 +241,18 @@ public class CalendarService {
         }
         return name;
 
+    }
+
+    public Calendar findCalendarByDateAndInstitution(Institution institution, LocalDate date){
+        if(date == null){
+            return null;
+        }
+        CalendarEnterprise calendarEnterprise = findCalendarEnterpriseByInstitution(institution);
+        return calendarRepo.findByCalendarEnterpriseAndDateD(calendarEnterprise, date);
+    }
+
+    public CalendarEnterprise findCalendarEnterpriseByInstitution(Institution institution){
+        return findByEnterpriseAndCalendarTypeAndActive(institution.getEnterprise(), CalendarType.getDefault(), true);
     }
 
     public Calendar findCalendarById(Long id){

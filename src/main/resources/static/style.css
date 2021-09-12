@@ -43,7 +43,7 @@ front-size: 9px;
 
 
 .btn {
-    margin: 5px;
+   // margin: 5px;
 }
 
 .btn-circle {
@@ -54,4 +54,5 @@ front-size: 9px;
     padding-left: 0;
     padding-right: 0;
     font-size: 16px;
+
 }
