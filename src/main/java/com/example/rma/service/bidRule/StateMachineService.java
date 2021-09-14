@@ -1,14 +1,13 @@
 package com.example.rma.service.bidRule;
 
-import com.example.rma.domain.bidRule.BidRule;
-import com.example.rma.domain.bidRule.State;
-import com.example.rma.domain.bidRule.Transition;
+import com.example.rma.domain.bidRule.*;
 import com.example.rma.domain.dto.StateDto;
 import com.example.rma.repository.bidRule.StateRepo;
 import com.example.rma.repository.bidRule.TransitionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,10 +38,15 @@ public class StateMachineService {
         return stateRepo.findByBidRuleAndBrief(bidRule, brief);
     }
 
+    public List<State> findStateByBidRuleAndStateType(BidRule bidRule, StateType stateType){
+        return stateRepo.findByBidRuleAndStateType(bidRule, stateType);
+    }
+
     public boolean checkStateBrief(BidRule bidRule, String brief) {
         return !(findStateByBidRuleAndBrief(bidRule, brief) == null);
     }
 
+    @Transactional
     public Map<String, String> createState(State state){
         Map<String, String> errors = new HashMap<>();
         boolean error = false;
@@ -55,6 +59,11 @@ public class StateMachineService {
 
         if(!error){
             saveState(state);
+            //создаем системный переход по созданию объекта для обеспечения протоколирования
+            if(state.getStateType() == StateType.INTRODUCED){
+                Transition transition = new Transition(null, state.getBidRule(), null, ActionType.CREATE.getName(), ActionType.CREATE, state, null);
+                createTransition(transition);
+            }
         }
         return errors;
     }
@@ -100,5 +109,36 @@ public class StateMachineService {
 
         }
         return stateDtoList;
+    }
+
+    public List<Transition> findTransitionBySourceState(State state){
+        return transitionRepo.findBySourceState(state);
+    }
+
+    public List<Transition> findTransitionByTargetState(State state){
+        return transitionRepo.findByTargetState(state);
+    }
+
+    public Map<String, String> deleteState(State state){
+        Map<String, String> errors = new HashMap<>();
+        boolean error = false;
+
+        if(state == null){
+            error = true;
+        }else if(!findTransitionBySourceState(state).isEmpty()){
+            error = true;
+            errors.put("error", "У состояния есть связанное действие");
+        }else if(!findTransitionByTargetState(state).isEmpty()){
+            error = true;
+            errors.put("error", "У состояния есть связанное действие");
+        }
+
+        if(!error){
+            stateRepo.delete(state);
+        }
+
+
+        return errors;
+
     }
 }

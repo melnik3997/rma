@@ -18,6 +18,8 @@ public interface TransitionRepo extends JpaRepository<Transition, Long> {
 
     List<Transition> findBySourceState(State sourceState);
 
+    List<Transition> findByTargetState(State targetState);
+
     @Query("select t from Transition t where t.sourceState.id = :sourceStateId")
     List<Transition> findBySourceStateId(@Param("sourceStateId") Long sourceStateId);
 

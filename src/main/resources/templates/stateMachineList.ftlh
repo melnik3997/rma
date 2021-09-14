@@ -11,6 +11,11 @@
         <a  type="button" class="btn btn-primary mb-3" href="/bidRule/${bidRule.id?c}/stateMachineList/addTransition">Добавить переход</a >
     </div>
 </div>
+<#if error??>
+<div class="alert alert-danger" role="alert">
+    ${error}
+</div>
+</#if>
 <table class="table table-hover mb-3">
     <thead>
     <tr>
@@ -34,7 +39,7 @@
                     Опции
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="">Открыть</a>
+                    <a class="dropdown-item" href="/bidRule/${bidRule.id?c}/stateMachineList/deleteState/${state.id?c}">Удалить</a>
                 </div>
             </div>
         </td>

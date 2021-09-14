@@ -139,6 +139,21 @@ public class BidRuleController {
         return "transitionForm";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping(path = "/bidRule/{bidRule}/stateMachineList/deleteState/{state}")
+    public String getStateMachineListDeleteState(@PathVariable BidRule bidRule,
+                                                 @PathVariable State state,
+                                                 Model model){
+        Map<String, String> errors = stateMachineService.deleteState(state);
+        if(!errors.isEmpty()){
+            model.mergeAttributes(errors);
+            model.addAttribute("bidRule", bidRule);
+            model.addAttribute("stateList", stateMachineService.findStateDtoByBidRule(bidRule));
+            return "stateMachineList";
+        }
+        return "redirect:/bidRule/"+bidRule.getId()+"/stateMachineList";
+    }
+
     private void getDateForTransition(@PathVariable BidRule bidRule, Model model) {
         model.addAttribute("bidRuleList", bidRuleService.findByEnterprise(bidRule.getEnterprise()));
         model.addAttribute("bidRuleDisabled", true);

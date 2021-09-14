@@ -5,6 +5,7 @@ import com.example.rma.domain.User;
 import com.example.rma.domain.bidRule.*;
 import com.example.rma.domain.calendar.Calendar;
 import com.example.rma.service.UserService;
+import com.example.rma.service.bidRule.BidObjectService;
 import com.example.rma.service.calendar.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class LeaveEarlyService {
 
     @Autowired
     private CalendarService calendarService;
+
+    @Autowired
+    private BidObjectService bidObjectService;
 
 
     public Map<String, String> create(BidRule bidRule, User author, String date, String timeLeave, String comment){
@@ -63,6 +67,8 @@ public class LeaveEarlyService {
         dealObjectAttrList.add(new DealObjectAttr(DealObjectAttrType.TIME_END, timeLeave));
 
         DealObject dealObject = new DealObject(bidRule, institution);
+
+        bidObjectService.createBidObject(dealObject, dealObjectAttrList);
 
 
         return errors;

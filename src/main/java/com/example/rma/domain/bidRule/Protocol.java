@@ -28,6 +28,16 @@ public class Protocol {
     @JoinColumn(name= "user_id")
     private User user;
 
+    public Protocol(DealObject dealObject, LocalDate dateProtocol, Transition transition, User user) {
+        this.dealObject = dealObject;
+        this.dateProtocol = dateProtocol;
+        this.transition = transition;
+        this.user = user;
+    }
+
+    public Protocol() {
+    }
+
     public Long getId() {
         return id;
     }

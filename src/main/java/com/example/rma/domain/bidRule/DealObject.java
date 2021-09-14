@@ -20,6 +20,10 @@ public class DealObject {
     @JoinColumn(name= "author_id")
     private Institution author;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name= "responsible_id")
+    private Institution responsible;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "protocol_id")
     private Protocol protocol;
@@ -28,6 +32,14 @@ public class DealObject {
     public DealObject(BidRule bidRule, Institution author) {
         this.bidRule = bidRule;
         this.author = author;
+    }
+
+    public Institution getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(Institution responsible) {
+        this.responsible = responsible;
     }
 
     public DealObject() {
