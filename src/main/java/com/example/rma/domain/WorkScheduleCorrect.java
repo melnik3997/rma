@@ -1,5 +1,6 @@
 package com.example.rma.domain;
 
+import com.example.rma.domain.bidRule.BidType;
 import com.example.rma.domain.bidRule.DealObject;
 import com.example.rma.domain.calendar.Calendar;
 
@@ -32,8 +33,20 @@ public class WorkScheduleCorrect {
     @Column(name = "time_finish", columnDefinition = "time without time zone")
     private LocalTime timeFinish;
 
+    @Enumerated(EnumType.STRING)
+    private WorkScheduleCorrectType workScheduleCorrectType;
+
     private String comment;
 
+    public WorkScheduleCorrect(Institution institution, DealObject dealObject, WorkScheduleCorrectType workScheduleCorrectType) {
+        this.institution = institution;
+        this.dealObject = dealObject;
+        this.workScheduleCorrectType = workScheduleCorrectType;
+    }
+
+    public WorkScheduleCorrect() {
+
+    }
 
     public Long getId() {
         return id;
@@ -81,6 +94,14 @@ public class WorkScheduleCorrect {
 
     public void setTimeFinish(LocalTime timeFinish) {
         this.timeFinish = timeFinish;
+    }
+
+    public WorkScheduleCorrectType getWorkScheduleCorrectType() {
+        return workScheduleCorrectType;
+    }
+
+    public void setWorkScheduleCorrectType(WorkScheduleCorrectType workScheduleCorrectType) {
+        this.workScheduleCorrectType = workScheduleCorrectType;
     }
 
     public String getComment() {

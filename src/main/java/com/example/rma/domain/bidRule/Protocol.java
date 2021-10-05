@@ -1,9 +1,10 @@
 package com.example.rma.domain.bidRule;
 
+import com.example.rma.domain.Institution;
 import com.example.rma.domain.User;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tProtocol")
@@ -17,8 +18,8 @@ public class Protocol {
     @JoinColumn(name= "object_id")
     private DealObject dealObject;
 
-    @Column(columnDefinition = "DATE")
-    private LocalDate dateProtocol;
+    @Column(columnDefinition = "timestamp without time zone")
+    private LocalDateTime dateProtocol;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "transition_id")
@@ -28,11 +29,16 @@ public class Protocol {
     @JoinColumn(name= "user_id")
     private User user;
 
-    public Protocol(DealObject dealObject, LocalDate dateProtocol, Transition transition, User user) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name= "responsible_id")
+    private Institution responsible;
+
+    public Protocol(DealObject dealObject, LocalDateTime dateProtocol, Transition transition, User user, Institution responsible) {
         this.dealObject = dealObject;
         this.dateProtocol = dateProtocol;
         this.transition = transition;
         this.user = user;
+        this.responsible = responsible;
     }
 
     public Protocol() {
@@ -54,11 +60,11 @@ public class Protocol {
         this.dealObject = dealObject;
     }
 
-    public LocalDate getDateProtocol() {
+    public LocalDateTime getDateProtocol() {
         return dateProtocol;
     }
 
-    public void setDateProtocol(LocalDate dateProtocol) {
+    public void setDateProtocol(LocalDateTime dateProtocol) {
         this.dateProtocol = dateProtocol;
     }
 
@@ -74,7 +80,26 @@ public class Protocol {
         return user;
     }
 
+    public String getUserName() {
+        return user.getUsername();
+    }
+
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getTransitionActionName()  {
+        return transition.getActionName();
+    }
+    public String getTransitionTargetStateName()  {
+        return transition.getTargetStateName();
+    }
+
+    public Institution getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(Institution responsible) {
+        this.responsible = responsible;
     }
 }

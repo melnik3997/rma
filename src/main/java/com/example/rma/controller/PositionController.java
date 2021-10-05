@@ -144,6 +144,7 @@ public class PositionController {
         model.addAttribute("postList", postService.findAll());
         model.addAttribute("institution", userService.findInstitutionByUser(user));
         model.addAttribute("userId", user.getId());
+        model.addAttribute("enterprise", userService.findInstitutionByUser(user).getEnterprise());
     }
 
 

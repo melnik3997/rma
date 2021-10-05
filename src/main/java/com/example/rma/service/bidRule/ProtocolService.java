@@ -5,6 +5,8 @@ import com.example.rma.repository.bidRule.ProtocolRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProtocolService {
 
@@ -13,5 +15,9 @@ public class ProtocolService {
 
     public Protocol save(Protocol protocol){
         return protocolRepo.save(protocol);
+    }
+
+    public List<Protocol> findByDealObjectId(Long dealObjectId){
+        return protocolRepo.findByDealObjectId(dealObjectId);
     }
 }

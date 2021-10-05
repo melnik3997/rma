@@ -24,22 +24,20 @@ public class DealObject {
     @JoinColumn(name= "responsible_id")
     private Institution responsible;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name= "employee_id")
+    private Institution employee;
+
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "protocol_id")
     private Protocol protocol;
 
 
-    public DealObject(BidRule bidRule, Institution author) {
+    public DealObject(BidRule bidRule, Institution author, Institution employee) {
         this.bidRule = bidRule;
         this.author = author;
-    }
-
-    public Institution getResponsible() {
-        return responsible;
-    }
-
-    public void setResponsible(Institution responsible) {
-        this.responsible = responsible;
+        this.employee = employee;
     }
 
     public DealObject() {
@@ -57,12 +55,20 @@ public class DealObject {
         return author;
     }
 
+    public String getAuthorFIO() {
+        return author.getFIO();
+    }
+
     public void setAuthor(Institution author) {
         this.author = author;
     }
 
     public BidRule getBidRule() {
         return bidRule;
+    }
+
+    public String getBidRuleName() {
+        return bidRule.getName();
     }
 
     public void setBidRule(BidRule bidRule) {
@@ -73,7 +79,31 @@ public class DealObject {
         return protocol;
     }
 
+    public String getProtocolStateName() {
+        return protocol.getTransition().getTargetStateName();
+    }
+
     public void setProtocol(Protocol protocol) {
         this.protocol = protocol;
+    }
+
+    public Institution getResponsible() {
+        return responsible;
+    }
+
+    public String getResponsibleFIO() {
+        return responsible.getFIO();
+    }
+
+    public void setResponsible(Institution responsible) {
+        this.responsible = responsible;
+    }
+
+    public Institution getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Institution employee) {
+        this.employee = employee;
     }
 }

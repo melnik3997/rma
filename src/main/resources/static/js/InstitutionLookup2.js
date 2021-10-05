@@ -1,19 +1,19 @@
-var institutionAPI = Vue.resource( '/institutionForLookup/{id}');
+var institutionAPI2 = Vue.resource( '/institutionForLookup/{id}');
 
-var param = new Map;
+var param2 = new Map;
 
-if (typeof paramInstitution !== 'undefined') {
-    param = paramInstitution;
+if (typeof paramInstitution2 !== 'undefined') {
+    param2 = paramInstitution2;
 }
-var enterpriseId = param.get("enterpriseId");
-var institutionsSelectId = param.get("institutionSelectId");
-var lookupName = param.get("lookupName");
-var lookupLabel = param.get("lookupLabel");
-var institutionError = param.get("institutionError");
+var enterpriseId = param2.get("enterpriseId");
+var institutionsSelectId = param2.get("institutionSelectId");
+var lookupName = param2.get("lookupName");
+var lookupLabel = param2.get("lookupLabel");
+var institutionError = param2.get("institutionError");
 
-var institutionDisable = param.get("institutionDisable");
+var institutionDisable = param2.get("institutionDisable");
 
-var institutionValueName = param.get("institutionValueName");
+var institutionValueName = param2.get("institutionValueName");
 
 if (institutionValueName == undefined ){
   institutionValueName = "userId";
@@ -23,13 +23,13 @@ if (institutionDisable == undefined ){
   institutionDisable = false;
   }
 
-var institutionRequired = param.get("institutionRequired");
+var institutionRequired = param2.get("institutionRequired");
 if (institutionRequired == undefined ){
   institutionRequired = false;
   }
 
 function getDisable(){
-  return institutionDisable ? 'disabled' : 'data-target="#exampleModal" v-on:click="findInst"';
+  return institutionDisable ? 'disabled' : 'data-target="#exampleModal2" v-on:click="findInst"';
 }
 
 console.log(institutionDisable);
@@ -71,11 +71,11 @@ template:
 
 
 
-'<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'+
+'<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">'+
   '<div class="modal-dialog" role="document">'+
     '<div class="modal-content">'+
         '<div class="modal-header">'+
-          '<h5 class="modal-title" id="exampleModalLabel">Работники</h5>'+
+          '<h5 class="modal-title" id="exampleModalLabel2">Работники</h5>'+
           '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
            ' <span aria-hidden="true">&times;</span>'+
           '</button>'+
@@ -110,7 +110,7 @@ template:
              this.institutionError = institutionError;
          }
     if (institutionsSelectId != undefined && institutionsSelectId != 0){
-            institutionAPI.get({id: institutionsSelectId}).then(result=>
+            institutionAPI2.get({id: institutionsSelectId}).then(result=>
             result.json().then(institution => this.institutionsSelect = institution
                 )
             )
@@ -128,11 +128,11 @@ template:
          },
      select: function(institution){
         this.institutionsSelect = institution;
-        close();
+        close2();
         },
      clear: function(){
         this.institutionsSelect = null;
-        close();
+        close2();
         }
     },
       data: function() {
@@ -145,14 +145,11 @@ template:
         },
 }
 )
-function close(){
-$('#exampleModal').modal('hide')
+function close2(){
+$('#exampleModal2').modal('hide')
 }
 
-var InstitutionLookup = new Vue({
-  el: '#InstitutionLookup',
-  template: '<institution-list />'/*,
-  data:{
-    institutions:[]
-  }*/
+var InstitutionLookup2 = new Vue({
+  el: '#InstitutionLookup2',
+  template: '<institution-list />'
 })

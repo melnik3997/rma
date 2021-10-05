@@ -4,7 +4,12 @@ import java.time.LocalDate;
 
 public enum DealObjectAttrType {
     DATE("дата"),
-    CALENDAR("дата из календаря"),
+    CALENDAR("дата из календаря"){
+        @Override
+        public Long getValue(DealObjectAttr dealObjectAttr) {
+            return Long.parseLong(dealObjectAttr.getValueAttr());
+        }
+    },
     COMMENT("комментарий"),
     TIME_END("время окончания")
     ;
@@ -19,5 +24,9 @@ public enum DealObjectAttrType {
 
     public String getName() {
         return name;
+    }
+
+    public Object getValue(DealObjectAttr dealObjectAttr){
+        return dealObjectAttr.getValueAttr();
     }
 }

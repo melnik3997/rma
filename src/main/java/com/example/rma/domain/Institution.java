@@ -53,6 +53,10 @@ public class Institution {
         return lastName + " " + firstName + " " + secondName;
     }
 
+    public String getFIO() {
+        return lastName + " " + firstName.substring(0,1) + "." + ((secondName == null || secondName.isEmpty() )? "":" "+secondName.substring(0,1)+ ".");
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }

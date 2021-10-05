@@ -38,7 +38,7 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Комментарий</label>
         <div class="col-sm-8">
-            <textarea class="form-control ${(commentError??)?string('is-invalid','')}" type="text" name="comment"   rows="3"  <#if comment??> value="${comment}" </#if>></textarea>
+            <textarea class="form-control ${(commentError??)?string('is-invalid','')}" type="text" name="comment"   rows="3"><#if comment??>${comment}</#if></textarea>
             <#if commentError??>
                 <div class="invalid-feedback">${commentError}</div>
             </#if>

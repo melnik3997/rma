@@ -116,4 +116,8 @@ public class InstitutionService {
     public InstitutionDto findInstitutionDtoByInstitution(Institution institution){
         return institutionRepo.findInstitutionDtoByInstitution(institution.getId());
     }
+
+    public Institution findInstitutionByInstitutionDto(InstitutionDto institutionDto){
+        return institutionRepo.findById(institutionDto.getId()).orElse(null);
+    }
 }

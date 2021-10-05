@@ -9,6 +9,8 @@ import com.example.rma.repository.InstitutionRepo;
 import com.example.rma.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,8 +32,6 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private InstitutionRepo institutionRepo;
-
-
 
     @Override
     public UserDetails loadUserByUsername(String userName)
@@ -175,5 +175,14 @@ public class UserService implements UserDetailsService {
             sendMailActivation(user);
         }
 
+    }
+    public String getCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
+    }
+
+    public User getCurrentUser(){
+        String userName = getCurrentUsername();
+        return userRepo.findByUsername(userName);
     }
 }
