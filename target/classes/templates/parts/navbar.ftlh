@@ -69,6 +69,9 @@ margin-right: .1rem;
         <li class="nav-item">
             <a class="nav-link" href="/bid">Заявки</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/schedule">График работы</a>
+        </li>
         </ul>
         <form action='/findUserByLastName' class="form-inline my-2 my-lg-0" method="get" enctype='multipart/form-data'>
             <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search" name="userName">

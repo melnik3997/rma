@@ -18,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -61,9 +62,10 @@ public class CalendarControllerRest {
         calendarList.forEach(calendar -> calendar.setDayType(DayType.values()[requestEditCalendar.getDayType()-1]));
 
         calendarService.saveAll(calendarList);
+        LocalDate date = LocalDate.now();
 
         Institution institution = userService.findInstitutionByUser(user);
-        List<Month> months = calendarService.getCalendarDtoForYear(institution.getEnterprise(), CalendarType.WORK, 2021);
+        List<Month> months = calendarService.getCalendarDtoForYear(institution.getEnterprise(), CalendarType.getDefault(), date.getYear());
 
         return months;
     }

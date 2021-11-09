@@ -193,6 +193,10 @@ public class CalendarService {
         return calendarRepo.findByCalendarEnterprise(calendarEnterprise, Sort.by(Sort.Direction.DESC, "dateInt"));
     }
 
+    public List<Calendar> findByCalendarEnterpriseAndNumberWeek (CalendarEnterprise calendarEnterprise, Integer numberWeek){
+        return calendarRepo.findByCalendarEnterpriseAndNumberWeek(calendarEnterprise, numberWeek, Sort.by(Sort.Direction.ASC, "dateInt"));
+    }
+
     private boolean checkCalendarEnterprise(Enterprise enterprise, CalendarType calendarType, Integer yearInt) {
         CalendarEnterprise calendarEnterprise = findByEnterpriseAndCalendarTypeAndYear(enterprise, calendarType, yearInt);
         return !(calendarEnterprise == null);

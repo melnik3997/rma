@@ -10,12 +10,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface CalendarRepo extends JpaRepository<Calendar, Long> {
 
     List<Calendar> findByCalendarEnterprise(CalendarEnterprise calendarEnterprise, Sort sort);
+
+    List<Calendar> findByCalendarEnterpriseAndNumberWeek(CalendarEnterprise calendarEnterprise, Integer numberWeek, Sort sort);
 
     @Query("select new com.example.rma.domain.calendar.dto.Week(c.numberWeek) " +
             " from Calendar c" +

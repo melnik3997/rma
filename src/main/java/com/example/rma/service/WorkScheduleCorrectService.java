@@ -1,16 +1,19 @@
 package com.example.rma.service;
 
 import com.example.rma.domain.WorkScheduleCorrect;
+import com.example.rma.domain.calendar.Calendar;
 import com.example.rma.exception.BusinessException;
 import com.example.rma.repository.WorkScheduleCorrectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class WorkScheduleCorrectService {
 
     @Autowired
-    public WorkScheduleCorrectRepo workScheduleCorrectRepo;
+    private WorkScheduleCorrectRepo workScheduleCorrectRepo;
 
     public WorkScheduleCorrect create(WorkScheduleCorrect workScheduleCorrect) throws BusinessException {
         if(workScheduleCorrect.getCalendar() == null){
@@ -26,5 +29,9 @@ public class WorkScheduleCorrectService {
 
     public WorkScheduleCorrect save(WorkScheduleCorrect workScheduleCorrect){
         return workScheduleCorrectRepo.save(workScheduleCorrect);
+    }
+
+    public List<WorkScheduleCorrect> findByCalendarList(List<Calendar> calendarList){
+        return workScheduleCorrectRepo.findByCalendarIn(calendarList);
     }
 }
