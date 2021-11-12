@@ -31,6 +31,11 @@ public class WorkScheduleDto {
 
     private int month;
 
+    private Double obligatoryWorkTime;
+
+    private boolean isPresence;
+
+
     public WorkScheduleDto(Calendar calendar, WorkSchedule workSchedule) {
         this.calendar = calendar;
         this.date = calendar.getDateD();
@@ -122,15 +127,19 @@ public class WorkScheduleDto {
         this.month = month;
     }
 
-    @Override
-    public String toString() {
-        return "WorkScheduleDto{" +
-                "date=" + date +
-                ", timeBegin=" + timeBegin +
-                ", timeFinish=" + timeFinish +
-                ", workTime=" + workTime +
-                ", lunchBreak=" + lunchBreak +
-                ", dayType=" + dayType +
-                '}';
+    public Double getObligatoryWorkTime() {
+        return obligatoryWorkTime;
+    }
+
+    public boolean isPresence() {
+        return isPresence;
+    }
+
+    public void setPresence(boolean presence) {
+        isPresence = presence;
+    }
+
+    public void setObligatoryWorkTime(Double obligatoryWorkTime) {
+        this.obligatoryWorkTime = obligatoryWorkTime;
     }
 }

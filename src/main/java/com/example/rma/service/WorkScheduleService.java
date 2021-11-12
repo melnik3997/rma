@@ -33,7 +33,10 @@ public class WorkScheduleService {
     private WorkScheduleCorrectService workScheduleCorrectService;
 
     @Autowired
-    CalendarService calendarService;
+    private CalendarService calendarService;
+
+    @Autowired
+    private PresenceWorkService presenceWorkService;
 
     private void save(WorkSchedule workSchedule){
         workScheduleRepo.save(workSchedule);
@@ -130,6 +133,7 @@ public class WorkScheduleService {
         WorkScheduleDto workScheduleDto = new WorkScheduleDto(calendar, workSchedule);
         workScheduleDto.setWorkTime(workSchedule.getWorkTime() - (workSchedule.isLunchBreakIn()?  workSchedule.getLunchBreak() : 0));
 
+
         workScheduleDto.getDayType().correctTimeWork(workScheduleDto);
 
         //механиз корректировки графика по заявкам
@@ -137,6 +141,12 @@ public class WorkScheduleService {
             for (WorkScheduleCorrect workScheduleCorrect : workScheduleCorrectListC) {
                 workScheduleCorrect.getWorkScheduleCorrectType().correct(workScheduleDto, workScheduleCorrect);
             }
+
+        long duration = Duration.between(workSchedule.getTimeBegin(), workSchedule.getTimeFinish()).getSeconds();
+        workScheduleDto.setObligatoryWorkTime(duration / 60.0 /60.0 - ( workSchedule.getLunchBreak() ));
+
+        workScheduleDto.setPresence(presenceWorkService.isActive(workSchedule.getInstitution(), calendar));
+
         return workScheduleDto;
     }
 
@@ -147,6 +157,17 @@ public class WorkScheduleService {
         calendarList.add(calendar);
         List<WorkScheduleCorrect> workScheduleCorrectList = workScheduleCorrectService.findByCalendarList(calendarList);
         return getWorkScheduleDto(workSchedule, calendar, workScheduleCorrectList);
+    }
+
+    public WorkScheduleDto getWorkScheduleDto( LocalDate date, Institution institution) {
+        Calendar calendar = calendarService.findCalendarByDateAndInstitution(institution, date);
+        return getWorkScheduleDto(calendar, institution);
+    }
+
+    public WorkScheduleDto getWorkScheduleDto(  Institution institution) {
+        LocalDate date = LocalDate.now();
+
+        return getWorkScheduleDto(date, institution);
     }
 
 

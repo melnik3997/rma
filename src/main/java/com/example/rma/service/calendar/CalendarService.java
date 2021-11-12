@@ -67,13 +67,10 @@ public class CalendarService {
             }
 
             int numberWeek = date.get(weekFields.weekOfWeekBasedYear());
+
             calendar.setDayWeek(DayWeek.valueOf(date.getDayOfWeek().name()));
-           /* if(calendar.getDayWeek() == DayWeek.SUNDAY){
-                calendar.setNumberWeek(numberWeek == 1 ? numberWeek + add : numberWeek + add - 1 );
-            }else{
-                */
-                calendar.setNumberWeek(numberWeek/* + add*/);
-          //  }
+
+            calendar.setNumberWeek(numberWeek);
             calendar.setCalendarEnterprise(calendarEnterprise);
             calendarList.add(calendar);
         }
@@ -246,7 +243,11 @@ public class CalendarService {
         return name;
 
     }
-
+    public Calendar findCalendarByNowDateAndInstitution(Institution institution){
+        LocalDate date = LocalDate.now();
+        CalendarEnterprise calendarEnterprise = findCalendarEnterpriseByInstitution(institution);
+        return calendarRepo.findByCalendarEnterpriseAndDateD(calendarEnterprise, date);
+    }
     public Calendar findCalendarByDateAndInstitution(Institution institution, LocalDate date){
         if(date == null){
             return null;
