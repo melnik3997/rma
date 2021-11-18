@@ -8,7 +8,6 @@ var r2 = url_string.length - ii
 return url_string.substr( ii, r2);
 }
 
-
 const User = {
   template: `
     <div class="user">
@@ -24,7 +23,7 @@ const router = new VueRouter({
   ]
 })
 
-
+var time = 2000;
 
 Vue.component('node-list',{
 props: ['nodes', 'pNode', 'enterprise'],
@@ -34,13 +33,15 @@ template:
                 '<tr>'+
                     '<th>Сокращение</th>'+
                     '<th>Наименование</th>'+
+                    '<th>Руководитель</th>'+
                     '<th></th>'+
                 '</tr>'+
                 '</thead>'+
     '<tbody>'+
-      '<tr v-for="node in nodes" :data-tt-id ="node.nodeId" :data-tt-parent-id= "node.pid">'+
+      '<tr  v-for="node in nodes" :data-tt-id ="node.nodeId" :data-tt-parent-id= "node.pid">'+
       '<td>{{node.brief}}</td>'+
       '<td>{{node.name}} </td>'+
+      '<td>{{node.institutionFIO}} </td>'+
         '<td>'+
             '<div class="dropdown show">'+
                 '<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
@@ -56,20 +57,17 @@ template:
     '</table>',
     created: function(){
     nodeAPI.get({pNode: this.pNode, enterprise: this.enterprise }).then(result=>
-       result.json().then(data =>
-            data.forEach(node => this.nodes.push(node))
+       result.json().then(data =>{
+                data.forEach(node => this.nodes.push(node))
+                time = 1;
+
+            }
         )
        )
 
-      let j = jQuery.noConflict();
-      j("#treeTable").treeTable({
-                    expandable: true,
-                    initialState: "collapsed",
-                    clickableNodeNames: true//,
-                   // indent: 30
-                });
 
-
+    },
+    methods: {
     },
     mounted : function(){
 
@@ -86,20 +84,14 @@ var app = new Vue({
     enterprise: param('subdivisionTree')
   }
 })
+
+
 jQuery.noConflict();
       jQuery(document).ready(function () {
-
-             $("#treeTable").treetable({
+             setTimeout(function() {$("#treeTable").treetable({
                     expandable: true,
                     initialState: "collapsed",
                     clickableNodeNames: true//,
                    // indent: 30
-                });
-                /*  $("#treeTable").treetable({
-                    //expandable: true,
-                    //initialState: "collapsed",
-                   // clickableNodeNames: true//,
-                   // indent: 30
-                });*/
-
+                })}, time);
     });

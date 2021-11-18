@@ -7,11 +7,13 @@ import com.example.rma.exception.BusinessException;
 import com.example.rma.repository.PresenceWorkRepo;
 import com.example.rma.service.calendar.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class PresenceWorkService {
@@ -62,6 +64,9 @@ public class PresenceWorkService {
         }
         return presenceWork;
 
+    }
+    public List<PresenceWork> getByInstitutionAndCalendar(Institution institution, Calendar calendar){
+        return presenceWorkRepo.findByInstitutionAndCalendar(institution, calendar, Sort.by(Sort.Direction.DESC,  "number"));
     }
 
     public PresenceWork getActiveNow(Institution institution){

@@ -9,7 +9,7 @@
     <div class="m-2">
         <h5 class="card-title">${institution.getFullName()} </h5>
         <#if institution.getPositionName() != "">
-            <a class="card-title" href="/institutionChain/${institution.id}" >Должность: ${institution.getPositionName()}</a>
+            <a class="card-title" href="/institutionChain/${institution.id?c}" >Должность: ${institution.getPositionName()}</a>
             <br>
         </#if>
         <#if institution.getSubdivisionName() != "">

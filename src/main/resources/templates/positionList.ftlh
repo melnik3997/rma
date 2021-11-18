@@ -6,7 +6,7 @@
         <h5 class="mb-3 ">Должности <#if institution??> ${institution.getFullName()}</#if> </h5>
     </div>
     <div class="col-4">
-        <a type="button" class="btn btn-primary mb-3 float-right" href="/positionUser/${userId}/add">Добавить должность</a>
+        <a type="button" class="btn btn-primary mb-3 float-right" href="/positionUser/${userId?c}/add">Добавить должность</a>
     </div>
 </div>
 
@@ -36,7 +36,7 @@
                     Опции
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="/positionUser/${userId}/deletePosition/${position.id}">Снять должность</a>
+                    <a class="dropdown-item" href="/positionUser/${userId?c}/deletePosition/${position.id?c}">Снять должность</a>
                 </div>
             </div>
         </td>

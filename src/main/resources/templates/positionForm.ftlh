@@ -9,7 +9,7 @@
 <form method="post" enctype='multipart/form-data' >
     <div class="form-group">
         <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <input class="form-control" type="hidden" name="positionId"  <#if positionModel??> value="${positionModel.id}" </#if>>
+        <input class="form-control" type="hidden" name="positionId"  <#if positionModel??> value="${positionModel.id?c}" </#if>>
 </div>
 
 <div class="form-group row">
@@ -53,9 +53,9 @@ value="${postL.id } ">${postL.name}</option>
 </form>
 
 <#if positionModel??>
-<form method="post" enctype='multipart/form-data' action="/positionUser/${userId}/delete/${positionModel.id}">
+<form method="post" enctype='multipart/form-data' action="/positionUser/${userId?c}/delete/${positionModel.id?c}">
     <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-    <input type="hidden" name="enterpriseId" value="${enterprise.id}"/>
+    <input type="hidden" name="enterpriseId" value="${enterprise.id?c}"/>
     <div class="form-group row">
         <button class="btn btn-secondary " type="submit">Удалить    </button>
     </div>
@@ -64,19 +64,19 @@ value="${postL.id } ">${postL.name}</option>
 
 <script>
         var paramInstitution = new Map;
-        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id?c} <#else> 0 </#if>);
         paramInstitution.set("lookupName", 'institution');
         paramInstitution.set("lookupLabel", 'Сотрудник');
         paramInstitution.set("institutionError", <#if leaderError??> "${institutionError}" <#else> null </#if>);
-        paramInstitution.set("institutionSelectId",<#if institution??>  ${institution.id} <#else> 0 </#if> );
+        paramInstitution.set("institutionSelectId",<#if institution??>  ${institution.id?c} <#else> 0 </#if> );
         paramInstitution.set("institutionDisable", true);
 
         var paramSubdivision = new Map;
-        paramSubdivision.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramSubdivision.set("enterpriseId", <#if enterprise??> ${enterprise.id?c} <#else> 0 </#if>);
         paramSubdivision.set("lookupName", 'subdivision');
         paramSubdivision.set("lookupLabel", 'Подразделение');
         paramSubdivision.set("subdivisionError", <#if subdivisionError??> "${subdivisionError}" <#else> null </#if>);
-        paramSubdivision.set("subdivisionSelectId",<#if subdivision??>  ${subdivision.id} <#else> 0 </#if> );
+        paramSubdivision.set("subdivisionSelectId",<#if subdivision??>  ${subdivision.id?c} <#else> 0 </#if> );
         paramSubdivision.set("subdivisionRequired", true);
 </script>
 

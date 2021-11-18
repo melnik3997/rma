@@ -50,8 +50,8 @@
                     Опции
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="settings/edit/${settings.sId}">Редактировать</a>
-                    <a class="dropdown-item" href="settings/delete/${settings.sId}">Удалить</a>
+                    <a class="dropdown-item" href="settings/edit/${settings.sId?c}">Редактировать</a>
+                    <a class="dropdown-item" href="settings/delete/${settings.sId?c}">Удалить</a>
                 </div>
             </div>
         </td>

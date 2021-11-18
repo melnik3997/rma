@@ -6,6 +6,7 @@ import com.example.rma.domain.WorkScheduleCorrect;
 import com.example.rma.domain.calendar.Calendar;
 import com.example.rma.domain.calendar.CalendarEnterprise;
 import com.example.rma.domain.calendar.CalendarType;
+import com.example.rma.domain.dto.InstitutionWorkScheduleDto;
 import com.example.rma.domain.dto.WorkScheduleDto;
 import com.example.rma.repository.WorkScheduleRepo;
 import com.example.rma.service.calendar.CalendarService;
@@ -98,6 +99,17 @@ public class WorkScheduleService {
         return !(findActiveByInstitution(institution) == null);
     }
 
+    public List<InstitutionWorkScheduleDto> getInstitutionListSchedule(List<Institution> institutionList, LocalDate date) {
+        List<InstitutionWorkScheduleDto> institutionWorkScheduleDtoList = new ArrayList<>();
+
+        for (Institution institution: institutionList) {
+            List<WorkScheduleDto> workScheduleDtoList = getSchedule(institution, date);
+            institutionWorkScheduleDtoList.add(new InstitutionWorkScheduleDto(institution.getId(), institution.getFIO(), workScheduleDtoList));
+
+        }
+        return institutionWorkScheduleDtoList;
+    }
+
     public List<WorkScheduleDto> getSchedule(Institution institution, LocalDate date){
         WeekFields weekFields = WeekFields.ISO;
 
@@ -134,8 +146,6 @@ public class WorkScheduleService {
         workScheduleDto.setWorkTime(workSchedule.getWorkTime() - (workSchedule.isLunchBreakIn()?  workSchedule.getLunchBreak() : 0));
 
 
-        workScheduleDto.getDayType().correctTimeWork(workScheduleDto);
-
         //механиз корректировки графика по заявкам
         if (workScheduleCorrectListC != null && !workScheduleCorrectListC.isEmpty())
             for (WorkScheduleCorrect workScheduleCorrect : workScheduleCorrectListC) {
@@ -143,8 +153,15 @@ public class WorkScheduleService {
             }
 
         long duration = Duration.between(workSchedule.getTimeBegin(), workSchedule.getTimeFinish()).getSeconds();
-        workScheduleDto.setObligatoryWorkTime(duration / 60.0 /60.0 - ( workSchedule.getLunchBreak() ));
+        double obligatoryWorkTime = duration / 60.0 /60.0 - ( workSchedule.getLunchBreak());
+        workScheduleDto.setObligatoryWorkTime(obligatoryWorkTime);
+        workScheduleDto.getDayType().correctTimeWork(workScheduleDto);
+/*
+        System.out.println("workSchedule.getTimeBegin(), workSchedule.getTimeFinish() " + workSchedule.getTimeBegin()+ " " +workSchedule.getTimeFinish());
+        System.out.println("obligatoryWorkTime " + obligatoryWorkTime);
 
+        workScheduleDto.setObligatoryWorkTime(obligatoryWorkTime < 0 ? 0 : obligatoryWorkTime);
+*/
         workScheduleDto.setPresence(presenceWorkService.isActive(workSchedule.getInstitution(), calendar));
 
         return workScheduleDto;

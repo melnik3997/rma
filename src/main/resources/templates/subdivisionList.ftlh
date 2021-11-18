@@ -2,7 +2,7 @@
 <@c.page>
 <h5 class=" mb-3 ">Список подразделений</h5>
 
-<a  type="button" class="btn btn-primary mb-3" href="/subdivisionEnterprise/add/${enterprise.id}">Добавить подразделение</a >
+<a  type="button" class="btn btn-primary mb-3" href="/subdivisionEnterprise/add/${enterprise.id?c}">Добавить подразделение</a >
 <table class="table table-hover mb-3">
     <thead>
     <tr>
@@ -24,7 +24,7 @@
                     Опции
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="/subdivisionEnterprise/${enterprise.id}/edit/${subdivision.id}">Редактировать</a>
+                    <a class="dropdown-item" href="/subdivisionEnterprise/${enterprise.id?c}/edit/${subdivision.id?c}">Редактировать</a>
                 </div>
             </div>
         </td>

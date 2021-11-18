@@ -5,8 +5,8 @@
 <form method="post" enctype='multipart/form-data' >
   <div class="form-group">
       <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-      <input type="hidden" name="userId" value="${userId}"/>
-      <input class="form-control" type="hidden" name="institutionId"  <#if institution??> value="${institution.id}" </#if>>
+      <input type="hidden" name="userId" value="${userId?c}"/>
+      <input class="form-control" type="hidden" name="institutionId"  <#if institution??> value="${institution.id?c}" </#if>>
   </div>
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Фамилия</label>
@@ -79,7 +79,7 @@
           <option value="">Организация</option>
             <#if enterpriseList??>
               <#list enterpriseList as enterprise>
-                <option <#if institution??> <#if enterprise.id == institution.enterpriseID> selected </#if> </#if> value="${enterprise.id} ">${enterprise.name}</option>
+                <option <#if institution??> <#if enterprise.id == institution.enterpriseID> selected </#if> </#if> value="${enterprise.id?c} ">${enterprise.name}</option>
               </#list>
             </#if>
         </select>

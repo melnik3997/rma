@@ -113,12 +113,12 @@
 
 <script>
         var paramInstitution = new Map;
-        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id?c} <#else> 0 </#if>);
         paramInstitution.set("lookupName", 'institution');
         paramInstitution.set("lookupLabel", 'Ответственный за целевое состояние');
         var t =  <#if institutionError??> "${institutionError}" <#else> null </#if>;
         paramInstitution.set("institutionError", t);
-        paramInstitution.set("institutionSelectId",<#if institutionLeader??>  ${institutionLeader.id} <#else> 0 </#if> );
+        paramInstitution.set("institutionSelectId",<#if institutionLeader??>  ${institutionLeader.id?c} <#else> 0 </#if> );
         paramInstitution.set("institutionValueName", "id");
 </script>
 

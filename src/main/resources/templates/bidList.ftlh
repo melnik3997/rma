@@ -119,27 +119,27 @@
 </table>
 <script>
         var paramInstitution2 = new Map;
-        paramInstitution2.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramInstitution2.set("enterpriseId", <#if enterprise??> ${enterprise.id?c} <#else> 0 </#if>);
         paramInstitution2.set("lookupName", 'employee');
         paramInstitution2.set("lookupLabel", 'Сотрудник');
         paramInstitution2.set("institutionError", <#if leaderError??> "${institutionError}" <#else> null </#if>);
-        paramInstitution2.set("institutionSelectId",<#if employee??>  ${employee.id} <#else> 0 </#if> );
+        paramInstitution2.set("institutionSelectId",<#if employee??>  ${employee.id?c} <#else> 0 </#if> );
         paramInstitution2.set("institutionValueName", "id");
 
         var paramInstitution = new Map;
-        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id?c} <#else> 0 </#if>);
         paramInstitution.set("lookupName", 'responsible');
         paramInstitution.set("lookupLabel", 'Ответственный');
         paramInstitution.set("institutionError", <#if leaderError??> "${institutionError}" <#else> null </#if>);
-        paramInstitution.set("institutionSelectId",<#if responsible??>  ${responsible.id} <#else> 0 </#if> );
+        paramInstitution.set("institutionSelectId",<#if responsible??>  ${responsible.id?c} <#else> 0 </#if> );
         paramInstitution.set("institutionValueName", "id");
 
         var paramInstitution3 = new Map;
-        paramInstitution3.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramInstitution3.set("enterpriseId", <#if enterprise??> ${enterprise.id?c} <#else> 0 </#if>);
         paramInstitution3.set("lookupName", 'author');
         paramInstitution3.set("lookupLabel", 'Автор');
         paramInstitution3.set("institutionError", <#if leaderError??> "${institutionError}" <#else> null </#if>);
-        paramInstitution3.set("institutionSelectId",<#if author??>  ${author.id} <#else> 0 </#if> );
+        paramInstitution3.set("institutionSelectId",<#if author??>  ${author.id?c} <#else> 0 </#if> );
         paramInstitution3.set("institutionValueName", "id");
 
 

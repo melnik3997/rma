@@ -6,7 +6,7 @@
     <div>${error!}</div>
     <div class="form-group">
         <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <input type="hidden" name="sId" value="${settings.sId}"/>
+        <input type="hidden" name="sId" value="${settings.sId?c}"/>
     </div>
     <div class="form-group">
         <input class="form-control ${(nameError??)?string('is-invalid','')}" type="text" name="sysName" value="${settings.sysName}" placeholder="Наименование">

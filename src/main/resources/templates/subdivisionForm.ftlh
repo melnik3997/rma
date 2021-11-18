@@ -9,8 +9,8 @@
 <form method="post" enctype='multipart/form-data' >
   <div class="form-group">
       <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-      <input class="form-control" type="hidden" name="enterprise"  <#if enterprise??> value="${enterprise.id}" </#if>>
-      <input class="form-control" type="hidden" name="subdivisionId"  <#if subdivisionModel??> value="${subdivisionModel.id}" </#if>>
+      <input class="form-control" type="hidden" name="enterprise"  <#if enterprise??> value="${enterprise.id?c}" </#if>>
+      <input class="form-control" type="hidden" name="subdivisionId"  <#if subdivisionModel??> value="${subdivisionModel.id?c}" </#if>>
   </div>
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Сокращение</label>
@@ -60,7 +60,7 @@
           <option value="">Организация</option>
             <#if enterpriseList??>
               <#list enterpriseList as enterpriseFor>
-                <option <#if enterprise??> <#if enterpriseFor.id == enterprise.id> selected </#if> </#if> value="${enterpriseFor.id} ">${enterpriseFor.name}</option>
+                <option <#if enterprise??> <#if enterpriseFor.id == enterprise.id> selected </#if> </#if> value="${enterpriseFor.id?c} ">${enterpriseFor.name}</option>
               </#list>
             </#if>
         </select>
@@ -75,9 +75,9 @@
 </div>
 </form>
 <#if subdivisionModel??>
-<form method="post" enctype='multipart/form-data' action="/subdivisionEnterprise/${enterprise.id}/delete/${subdivisionModel.id}">
+<form method="post" enctype='multipart/form-data' action="/subdivisionEnterprise/${enterprise.id?c}/delete/${subdivisionModel.id?c}">
   <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-  <input type="hidden" name="enterpriseId" value="${enterprise.id}"/>
+  <input type="hidden" name="enterpriseId" value="${enterprise.id?c}"/>
   <div class="form-group row">
     <button class="btn btn-secondary " type="submit">Удалить    </button>
   </div>
@@ -85,12 +85,12 @@
 </#if>
 <script>
         var paramInstitution = new Map;
-        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id} <#else> 0 </#if>);
+        paramInstitution.set("enterpriseId", <#if enterprise??> ${enterprise.id?c} <#else> 0 </#if>);
         paramInstitution.set("lookupName", 'leaderId');
         paramInstitution.set("lookupLabel", 'Управляющий');
         var t =  <#if leaderError??> "${leaderError}" <#else> null </#if>;
         paramInstitution.set("institutionError", t);
-        paramInstitution.set("institutionSelectId",<#if institutionLeader??>  ${institutionLeader.id} <#else> 0 </#if> );
+        paramInstitution.set("institutionSelectId",<#if institutionLeader??>  ${institutionLeader.id?c} <#else> 0 </#if> );
 </script>
 
 <script src="/js/institutionLookup.js"> </script>

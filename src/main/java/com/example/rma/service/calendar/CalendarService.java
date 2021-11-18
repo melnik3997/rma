@@ -130,6 +130,13 @@ public class CalendarService {
         return months;
     }
 
+    public Month getCalendarDtoNowByInstitution(Institution institution){
+        CalendarEnterprise calendarEnterprise = findCalendarEnterpriseByInstitution(institution);
+
+        return new Month(LocalDate.now().getMonth().getValue(),getRusNameMonthByNumber(LocalDate.now().getMonth().getValue()), getWeekList(calendarEnterprise, LocalDate.now().getMonth().getValue()));
+
+    }
+
     public List<Week> getWeekList(CalendarEnterprise calendarEnterprise, Integer numberMonth){
         List<Week> weeks = calendarRepo.findWeekByCalendarEnterpriseAndMonth(calendarEnterprise, numberMonth);
         if(numberMonth == 1 || numberMonth == 12){
@@ -243,6 +250,51 @@ public class CalendarService {
         return name;
 
     }
+
+    public String getRusNameMonthRodByNumber(Integer number){
+        String name = "";
+        switch (number){
+            case 1:
+                name = "Января";
+                break;
+            case 2:
+                name = "Февраля";
+                break;
+            case 3:
+                name = "Мара";
+                break;
+            case 4:
+                name = "Апреля";
+                break;
+            case 5:
+                name = "Мая";
+                break;
+            case 6:
+                name = "Июня";
+                break;
+            case 7:
+                name = "Июля";
+                break;
+            case 8:
+                name = "Августа";
+                break;
+            case 9:
+                name = "Сентября";
+                break;
+            case 10:
+                name = "Октября";
+                break;
+            case 11:
+                name = "Ноября";
+                break;
+            case 12:
+                name = "Декабря";
+                break;
+        }
+        return name;
+
+    }
+
     public Calendar findCalendarByNowDateAndInstitution(Institution institution){
         LocalDate date = LocalDate.now();
         CalendarEnterprise calendarEnterprise = findCalendarEnterpriseByInstitution(institution);

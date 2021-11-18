@@ -24,7 +24,7 @@
                     Опции
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="/post/${post.id}">Редактировать</a>
+                    <a class="dropdown-item" href="/post/${post.id?c}">Редактировать</a>
                 </div>
             </div>
         </td>

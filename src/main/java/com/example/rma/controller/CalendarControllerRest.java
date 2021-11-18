@@ -41,6 +41,13 @@ public class CalendarControllerRest {
         return months;
     }
 
+    @GetMapping("/calendarEnterprise/now")
+    public Month getCalendarNow(@AuthenticationPrincipal User user){
+        Institution institution = userService.findInstitutionByUser(user);
+
+        return calendarService.getCalendarDtoNowByInstitution(institution);
+    }
+
     @GetMapping("/calendarEnterprise/{calendarEnterprise}")
     public List<Month> getCalendarById(@AuthenticationPrincipal User user,
                                        @PathVariable CalendarEnterprise calendarEnterprise){

@@ -1,6 +1,7 @@
 package com.example.rma.domain.dto;
 
 
+import com.example.rma.domain.Institution;
 import com.example.rma.domain.Subdivision;
 
 public class Node {
@@ -10,15 +11,16 @@ public class Node {
     private String brief;
     private String name;
     private Long enterpriseId;
+    private Institution institution;
 
 
-    public Node(Subdivision subdivision){
+    public Node(Subdivision subdivision, Institution institution){
         this.nodeId = subdivision.getId();
         this.pid = subdivision.getParentId();
         this.brief = subdivision.getBrief();
         this.name = subdivision.getName();
         this.enterpriseId = subdivision.getEnterpriseId();
-
+        this.institution = institution;
     }
 
     public Node(Long nodeId, Long pId, String brief, String name, Long enterpriseId) {
@@ -28,7 +30,6 @@ public class Node {
         this.name = name;
         this.enterpriseId = enterpriseId;
     }
-
 
     public Node() {
 
@@ -74,6 +75,18 @@ public class Node {
         this.name = name;
     }
 
+    public Institution getInstitution() {
+        return institution;
+    }
+
+    public String getInstitutionFIO() {
+        return institution.getFIO();
+    }
+
+    public void setInstitution(Institution institution) {
+        this.institution = institution;
+    }
+/*
     @Override
     public String toString() {
         return "Node{" +
@@ -83,5 +96,5 @@ public class Node {
                 ", name='" + name + '\'' +
                 ", enterpriseId=" + enterpriseId +
                 '}';
-    }
+    }*/
 }

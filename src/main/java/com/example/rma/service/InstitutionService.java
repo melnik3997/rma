@@ -69,7 +69,7 @@ public class InstitutionService {
         if(position.getInstitution().getId().equals(institution.getId())){
             //добавляем всх в его подразделении
             institutionDtoList.addAll(institutionRepo.findInstitutionDtoColleaguesByInstitutionAndPosition(institution, position.getId() ));
-
+            System.out.println("под " + institutionDtoList);
             //добавляем либеров подченненных подразделений
             List<Subdivision> subdivisionList = subdivisionService.getSubdivisionByParent(position.getSubdivision());
             for (Subdivision s: subdivisionList) {

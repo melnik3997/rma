@@ -83,7 +83,7 @@ public class SubdivisionService {
 
     public List<Node> subdivisionToNode(List<Subdivision> subdivisionList){
 
-        return subdivisionList.stream().map(Node::new).collect(Collectors.toList());
+        return subdivisionList.stream().map(subdivision -> new Node(subdivision, userService.findInstitutionByUser(subdivision.getLeader()))).collect(Collectors.toList());
 
     }
 
@@ -105,8 +105,6 @@ public class SubdivisionService {
     public Subdivision findSubdivisionByInstitution(Institution institution){
         return positionService.findActiveByInstitutionAndGeneral(institution).getSubdivision();
     }
-
-
 
 
     public List<Subdivision> findByParam (Long enterpriseId, String name){

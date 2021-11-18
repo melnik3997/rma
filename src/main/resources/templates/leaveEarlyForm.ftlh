@@ -9,7 +9,7 @@
 <form method="post" enctype='multipart/form-data' >
     <div class="form-group">
         <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <input type="hidden" name="institution" value="<#if institution??> ${institution.id}</#if> "/>
+        <input type="hidden" name="institution" value="<#if institution??> ${institution.id?c}</#if> "/>
     </div>
 
 

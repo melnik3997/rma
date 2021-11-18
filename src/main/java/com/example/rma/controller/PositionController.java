@@ -109,7 +109,10 @@ public class PositionController {
         Map<String, String> result = postService.delete(post);
         if (result.size() > 0){
             model.mergeAttributes(result);
-            getPostDataForError(post, model);
+            model.addAttribute("postLevelList", PostLevel.values());
+            model.addAttribute("postTypeList", PostType.values());
+            model.addAttribute("postModel", post);
+            //getPostDataForError(post, model);
             return "postForm";
         }
         return "redirect:/post";

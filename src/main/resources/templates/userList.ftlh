@@ -26,10 +26,10 @@
              Опции
            </a>
            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-             <a class="dropdown-item" href="/user/${user.id}">Редактировать</a>
-             <a class="dropdown-item" href="/institution/${user.id}">Основная информация</a>
-             <a class="dropdown-item" href="/positionUser/${user.id}">Должности</a>
-             <#if user.getInstitutionID() != 0>  <a class="dropdown-item" href="/workSchedule/list/${user.getInstitutionID()}">График работы</a> </#if>
+             <a class="dropdown-item" href="/user/${user.id?c}">Редактировать</a>
+             <a class="dropdown-item" href="/institution/${user.id?c}">Основная информация</a>
+             <a class="dropdown-item" href="/positionUser/${user.id?c}">Должности</a>
+             <#if user.getInstitutionID() != 0>  <a class="dropdown-item" href="/workSchedule/list/${user.getInstitutionID()?c}">График работы</a> </#if>
            </div>
           </div>
         </td>

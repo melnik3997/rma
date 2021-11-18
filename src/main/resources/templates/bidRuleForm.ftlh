@@ -9,7 +9,7 @@
 <form method="post" enctype='multipart/form-data' >
     <div class="form-group">
         <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <input class="form-control" type="hidden" name="enterprise"  <#if enterprise??> value="${enterprise.id}" </#if>>
+        <input class="form-control" type="hidden" name="enterprise"  <#if enterprise??> value="${enterprise.id?c}" </#if>>
 
 </div>
 
@@ -50,7 +50,7 @@
     <option value="">Организация</option>
     <#if enterpriseList??>
     <#list enterpriseList as enterpriseFor>
-    <option <#if enterprise??> <#if enterpriseFor.id == enterprise.id> selected </#if> </#if> value="${enterpriseFor.id} ">${enterpriseFor.name}</option>
+    <option <#if enterprise??> <#if enterpriseFor.id == enterprise.id> selected </#if> </#if> value="${enterpriseFor.id?c} ">${enterpriseFor.name}</option>
 </#list>
 </#if>
 </select>

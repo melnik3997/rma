@@ -14,7 +14,7 @@
         </div>
     </#list>
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-    <input type="hidden" name="userId" value="${user.id}"/>
+    <input type="hidden" name="userId" value="${user.id?c}"/>
     <button type="submit">Save</button>
 </form>
 </@c.page>

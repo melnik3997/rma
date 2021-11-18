@@ -11,7 +11,7 @@
 <form method="post" enctype='multipart/form-data' >
     <div class="form-group">
         <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <input class="form-control" type="hidden" name="postId"  <#if postModel??> value="${postModel.id}" </#if>>
+        <input class="form-control" type="hidden" name="postId"  <#if postModel??> value="${postModel.id?c}" </#if>>
 </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Наименование</label>
@@ -71,7 +71,7 @@
 <#if postModel??>
 <form method="post" enctype='multipart/form-data' action="/postDelete">
     <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-    <input type="hidden" name="postId" value="${postModel.id}"/>
+    <input type="hidden" name="postId" value="${postModel.id?c}"/>
     <div class="form-group row">
         <button class="btn btn-secondary " type="submit">Удалить    </button>
     </div>

@@ -2,12 +2,18 @@ package com.example.rma.domain.calendar;
 
 import com.example.rma.domain.dto.WorkScheduleDto;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public enum DayType {
     WORK("рабочий"),
     OUTPUT("выходной") {
         @Override
         public WorkScheduleDto correctTimeWork(WorkScheduleDto workScheduleDto) {
             workScheduleDto.setWorkTime(0D);
+            workScheduleDto.setObligatoryWorkTime(0D);
+            workScheduleDto.setTimeBegin( LocalTime.parse("00:00", DateTimeFormatter.ISO_LOCAL_TIME));
+            workScheduleDto.setTimeFinish( LocalTime.parse("00:00", DateTimeFormatter.ISO_LOCAL_TIME));
             return workScheduleDto;
         }
     },
@@ -15,6 +21,9 @@ public enum DayType {
         @Override
         public WorkScheduleDto correctTimeWork(WorkScheduleDto workScheduleDto) {
             workScheduleDto.setWorkTime(0D);
+            workScheduleDto.setObligatoryWorkTime(0D);
+            workScheduleDto.setTimeBegin( LocalTime.parse("00:00", DateTimeFormatter.ISO_LOCAL_TIME));
+            workScheduleDto.setTimeFinish( LocalTime.parse("00:00", DateTimeFormatter.ISO_LOCAL_TIME));
             return workScheduleDto;
         }
     },
@@ -25,8 +34,27 @@ public enum DayType {
             return workScheduleDto;
         }
     },
-    VACATION("отпуск"),
-    DAY_OFF("отгул");
+    VACATION("отпуск"){
+        @Override
+        public WorkScheduleDto correctTimeWork(WorkScheduleDto workScheduleDto) {
+            workScheduleDto.setWorkTime(0D);
+            workScheduleDto.setObligatoryWorkTime(0D);
+            workScheduleDto.setTimeBegin( LocalTime.parse("00:00", DateTimeFormatter.ISO_LOCAL_TIME));
+            workScheduleDto.setTimeFinish( LocalTime.parse("00:00", DateTimeFormatter.ISO_LOCAL_TIME));
+            return workScheduleDto;
+        }
+    },
+    DAY_OFF("отгул"){
+        @Override
+        public WorkScheduleDto correctTimeWork(WorkScheduleDto workScheduleDto) {
+            workScheduleDto.setWorkTime(0D);
+            workScheduleDto.setObligatoryWorkTime(0D);
+            workScheduleDto.setTimeBegin( LocalTime.parse("00:00", DateTimeFormatter.ISO_LOCAL_TIME));
+            workScheduleDto.setTimeFinish( LocalTime.parse("00:00", DateTimeFormatter.ISO_LOCAL_TIME));
+            return workScheduleDto;
+        }
+    }
+    ;
 
     private final String name;
 

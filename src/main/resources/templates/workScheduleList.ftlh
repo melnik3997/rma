@@ -6,7 +6,7 @@
         <h5 class="mb-3 ">График работы <#if institution??> ${institution.getFullName()}</#if> </h5>
     </div>
     <div class="col-4">
-        <a type="button" class="btn btn-primary mb-3 float-right" href="/workSchedule/${institution.id}">Изменить график</a>
+        <a type="button" class="btn btn-primary mb-3 float-right" href="/workSchedule/${institution.id?c}">Изменить график</a>
     </div>
 </div>
 

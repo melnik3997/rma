@@ -38,10 +38,6 @@ function getRequired(){
   return institutionRequired ? 'required' : '';
 }
 
-console.log(getDisable());
-
-console.log(getRequired());
-
 Vue.component('institution-tbody',{
 props: ['institution', 'selectMethod'],
 template:'<tr @dblclick="select">'+
@@ -68,9 +64,6 @@ template:
      '<div  class="invalid-feedback">{{institutionError}}</div>'+
   '</div>'+
 '</div>'+
-
-
-
 '<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'+
   '<div class="modal-dialog" role="document">'+
     '<div class="modal-content">'+
@@ -105,7 +98,6 @@ template:
 '</div>'+
 '</div>',
     created: function(){
-    console.log(institutionsSelectId);
      if (institutionError != ''){
              this.institutionError = institutionError;
          }
@@ -151,8 +143,5 @@ $('#exampleModal').modal('hide')
 
 var InstitutionLookup = new Vue({
   el: '#InstitutionLookup',
-  template: '<institution-list />'/*,
-  data:{
-    institutions:[]
-  }*/
+  template: '<institution-list />'
 })

@@ -2,7 +2,7 @@
 <@c.page>
 <h5 class=" mb-3 ">Календари предприятия ${enterprise.name}</h5>
 
-<a  type="button" class="btn btn-primary mb-3" href="/calendarAdd/${enterprise.id}">Добавить календарь</a >
+<a  type="button" class="btn btn-primary mb-3" href="/calendarAdd/${enterprise.id?c}">Добавить календарь</a >
 <table class="table table-hover mb-3">
     <thead>
     <tr>

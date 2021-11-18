@@ -9,7 +9,7 @@
 <form method="post" enctype='multipart/form-data' action="/editEnterprise" >
   <div class="form-group">
       <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-      <input type="hidden" name="enterpriseId" value="${enterprise.id}"/>
+      <input type="hidden" name="enterpriseId" value="${enterprise.id?c}"/>
   </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Сокращение</label>
@@ -38,7 +38,7 @@
 
 <form method="post" enctype='multipart/form-data' action="/deleteEnterprise">
     <input class="form-control" type="hidden" name="_csrf" value="${_csrf.token}"/>
-    <input type="hidden" name="enterpriseId" value="${enterprise.id}"/>
+    <input type="hidden" name="enterpriseId" value="${enterprise.id?c}"/>
     <div class="form-group row">
     <button class="btn btn-secondary " type="submit">Удалить    </button>
     </div>
