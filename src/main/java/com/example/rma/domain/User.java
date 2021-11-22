@@ -135,17 +135,4 @@ public class User implements UserDetails {
         return isActive();
     }
 
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", active=" + active +
-                ", email='" + email + '\'' +
-                ", activationCode='" + activationCode + '\'' +
-                ", role=" + role +
-                '}';
-    }
 }

@@ -1,5 +1,7 @@
 package com.example.rma.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -12,6 +14,7 @@ public class Institution {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "user_id")
     private User user;
@@ -138,21 +141,4 @@ public class Institution {
     }
 
     public String getEnterpriseBrief(){return enterprise.getBrief();}
-
-
-    @Override
-    public String toString() {
-        return "Institution{" +
-                "id=" + id +
-                ", user=" + user +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", enterprise=" + enterprise +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", skypeName='" + skypeName + '\'' +
-                ", fileName='" + fileName + '\'' +
-                '}';
-    }
 }

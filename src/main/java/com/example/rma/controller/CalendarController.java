@@ -6,6 +6,7 @@ import com.example.rma.domain.User;
 import com.example.rma.domain.calendar.CalendarEnterprise;
 import com.example.rma.domain.calendar.CalendarType;
 import com.example.rma.domain.calendar.dto.Month;
+import com.example.rma.service.SettingsService;
 import com.example.rma.service.UserService;
 import com.example.rma.service.calendar.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class CalendarController {
 
     @Autowired
     private CalendarService calendarService;
+
+    @Autowired
+    private SettingsService settingsService;
 
 
     @GetMapping("/calendar")
@@ -70,7 +74,6 @@ public class CalendarController {
 
     @GetMapping("/calendarListEnterprise/{enterprise}")
     public String getCalendarListEnterprise(@PathVariable Enterprise enterprise, Model model){
-
         model.addAttribute("calendarList", calendarService.findCalendarEnterpriseByEnterprise(enterprise));
         model.addAttribute("enterprise", enterprise);
 

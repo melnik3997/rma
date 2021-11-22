@@ -61,6 +61,21 @@ public class SubdivisionController {
 
         return "subdivisionForm";
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(method = RequestMethod.GET, value = "/subdivisionEnterprise/add/{enterprise}/sub/{subdivision}")
+    public String getSubdivisionAddSub(@PathVariable Enterprise enterprise,
+                                    @PathVariable Subdivision subdivision,
+                                    Model model){
+
+        model.addAttribute("parent", subdivision);
+        model.addAttribute("parentDisabled", true);
+
+        getDataForAdd(enterprise, model);
+
+        return "subdivisionForm";
+    }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/subdivisionEnterprise/{enterprise}/edit/{subdivision}")
     public String getSubdivisionEdit(@PathVariable(name = "enterprise") Enterprise enterprise,
@@ -75,6 +90,8 @@ public class SubdivisionController {
         return "subdivisionForm";
     }
 
+
+
     private void getDataForAdd(Enterprise enterprise, Model model) {
         List<Enterprise> enterpriseList = new ArrayList<>();
         enterpriseList.add(enterprise);
@@ -86,6 +103,36 @@ public class SubdivisionController {
         model.addAttribute("parentRequired",false);
 
       //  model.addAttribute("institutionList",userService.getByEnterprise(enterprise));
+    }
+
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(method = RequestMethod.POST, value = "/subdivisionEnterprise/add/{enterprise}/sub/{subdivisionParent}")
+    public String saveSubdivisionSub( @PathVariable Enterprise enterprise,
+                                      @PathVariable Subdivision subdivisionParent,
+                                      @Valid Subdivision subdivision,
+                                      BindingResult bindingResult,
+                                      @RequestParam(required = false, name = "parentId") Subdivision parent,
+                                      @RequestParam(name = "leaderId", required = false) User leader,
+                                      @RequestParam(required = false, name = "subdivisionId" ) Long subdivisionId,
+                                      Model model)  {
+        boolean error = ControllerUtils.checkErrorBinding(bindingResult, model);
+
+        subdivision.setLeader(leader);
+        subdivision.setEnterprise(enterprise);
+        subdivision.setParent(subdivisionParent);
+        if(error){
+            getDataForError(enterprise, subdivision, model);
+            return "subdivisionForm";
+        }
+        Map<String, String> result = subdivisionService.addSubdivision(subdivision);
+
+        if (result.size() > 0){
+            model.mergeAttributes(result);
+            getDataForError(enterprise, subdivision, model);
+            return "subdivisionForm";
+        }
+        return "redirect:/subdivisionTree/" + enterprise.getId() ;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

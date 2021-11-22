@@ -1,20 +1,18 @@
 package com.example.rma.controller;
 
-import com.example.rma.domain.Institution;
-import com.example.rma.domain.Post;
-import com.example.rma.domain.PresenceWork;
-import com.example.rma.domain.User;
+import com.example.rma.domain.*;
 import com.example.rma.domain.calendar.Calendar;
-import com.example.rma.domain.calendar.CalendarEnterprise;
 import com.example.rma.domain.calendar.DayWeek;
-import com.example.rma.domain.calendar.dto.Month;
 import com.example.rma.domain.dto.WorkScheduleDto;
 import com.example.rma.exception.BusinessException;
+import com.example.rma.service.ActuallyWorkService;
 import com.example.rma.service.PresenceWorkService;
 import com.example.rma.service.UserService;
 import com.example.rma.service.WorkScheduleService;
 import com.example.rma.service.calendar.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +20,14 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping
 public class MainControllerRest {
+
+    @Autowired
+    private ActuallyWorkService actuallyWorkService;
 
     @Autowired
     private CalendarService calendarService;
@@ -116,12 +116,40 @@ public class MainControllerRest {
         return  b;
     }
 
+    @GetMapping("/getInstitution")
+    public Institution getInstitution(@AuthenticationPrincipal User user){
+        return  userService.findInstitutionByUser(user);
+    }
+
     @RequestMapping(method = RequestMethod.POST,
             value = "/endWork")
     public WorkScheduleDto endWork(@AuthenticationPrincipal User user){
         System.out.println("end");
         return workScheduleService.getWorkScheduleDto(userService.findInstitutionByUser(user));
     }
+
+
+    @RequestMapping(method = RequestMethod.POST,
+            value = "/createActuallyWork")
+    public ResponseEntity createActuallyWork(@AuthenticationPrincipal User user,
+                                             @RequestBody(required = false) ActuallyWork actuallyWork) throws Exception {
+        Institution institution = userService.findInstitutionByUser(user);
+        System.out.println("createActuallyWork " + actuallyWork.getTime() + " " + actuallyWork.getComment() + " " + actuallyWork.getInstitution().getFIO());
+        actuallyWork.setCalendar(calendarService.findCalendarByNowDateAndInstitution(institution));
+
+        try {
+            actuallyWorkService.create(actuallyWork);
+        } catch (BusinessException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+/*
+    @ExceptionHandler(BusinessException.class)
+    public String handleException(BusinessException e) {
+        return e.getMessage();
+    }*/
 
 
 }

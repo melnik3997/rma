@@ -54,9 +54,33 @@ public class SettingsService {
         return getSettingsDtoList(settingsObjectList);
     }
 
-    public SettingsDto getSettingsBySysNameAndType(String sysName, String value ){
+    private SettingsDto getSettingsBySysNameAndType(String sysName, String value ){
 
         return parsObjectArrToSettingDto(settingsRepo.findSettingsByValue(sysName, value));
+    }
+
+    public SettingsDto getSettingsBySysName(String sysName){
+        return getSettingsBySysNameAndType("SysName", sysName);
+    }
+
+    public int getIntSettingsBySysName(String sysName){
+        int i = 0;
+        try {
+             i = Integer.parseInt(getSettingsBySysName(sysName).getVal());
+        }catch (Exception e){
+            i = 0;
+        }
+        return i;
+    }
+
+    public boolean getBooleanSettingsBySysName(String sysName){
+        boolean b = false;
+        try {
+            b = Boolean.parseBoolean(getSettingsBySysName(sysName).getVal());
+        }catch (Exception e){
+            b = false;
+        }
+        return b;
     }
 
     public SettingsDto getSettingsBySId(Long sId){

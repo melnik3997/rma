@@ -74,7 +74,7 @@ margin-right: .1rem;
         </li>
         </ul>
         <form action='/findUserByLastName' class="form-inline my-2 my-lg-0" method="get" enctype='multipart/form-data'>
-            <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search" name="userName">
+            <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search" name="userName" <#if findValue??>value="${findValue}" </#if> >
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
         </form>
 

@@ -6,6 +6,7 @@ var calendarAPI = Vue.resource( '/calendarEnterprise/now');
 var presenceWorkAPI = Vue.resource( '/getPresenceWork');
 var presenceWorkAPI = Vue.resource( '/getPresenceWork');
 var presenceWorkTimeSumAPI = Vue.resource( '/getPresenceWorkTimeSum');
+var institutionAPI = Vue.resource( '/getInstitution');
 console.log(tocken);
 Vue.http.headers.common['X-CSRF-TOKEN'] = tocken;
 
@@ -52,10 +53,71 @@ template:
 }
 )
 
+Vue.component('ActuallyWork',{
+props: ['methodSave'],
+template:
+'<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'+
+  '<div class="modal-dialog" role="document">'+
+    '<div class="modal-content">'+
+      '<div class="modal-header">'+
+        '<h5 class="modal-title" id="exampleModalLabel">Списание трудозатрат</h5>'+
+        '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+          '<span aria-hidden="true">&times;</span>'+
+        '</button>'+
+      '</div>'+
+      '<div class="modal-body">'+
+        '<form>'+
+          '<div class="form-group">'+
+            '<label for="recipient-name" class="col-form-label">Тема:</label>'+
+            '<input type="text" class="form-control" id="recipient-name" v-model="theme">'+
+          '</div>'+
+          '<div class="form-group">'+
+            '<label for="message-text" class="col-form-label">Коментарий:</label>'+
+            '<textarea class="form-control" id="message-text" v-model="comment"></textarea>'+
+          '</div>'+
+         '<div class="form-group">'+
+            '<label for="recipient-time" class="col-form-label">Затраченное время:</label>'+
+            '<input type="number" min="0.01" max="12" step = "0.01" class="form-control" id="recipient-time" v-model="time">'+
+          '</div>'+
+        '</form>'+
+      '</div>'+
+      '<div class="modal-footer">'+
+        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>'+
+        '<button type="button" @click="save" class="btn btn-primary">Сохранить</button>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+'</div>',
+methods: {
+    save: function(){
+        $('#exampleModal').modal('hide');
+        this.methodSave(this.time,this.comment,this.theme);
+        this.time = 0;
+        this.comment = "";
+        this.theme = "";
+
+    }
+},
+data: function(){
+        return {
+            time : 0.0,
+            comment : "",
+            theme : ""
+        }
+}
+}
+)
+
 Vue.component('main-tab',{
 template:
 '<div>'+
     '<div class="container">'+
+        '<div v-if="errorMess != null " class="alert alert-warning alert-dismissible fade show" role="alert">'+
+          '<strong>{{errorMess}}'+
+          '<button type="button" @click = "closeError" class="close" data-dismiss="alert" aria-label="Close">'+
+            '<span aria-hidden="true">&times;</span>'+
+          '</button>'+
+        '</div>'+
          '<div class="row">'+
              '<div  v-if = "mouth != null"  class="col-lg-6 col-xl-4 ">'+
                 '<table class="table  table-light table-borderless border-table-radius">'+
@@ -132,7 +194,7 @@ template:
                                 '</div>'+
                             '</div>'+
                             '<div class="col-2">'+
-                                '<button type="button" class="btn btn-primary"><strong>✚</strong></button>'+
+                                '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" ><strong>✚</strong></button>'+
                             '</div>'+
                         '</div>'+
                         '<span>Требуется списать: <strong>{{workSchedule.workTime}} </strong> </span>'+
@@ -141,6 +203,7 @@ template:
              '</div>'+
          '</div>'+
     '</div>'+
+    '<ActuallyWork :methodSave = "ActuallyWorkSave"> </ActuallyWork>'+
 '</div>',
     created: function(){
                 calendarAPI.get().then(result=>
@@ -159,6 +222,9 @@ template:
                                         )
                     }
                 )
+                institutionAPI.get().then(result=>
+                    result.json().then(data => this.institution = data)
+                    )
                 this.getPresenceWorkTimeSum();
               },
     methods: {
@@ -214,6 +280,22 @@ template:
                            this.getPresenceWorkTimeSum();
                           })
                     )
+       },
+       ActuallyWorkSave: function(time, comment, theme){
+             this.$http.post('/createActuallyWork', {time: time, comment: comment,theme :theme, institution: this.institution } )
+                .then(/*result=>
+                    result.json()
+                        .then(data =>data.forEach(actuallyWork => this.actuallyWorkList.push(actuallyWork)))*/
+                     )
+                .catch(error => {
+                    // error.response can be null
+                   // if (error.response && error.response.status === 400) {
+                        this.errorMess = error.bodyText
+                  //  }
+                })
+       },
+       closeError: function(){
+        errorMess = null;
        }
     },
     data: function() {
@@ -228,7 +310,13 @@ template:
           workScheduleDay : null,
           openDitail: false,
           presenceWorkList: [],
-          presenceWorkTimeSum : 0.0
+          presenceWorkTimeSum : 0.0,
+          time : 0.0,
+          comment : "",
+          theme : "",
+          actuallyWorkList: [],
+          institution: null,
+          errorMess:null
         }
     }
 })

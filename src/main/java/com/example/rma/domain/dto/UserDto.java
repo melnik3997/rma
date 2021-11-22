@@ -1,9 +1,6 @@
 package com.example.rma.domain.dto;
 
-import com.example.rma.domain.Institution;
-import com.example.rma.domain.Position;
-import com.example.rma.domain.Role;
-import com.example.rma.domain.User;
+import com.example.rma.domain.*;
 
 import java.util.Set;
 
@@ -17,6 +14,8 @@ public class UserDto {
     private Set<Role> role;
     private Institution institution;
     private Position position;
+    private Enterprise enterprise;
+    private Subdivision subdivision;
 
 
     public UserDto(User user, Institution institution, Position position) {
@@ -28,6 +27,9 @@ public class UserDto {
         this.role = user.getRole();
         this.institution = institution;
         this.position = position;
+        this.enterprise = institution != null? institution.getEnterprise() : null ;
+        this.subdivision = position != null ? position.getSubdivision() : null;
+
     }
 
     public Long getId() {
@@ -104,6 +106,28 @@ public class UserDto {
 
     public String getPositionName(){
         return this.position == null ? "": this.position.getPostName();
+    }
+
+    public String getEnterpriseBrief(){return enterprise == null ? "" : enterprise.getBrief();}
+
+    public Enterprise getEnterprise() {
+        return enterprise;
+    }
+
+    public void setEnterprise(Enterprise enterprise) {
+        this.enterprise = enterprise;
+    }
+
+    public Subdivision getSubdivision() {
+        return subdivision;
+    }
+
+    public String getSubdivisionName() {
+        return subdivision != null ? subdivision.getName() : "";
+    }
+
+    public void setSubdivision(Subdivision subdivision) {
+        this.subdivision = subdivision;
     }
 
     @Override

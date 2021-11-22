@@ -9,6 +9,8 @@
         <th scope="col">Логин</th>
         <th scope="col">Роль</th>
         <th scope="col">ФИО</th>
+        <th scope="col">Организация</th>
+        <th scope="col">Подразделение</th>
         <th scope="col">Должность</th>
         <th scope="col"></th>
     </tr>
@@ -19,6 +21,8 @@
         <td>${user.username}</td>
         <td><#list user.role as role> ${role}<#sep>, </#list> </td>
         <td>${user.getFullName()}</td>
+        <td>${user.getEnterpriseBrief()}</td>
+        <td>${user.getSubdivisionName()}</td>
         <td>${user.getPositionName()}</td>
         <td>
           <div class="dropdown show">

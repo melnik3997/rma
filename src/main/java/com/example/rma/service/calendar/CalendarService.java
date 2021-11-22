@@ -9,6 +9,7 @@ import com.example.rma.domain.calendar.dto.Month;
 import com.example.rma.domain.calendar.dto.Week;
 import com.example.rma.repository.calendar.CalendarEnterpriseRepo;
 import com.example.rma.repository.calendar.CalendarRepo;
+import com.example.rma.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ public class CalendarService {
     private CalendarRepo calendarRepo;
 
     @Autowired
-    private EntityManager em;
+    private SettingsService settingsService;
+
 
     public List<LocalDate> getDateForYear(String year){
         List<LocalDate> result = new ArrayList<>();
@@ -51,26 +53,26 @@ public class CalendarService {
     public List<Calendar> getCalendarForYear(String year, CalendarEnterprise calendarEnterprise){
         WeekFields weekFields = WeekFields.ISO;
         List<Calendar> calendarList = new ArrayList<>();
+        boolean SATURDAY_DAY_OFF = settingsService.getBooleanSettingsBySysName("SATURDAY_DAY_OFF");
+        boolean SUNDAY_DAY_OFF = settingsService.getBooleanSettingsBySysName("SUNDAY_DAY_OFF");
+        //создаем список дат в году
         List<LocalDate> localDateList = getDateForYear(year);
-        int add = 0;
-        //если первый день в году востресенье корректируем календарь
-        if(localDateList.get(0).getDayOfWeek().getValue() == 7){
-            add = 1;
-        }
-
+        //обработка дат
         for (LocalDate date : localDateList) {
+            //формируем день календаря
             Calendar calendar = new Calendar(date, Integer.parseInt(date.format(DateTimeFormatter.BASIC_ISO_DATE)),date.getMonth().getValue() );
-            if(date.getDayOfWeek().getValue() == 6 || date.getDayOfWeek().getValue() == 7  ){
+            //определяем рабочий или не рабочий день
+            if((date.getDayOfWeek().getValue() == 6 && SATURDAY_DAY_OFF) || (date.getDayOfWeek().getValue() == 7 && SUNDAY_DAY_OFF)  ){
                 calendar.setDayType(DayType.OUTPUT);
             }else {
                 calendar.setDayType(DayType.WORK);
             }
-
+            //определяем номер недели
             int numberWeek = date.get(weekFields.weekOfWeekBasedYear());
-
-            calendar.setDayWeek(DayWeek.valueOf(date.getDayOfWeek().name()));
-
             calendar.setNumberWeek(numberWeek);
+            //определяем день недели
+            calendar.setDayWeek(DayWeek.valueOf(date.getDayOfWeek().name()));
+            //запись календаря
             calendar.setCalendarEnterprise(calendarEnterprise);
             calendarList.add(calendar);
         }
@@ -81,8 +83,13 @@ public class CalendarService {
     public Map<String, String> createCalendarEnterprise(Enterprise enterprise, CalendarType calendarType, Integer yearInt, boolean activeCalendar){
         Map<String, String> result = new HashMap<>();
         boolean checkCalendarEnterprise = checkCalendarEnterprise(enterprise, calendarType, yearInt);
-        System.out.println(checkCalendarEnterprise);
-        if(yearInt < 2000 || yearInt > 2070){
+        int minYear = settingsService.getIntSettingsBySysName("MIN_YEAR");
+        int maxYear = settingsService.getIntSettingsBySysName("MAX_YEAR");
+        if(minYear == 0 || maxYear == 0) {
+            result.put("errorCreate", "Отсутсвует настройка MIN_YEAR или MAX_YEAR" );
+            return result;
+        }
+        if(yearInt < minYear || yearInt > maxYear){
             result.put("errorYear", "Не корректное значение года" );
             return result;
         }
@@ -103,13 +110,9 @@ public class CalendarService {
         CalendarEnterprise calendarEnterprise = new CalendarEnterprise(enterprise, calendarType, yearInt, activeCalendar);
 
         calendarEnterprise = calendarEnterpriseRepo.save(calendarEnterprise);
-        System.out.println(calendarEnterprise);
 
         List<Calendar> calendarList = getCalendarForYear(yearInt.toString(), calendarEnterprise );
         List<Calendar> calendarListDb = calendarRepo.saveAll(calendarList);
-
-        System.out.println(calendarListDb.size());
-
 
         return result;
 
@@ -138,25 +141,32 @@ public class CalendarService {
     }
 
     public List<Week> getWeekList(CalendarEnterprise calendarEnterprise, Integer numberMonth){
+        //получаем список недель в месяце
         List<Week> weeks = calendarRepo.findWeekByCalendarEnterpriseAndMonth(calendarEnterprise, numberMonth);
+        //сортируем первый и последний месяц
         if(numberMonth == 1 || numberMonth == 12){
             weeks = orderByWeekList(weeks, numberMonth);
         }
         int i = 0;
+        //обрабатываем список недель и добавляем в них дни
         for (Week week : weeks ) {
+            //список жней в неделе
             List<Day> days = calendarRepo.findDayByCalendarEnterpriseAndMonth(calendarEnterprise, numberMonth, week.getNumberWeek());
-            for (Day day: days) {
-                day.setDay(Integer.parseInt(day.getDay().toString().substring(6)));
-            }
+            //определяем номер дня
+            days.forEach(day -> day.setDay(Integer.parseInt(day.getDay().toString().substring(6))));
+            //заполняем недостающие дни до 7
             if(i == 0){
+                //первая неделя в начало
                 while (days.size() < 7){
                     days.add(0, new Day());
                 }
             }else{
+                //последующие в конец
                 while (days.size() < 7){
                     days.add(new Day());
                 }
             }
+            //добавляем список дней в неделю
             week.setDayList(days);
             i++;
         }
@@ -261,7 +271,7 @@ public class CalendarService {
                 name = "Февраля";
                 break;
             case 3:
-                name = "Мара";
+                name = "Марта";
                 break;
             case 4:
                 name = "Апреля";

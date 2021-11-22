@@ -7,7 +7,7 @@ var ii = url_string.indexOf(patch)+patch.length +1
 var r2 = url_string.length - ii
 return url_string.substr( ii, r2);
 }
-
+/*
 const User = {
   template: `
     <div class="user">
@@ -21,9 +21,9 @@ const router = new VueRouter({
   routes: [
     { path: '/subdivisionTree/:entId', component: User }
   ]
-})
+})*/
 
-var time = 2000;
+var time = 500;
 
 Vue.component('node-list',{
 props: ['nodes', 'pNode', 'enterprise'],
@@ -49,7 +49,8 @@ template:
                 '</a>'+
                 '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">'+
                     '<a class="dropdown-item"  :href="`/subdivisionEnterprise/${node.enterpriseId}/edit/${node.nodeId}`" >Редактировать</a>'+
-               ' </div>'+
+                    '<a class="dropdown-item"  :href="`/subdivisionEnterprise/add/${node.enterpriseId}/sub/${node.nodeId}`" >Добавить</a>'+
+               '</div>'+
             '</div>'+
         '</td>'+
       ' </tr> ' +

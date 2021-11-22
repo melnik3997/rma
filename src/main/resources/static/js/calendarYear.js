@@ -65,57 +65,56 @@ template:
 Vue.component('calendar-list',{
 template:
 '<div>'+
-'<div class = "row">'+
-'<div class="form-group col-4" >'+
-'<div class="custom-control custom-radio">'+
-'  <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="1" v-model="dataII">'+
-'  <label class="custom-control-label" for="customRadio1">Рабочий</label>'+
-'</div>'+
-'<div class="custom-control custom-radio">'+
-'  <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="2" v-model="dataII">'+
-'  <label class="custom-control-label" for="customRadio2">Выходной</label>'+
-'</div>'+
-'<div class="custom-control custom-radio">'+
-'  <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input" value="3" v-model="dataII">'+
-'  <label class="custom-control-label" for="customRadio3">Праздничный</label>'+
-'</div>'+
-'<div class="custom-control custom-radio">'+
-'  <input type="radio" id="customRadio4" name="customRadio" class="custom-control-input" value="4" v-model="dataII">'+
-'  <label class="custom-control-label" for="customRadio4">Предпраздничный</label>'+
-'</div>'+
-'</div>'+
-'<div class = "col-4">'+
- '<button type="submit" class="btn btn-primary" @click="editCalendar2">Редактировать календарь</button>'+
-'</div>'+
-'<div class = "col-4">'+
-'<p v-if = "selectDay.length != 0"  class= "float-right">Колличество выделенных: {{selectDay.length}}  </p> '+
-'</div>'+
-'</div>'+
-'<div class="container">'+
-     '<div class="row">'+
-         '<div v-for="mouth in mouthList" class="col-lg-6 col-xl-4 ">'+
-             '<table class="table  table-light table-borderless border-table-radius">'+
-                 '<thead class="">'+
-                    '<tr class="">'+
-                        '<th class="  text-center border-table-radius-top" colspan="8">{{mouth.name}}</th>'+
-                    '</tr>'+
-                    '<tr class = "">'+
-                        '<th style="width: 12%" class="text-center"></th>'+
-                        '<th style="width: 12%" class="text-center">Пн</th>'+
-                        '<th style="width: 12%" class="text-center">Вт</th>'+
-                        '<th style="width: 12%" class="text-center">Ср</th>'+
-                        '<th style="width: 12%" class="text-center">Чт</th>'+
-                        '<th style="width: 12%" class="text-center">Пт</th>'+
-                        '<th style="width: 12%" class="text-center">Сб</th>'+
-                        '<th style="width: 12%" class="text-center">Вс</th>'+
-                    '</tr>'+
-                '</thead>'+
-                '<week-list :key="mouth.number" :key = "componentKey" :weekList = "mouth.weekList" :selectMethod = "select" />'+
-             '</table>'+
+    '<div class = "row">'+
+        '<div class="form-group col-4" >'+
+            '<div class="custom-control custom-radio">'+
+                '<input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="1" v-model="dataII">'+
+                '<label class="custom-control-label" for="customRadio1">Рабочий</label>'+
+            '</div>'+
+            '<div class="custom-control custom-radio">'+
+                '<input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="2" v-model="dataII">'+
+                '<label class="custom-control-label" for="customRadio2">Выходной</label>'+
+            '</div>'+
+            '<div class="custom-control custom-radio">'+
+                '<input type="radio" id="customRadio3" name="customRadio" class="custom-control-input" value="3" v-model="dataII">'+
+                '<label class="custom-control-label" for="customRadio3">Праздничный</label>'+
+            '</div>'+
+            '<div class="custom-control custom-radio">'+
+                '<input type="radio" id="customRadio4" name="customRadio" class="custom-control-input" value="4" v-model="dataII">'+
+                '<label class="custom-control-label" for="customRadio4">Предпраздничный</label>'+
+            '</div>'+
+        '</div>'+
+        '<div class = "col-4">'+
+            '<button type="submit" class="btn btn-primary" @click="editCalendar2">Редактировать календарь</button>'+
+        '</div>'+
+        '<div class = "col-4">'+
+            '<p v-if = "selectDay.length != 0"  class= "float-right">Колличество выделенных: {{selectDay.length}}  </p> '+
+        '</div>'+
+    '</div>'+
+    '<div class="container">'+
+         '<div class="row">'+
+             '<div v-for="mouth in mouthList" class="col-lg-6 col-xl-4 ">'+
+                 '<table class="table  table-light table-borderless border-table-radius">'+
+                     '<thead class="">'+
+                        '<tr class="">'+
+                            '<th class="  text-center border-table-radius-top" colspan="8">{{mouth.name}}</th>'+
+                        '</tr>'+
+                        '<tr class = "">'+
+                            '<th style="width: 12%" class="text-center"></th>'+
+                            '<th style="width: 12%" class="text-center">Пн</th>'+
+                            '<th style="width: 12%" class="text-center">Вт</th>'+
+                            '<th style="width: 12%" class="text-center">Ср</th>'+
+                            '<th style="width: 12%" class="text-center">Чт</th>'+
+                            '<th style="width: 12%" class="text-center">Пт</th>'+
+                            '<th style="width: 12%" class="text-center">Сб</th>'+
+                            '<th style="width: 12%" class="text-center">Вс</th>'+
+                        '</tr>'+
+                    '</thead>'+
+                    '<week-list :key="mouth.number" :key = "componentKey" :weekList = "mouth.weekList" :selectMethod = "select" />'+
+                 '</table>'+
+             '</div>'+
          '</div>'+
-
-     '</div>'+
-'</div>'+
+    '</div>'+
 '</div>',
     created: function(){
             calendarAPI.get({id:calendarEnterpriseId}).then(result=>
@@ -167,7 +166,6 @@ template:
         }
 }
 )
-
 
 var CalendarYear = new Vue({
   el: '#CalendarYear',

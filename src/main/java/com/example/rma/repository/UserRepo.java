@@ -16,10 +16,10 @@ public interface UserRepo extends JpaRepository<User, Long> {
               "from User u " +
               "left join Institution i " +
                      "on i.user = u.id "+
-            " left join Position p" +
-                   " on p.institution = i.id" +
-                  " and p.active = true" +
-                  " and p.general = true" )
+             " left join Position p" +
+                    " on p.institution = i.id" +
+                   " and p.active = true" +
+                   " and p.general = true" )
     List<UserDto> findUserDto();
 
 }

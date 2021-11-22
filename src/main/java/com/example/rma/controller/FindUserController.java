@@ -1,5 +1,6 @@
 package com.example.rma.controller;
 
+import com.example.rma.domain.Enterprise;
 import com.example.rma.domain.Institution;
 import com.example.rma.domain.User;
 import com.example.rma.domain.dto.InstitutionDto;
@@ -59,10 +60,13 @@ public class FindUserController {
         }
 */
         if(userName.length()>0) {
-            userName = "%" + userName + "%";
+            String param = "%" + userName + "%";
+            Enterprise enterprise = userService.findInstitutionByUser(user).getEnterprise();
+            List<InstitutionDto> institutionDtoList = institutionRepo.findInstitutionDtoByParam(enterprise.getId(), param);
+            model.addAttribute("institutions", institutionDtoList );
         }
-        List<InstitutionDto> institutionDtoList = institutionRepo.findInstitutionDtoByParam(0l, userName);
-        model.addAttribute("institutions", institutionDtoList );
+
+        model.addAttribute("findValue", userName);
 
         return "/findUser";
     }

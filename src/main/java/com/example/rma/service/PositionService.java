@@ -70,7 +70,6 @@ public class PositionService {
             errors.put("posError", "Не заполненно поле подразделение!");
             error = true;
         }
-
         if(!error) {
             if (position.getId() == null) {
                 position.setActive(true);
@@ -78,11 +77,9 @@ public class PositionService {
                 int maxNumber = findMaxNumberByInstitution(position.getInstitution());
                 maxNumber += maxNumber;
                 position.setNumber(maxNumber);
-
             }
             Position positionGeneral = findActiveByInstitutionAndGeneral(position.getInstitution());
             if (position.isGeneral()) {
-
                 if (positionGeneral != null) {
                     positionGeneral.setGeneral(false);
                     positionRepo.save(positionGeneral);
@@ -90,8 +87,6 @@ public class PositionService {
             } else if (positionGeneral == null) {
                 position.setGeneral(true);
             }
-
-
             positionRepo.save(position);
         }
         return errors;
@@ -100,10 +95,8 @@ public class PositionService {
     public Map<String,String> delete(Position position){
         Map<String, String> errors = new HashMap<>();
         boolean error = false;
-
         position.setActive(false);
         position.setDateEnd(new Date());
-
         if(!error)
             errors = save(position);
 

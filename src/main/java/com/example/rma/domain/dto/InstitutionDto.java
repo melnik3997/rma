@@ -133,7 +133,7 @@ public class InstitutionDto {
     public String getSubdivisionName(){
         return position == null ? "" : position.getSubdivisionName();
     }
-    public String getEnterpriseBrief(){return enterprise.getBrief();}
+    public String getEnterpriseBrief(){return enterprise == null ? "" : enterprise.getBrief();}
 
     @Override
     public String toString() {

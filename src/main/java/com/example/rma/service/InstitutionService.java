@@ -5,8 +5,6 @@ import com.example.rma.domain.Position;
 import com.example.rma.domain.Subdivision;
 import com.example.rma.domain.dto.InstitutionDto;
 import com.example.rma.repository.InstitutionRepo;
-import com.sun.deploy.uitoolkit.impl.awt.AWTDragHelper;
-import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
