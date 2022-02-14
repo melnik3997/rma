@@ -1,7 +1,5 @@
 package com.example.rma.domain.dto;
 
-import com.example.rma.domain.Institution;
-
 import java.util.ArrayList;
 import java.util.List;
 

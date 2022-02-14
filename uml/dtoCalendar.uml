@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.example.rma.domain.calendar.dto</OriginalElement>
+  <nodes>
+    <node x="0.0" y="170.0">com.example.rma.domain.calendar.dto.Week</node>
+    <node x="0.0" y="296.0">com.example.rma.domain.calendar.dto.Month</node>
+    <node x="5.5" y="0.0">com.example.rma.domain.calendar.dto.Day</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.example.rma.domain.calendar.dto.Week" target="com.example.rma.domain.calendar.dto.Day" relationship="TO_MANY">
+      <point x="0.0" y="-38.0" />
+      <point x="0.0" y="60.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.dto.Month" target="com.example.rma.domain.calendar.dto.Week" relationship="TO_MANY">
+      <point x="15.0" y="-49.0" />
+      <point x="15.0" y="38.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.dto.Month" target="com.example.rma.domain.calendar.dto.Week" relationship="DEPENDENCY">
+      <point x="0.0" y="-49.0" />
+      <point x="0.0" y="38.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.dto.Week" target="com.example.rma.domain.calendar.dto.Day" relationship="DEPENDENCY">
+      <point x="15.0" y="-38.0" />
+      <point x="15.0" y="60.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="true" x="80.0" y="197.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

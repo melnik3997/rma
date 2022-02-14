@@ -63,17 +63,12 @@ public class CalendarControllerRest {
     public List<Month> editCalendar(@AuthenticationPrincipal User user,
                                     @RequestBody RequestEditCalendar requestEditCalendar,
                                     HttpServletRequest request ){
-
         List<Calendar> calendarList = calendarService.findCalendarListByDayList(requestEditCalendar.getDay());
-
         calendarList.forEach(calendar -> calendar.setDayType(DayType.values()[requestEditCalendar.getDayType()-1]));
-
         calendarService.saveAll(calendarList);
         LocalDate date = LocalDate.now();
-
         Institution institution = userService.findInstitutionByUser(user);
         List<Month> months = calendarService.getCalendarDtoForYear(institution.getEnterprise(), CalendarType.getDefault(), date.getYear());
-
         return months;
     }
 

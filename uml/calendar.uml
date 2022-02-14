@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.example.rma.domain.calendar</OriginalElement>
+  <nodes>
+    <node x="174.0" y="-91.0">com.example.rma.domain.calendar.dto</node>
+    <node x="0.0" y="192.0">com.example.rma.domain.calendar.DayWeek</node>
+    <node x="135.0" y="126.0">com.example.rma.domain.calendar.CalendarEnterprise</node>
+    <node x="107.91176470588236" y="372.0">com.example.rma.domain.calendar.Calendar</node>
+    <node x="151.5" y="0.0">com.example.rma.domain.calendar.CalendarType</node>
+    <node x="369.0" y="211.0">com.example.rma.domain.calendar.DayType</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.example.rma.domain.calendar.Calendar" target="com.example.rma.domain.calendar.DayType" relationship="TO_ONE">
+      <point x="124.0" y="0.0" />
+      <point x="425.5" y="476.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.CalendarEnterprise" target="com.example.rma.domain.calendar.CalendarType" relationship="TO_ONE">
+      <point x="15.0" y="-93.0" />
+      <point x="15.0" y="38.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.CalendarEnterprise" target="com.example.rma.domain.calendar.CalendarType" relationship="DEPENDENCY">
+      <point x="0.0" y="-93.0" />
+      <point x="0.0" y="38.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.Calendar" target="com.example.rma.domain.calendar.DayWeek" relationship="TO_ONE">
+      <point x="-124.00000000000001" y="15.0" />
+      <point x="42.5" y="491.0" />
+      <point x="-15.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.Calendar" target="com.example.rma.domain.calendar.DayWeek" relationship="DEPENDENCY">
+      <point x="-124.00000000000001" y="0.0" />
+      <point x="57.5" y="476.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.Calendar" target="com.example.rma.domain.calendar.CalendarEnterprise" relationship="DEPENDENCY">
+      <point x="15.088235294117624" y="-104.0" />
+      <point x="15.0" y="93.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.Calendar" target="com.example.rma.domain.calendar.DayType" relationship="DEPENDENCY">
+      <point x="124.0" y="15.0" />
+      <point x="440.5" y="491.0" />
+      <point x="15.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.calendar.Calendar" target="com.example.rma.domain.calendar.CalendarEnterprise" relationship="TO_ONE">
+      <point x="0.08823529411762365" y="-104.0" />
+      <point x="0.0" y="93.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="true" x="241.0" y="244.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

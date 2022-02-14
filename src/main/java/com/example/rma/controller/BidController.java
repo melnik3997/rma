@@ -84,11 +84,9 @@ public class BidController {
                                Model model){
 
         String urlName = bidRule.getBidType().getUrlName();
-
         if(urlName.length() > 0){
             return "redirect:/bid/"+ bidRule.getId() + "/"+ urlName;
         }
-
         return "redirect:/bid";
     }
 

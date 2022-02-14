@@ -22,8 +22,6 @@ public enum ActionType {
                     leaveEarlyService.beforeDoTransitionProcess(dealObject,transition);
                     break;
             }
-
-
             return dealObject;
         }
     },
@@ -55,6 +53,10 @@ public enum ActionType {
     }
 
     public DealObject beforeDoTransition(DealObject dealObject, Transition transition) throws BusinessException {
+        return dealObject;
+    }
+
+    public DealObject afterDoTransition(DealObject dealObject, Transition transition, Protocol protocol) throws BusinessException {
         return dealObject;
     }
 

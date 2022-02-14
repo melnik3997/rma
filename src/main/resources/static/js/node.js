@@ -7,21 +7,6 @@ var ii = url_string.indexOf(patch)+patch.length +1
 var r2 = url_string.length - ii
 return url_string.substr( ii, r2);
 }
-/*
-const User = {
-  template: `
-    <div class="user">
-      <h2>Пользователь {{ $route.params.id }}</h2>
-      <router-view></router-view>
-    </div>
-  `
-}
-const router = new VueRouter({
-   mode: 'history',
-  routes: [
-    { path: '/subdivisionTree/:entId', component: User }
-  ]
-})*/
 
 var time = 500;
 
@@ -61,14 +46,16 @@ template:
        result.json().then(data =>{
                 data.forEach(node => this.nodes.push(node))
                 time = 1;
-
             }
         )
        )
-
-
     },
     methods: {
+    },
+    data:function() {
+        return {
+
+        }
     },
     mounted : function(){
 

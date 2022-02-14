@@ -70,18 +70,17 @@ public class TransitionService {
      */
     @Transactional
     public Protocol doTransition(DealObject dealObject, Transition transition) throws BusinessException {
-        //вызываем пред обработку
 
+        //находим действие
         ActionType action = transition.getActionType();
-
+        //вызываем пред обработку
         dealObject = action.beforeDoTransition(dealObject, transition);
-
         //формируем протокол
-
         LocalDateTime dateProtocol = LocalDateTime.now();
-
+        //находим текущего пользователя
         User user = userService.getCurrentUser();
         Institution responsible;
+        //установка ответсвенного за переход
         if(transition.getInstitution() == null) {
             if(dealObject.getResponsible() == null ){
                 responsible = null;
@@ -95,19 +94,16 @@ public class TransitionService {
                 dealObject = bidObjectService.saveDealObject(dealObject);
             }
         }
-
-
+        //создаем протокол по выполненному дейсию
         Protocol protocol = new Protocol(dealObject, dateProtocol, transition,user,responsible );
-
-        Protocol protocolDB = protocolService.save(protocol);
-        dealObject.setProtocol(protocolDB);
+        protocol = protocolService.save(protocol);
+        //устанавливаем последний протокол
+        dealObject.setProtocol(protocol);
+        //сохраняем объект
         dealObject = bidObjectService.saveDealObject(dealObject);
-
         //вызываем пост обработку
+        action.afterDoTransition(dealObject, transition, protocol);
 
-
-        return protocolDB;
+        return protocol;
     }
-
-
 }

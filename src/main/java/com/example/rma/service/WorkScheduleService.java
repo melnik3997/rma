@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,33 +98,33 @@ public class WorkScheduleService {
         return !(findActiveByInstitution(institution) == null);
     }
 
-    public List<InstitutionWorkScheduleDto> getInstitutionListSchedule(List<Institution> institutionList, LocalDate date) {
+    public List<InstitutionWorkScheduleDto> getInstitutionListScheduleByWeek(List<Institution> institutionList, LocalDate date) {
         List<InstitutionWorkScheduleDto> institutionWorkScheduleDtoList = new ArrayList<>();
 
         for (Institution institution: institutionList) {
-            List<WorkScheduleDto> workScheduleDtoList = getSchedule(institution, date);
+            List<WorkScheduleDto> workScheduleDtoList = getScheduleByWeek(institution, date);
             institutionWorkScheduleDtoList.add(new InstitutionWorkScheduleDto(institution.getId(), institution.getFIO(), workScheduleDtoList));
 
         }
         return institutionWorkScheduleDtoList;
     }
 
-    public List<WorkScheduleDto> getSchedule(Institution institution, LocalDate date){
+    public List<WorkScheduleDto> getScheduleByWeek(Institution institution, LocalDate date){
         WeekFields weekFields = WeekFields.ISO;
-
-        CalendarEnterprise calendarEnterprise = calendarService.findByEnterpriseAndCalendarTypeAndYear(institution.getEnterprise(), CalendarType.getDefault(), date.getYear());
-
-        int numberWeek = date.get(weekFields.weekOfWeekBasedYear());
-
-        List<Calendar> calendarList = calendarService.findByCalendarEnterpriseAndNumberWeek(calendarEnterprise, numberWeek);
-
-        WorkSchedule workSchedule = findActiveByInstitution(institution);
-
-        List<WorkScheduleCorrect> workScheduleCorrectList = workScheduleCorrectService.findByCalendarList(calendarList);
         List<WorkScheduleDto> workScheduleDtoList = new ArrayList<>();
-
+        //находим рабочий календарь по дате
+        CalendarEnterprise calendarEnterprise = calendarService.findByEnterpriseAndCalendarTypeAndYear(institution.getEnterprise(), CalendarType.getDefault(), date.getYear());
+        //находим номер недели
+        int numberWeek = date.get(weekFields.weekOfWeekBasedYear());
+        //ноходим дни в календаре в текущей неделе
+        List<Calendar> calendarList = calendarService.findByCalendarEnterpriseAndNumberWeek(calendarEnterprise, numberWeek);
+        //находим график работы сотпрудников
+        WorkSchedule workSchedule = findActiveByInstitution(institution);
+        //находим корректровки по необходимым дням
+        List<WorkScheduleCorrect> workScheduleCorrectList = workScheduleCorrectService.findByCalendarList(calendarList);
+        //обработка графика
         for (Calendar calendar : calendarList) {
-            //создали дто графика
+            //компиляция графика
             WorkScheduleDto workScheduleDto = getWorkScheduleDto(workSchedule, calendar, workScheduleCorrectList);
             workScheduleDtoList.add(workScheduleDto);
         }
@@ -144,7 +143,6 @@ public class WorkScheduleService {
         List<WorkScheduleCorrect> workScheduleCorrectListC = getWorkScheduleCorrectByCalendar(calendar, workScheduleCorrectList);
         WorkScheduleDto workScheduleDto = new WorkScheduleDto(calendar, workSchedule);
         workScheduleDto.setWorkTime(workSchedule.getWorkTime() - (workSchedule.isLunchBreakIn()?  workSchedule.getLunchBreak() : 0));
-
 
         //механиз корректировки графика по заявкам
         if (workScheduleCorrectListC != null && !workScheduleCorrectListC.isEmpty())

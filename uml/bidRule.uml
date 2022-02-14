@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.example.rma.domain.bidRule</OriginalElement>
+  <nodes>
+    <node x="-63.93522119591643" y="350.0">com.example.rma.domain.bidRule.ActionType</node>
+    <node x="719.8383430909421" y="577.8403648802737">com.example.rma.domain.bidRule.dto</node>
+    <node x="303.7079831932773" y="480.0">com.example.rma.domain.bidRule.BidRule</node>
+    <node x="-493.14557990492455" y="378.54688275222037">com.example.rma.domain.bidRule.Protocol</node>
+    <node x="222.8329831932773" y="306.0">com.example.rma.domain.bidRule.BidType</node>
+    <node x="-270.82948040366625" y="16.0">com.example.rma.domain.bidRule.Transition</node>
+    <node x="417.6344537815126" y="137.0">com.example.rma.domain.bidRule.StateType</node>
+    <node x="44.75" y="0.0">com.example.rma.domain.bidRule.DealObjectAttrType</node>
+    <node x="295.7079831932773" y="690.9053591790193">com.example.rma.domain.bidRule.State</node>
+    <node x="8.25" y="104.0">com.example.rma.domain.bidRule.DealObjectAttr</node>
+    <node x="598.4369747899159" y="240.0">com.example.rma.domain.bidRule.DealObject</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.example.rma.domain.bidRule.DealObject" target="com.example.rma.domain.bidRule.BidRule" relationship="DEPENDENCY">
+      <point x="-93.0" y="-103.5" />
+      <point x="568.2364615157483" y="262.5" />
+      <point x="568.2364615157483" y="578.6164635874183" />
+      <point x="78.5" y="16.616463587418252" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Protocol" target="com.example.rma.domain.bidRule.Transition" relationship="TO_ONE">
+      <point x="112.0" y="0.0" />
+      <point x="-236.57948040366625" y="493.54688275222037" />
+      <point x="-64.25" y="148.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.BidType" target="com.example.rma.domain.bidRule.BidRule" relationship="DEPENDENCY">
+      <point x="39.875" y="60.0" />
+      <point x="15.0" y="-82.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.BidRule" target="com.example.rma.domain.bidRule.BidType" relationship="DEPENDENCY">
+      <point x="-24.875" y="-82.0" />
+      <point x="0.0" y="60.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.State" target="com.example.rma.domain.bidRule.StateType" relationship="TO_ONE">
+      <point x="82.5" y="15.000011806375483" />
+      <point x="526.5" y="798.9053709853948" />
+      <point x="49.865546218487395" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.DealObjectAttr" target="com.example.rma.domain.bidRule.DealObject" relationship="DEPENDENCY">
+      <point x="79.25" y="-60.0" />
+      <point x="216.0" y="79.0" />
+      <point x="664.6090097416126" y="79.0" />
+      <point x="-26.827965048303327" y="-126.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.State" target="com.example.rma.domain.bidRule.StateType" relationship="DEPENDENCY">
+      <point x="82.5" y="0.0" />
+      <point x="509.3329831932773" y="783.9053591790193" />
+      <point x="32.698529411764696" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.DealObjectAttr" target="com.example.rma.domain.bidRule.DealObject" relationship="TO_ONE">
+      <point x="128.5" y="-44.5" />
+      <point x="629.9369747899159" y="119.5" />
+      <point x="-61.5" y="-126.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.BidRule" target="com.example.rma.domain.bidRule.BidType" relationship="TO_ONE">
+      <point x="0.0" y="-82.0" />
+      <point x="24.875" y="60.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Transition" target="com.example.rma.domain.bidRule.State" relationship="DEPENDENCY">
+      <point x="0.0" y="148.0" />
+      <point x="-172.32948040366625" y="783.9053591790193" />
+      <point x="-82.5" y="0.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.DealObject" target="com.example.rma.domain.bidRule.Transition" relationship="DEPENDENCY">
+      <point x="0.0" y="-126.0" />
+      <point x="691.4369747899159" y="-17.5" />
+      <point x="-172.32948040366625" y="-17.5" />
+      <point x="0.0" y="-148.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.BidType" target="com.example.rma.domain.bidRule.DealObjectAttr" relationship="DEPENDENCY">
+      <point x="-127.0" y="-60.0" />
+      <point x="93.5829831932773" y="60.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Transition" target="com.example.rma.domain.bidRule.BidRule" relationship="TO_ONE">
+      <point x="15.0" y="148.0" />
+      <point x="-157.32948040366625" y="547.0" />
+      <point x="-78.5" y="-15.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.DealObject" target="com.example.rma.domain.bidRule.BidRule" relationship="TO_ONE">
+      <point x="-93.0" y="-118.5" />
+      <point x="568.2364615157483" y="247.5" />
+      <point x="568.2364615157483" y="563.6164635874183" />
+      <point x="78.5" y="1.6164635874182522" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.BidType" target="com.example.rma.domain.bidRule.StateType" relationship="DEPENDENCY">
+      <point x="119.3014705882353" y="-60.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Transition" target="com.example.rma.domain.bidRule.BidRule" relationship="DEPENDENCY">
+      <point x="30.0" y="148.0" />
+      <point x="-142.32948040366625" y="493.54688275222037" />
+      <point x="-78.5" y="-68.45311724777963" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.BidType" target="com.example.rma.domain.bidRule.State" relationship="DEPENDENCY">
+      <point x="-82.25" y="60.0" />
+      <point x="275.0829831932773" y="768.9053591790193" />
+      <point x="-82.5" y="-15.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.DealObjectAttrType" target="com.example.rma.domain.bidRule.DealObjectAttr" relationship="DEPENDENCY">
+      <point x="15.0" y="27.0" />
+      <point x="15.0" y="-60.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.DealObjectAttr" target="com.example.rma.domain.bidRule.DealObjectAttrType" relationship="DEPENDENCY">
+      <point x="-15.0" y="-60.0" />
+      <point x="-15.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.State" target="com.example.rma.domain.bidRule.BidRule" relationship="TO_ONE">
+      <point x="16.676470588235304" y="-93.0" />
+      <point x="12.676470588235304" y="82.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Transition" target="com.example.rma.domain.bidRule.State" relationship="TO_ONE">
+      <point x="-30.0" y="148.0" />
+      <point x="-202.32948040366625" y="798.9053591790193" />
+      <point x="-82.5" y="15.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.State" target="com.example.rma.domain.bidRule.BidRule" relationship="DEPENDENCY">
+      <point x="-13.323529411764696" y="-93.0" />
+      <point x="-17.323529411764696" y="82.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.DealObjectAttr" target="com.example.rma.domain.bidRule.DealObjectAttrType" relationship="TO_ONE">
+      <point x="0.0" y="-60.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Protocol" target="com.example.rma.domain.bidRule.Transition" relationship="DEPENDENCY">
+      <point x="15.0" y="-115.0" />
+      <point x="-366.14557990492455" y="164.0" />
+      <point x="-98.5" y="0.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.DealObject" target="com.example.rma.domain.bidRule.Protocol" relationship="TO_ONE">
+      <point x="91.5" y="-126.0" />
+      <point x="782.9369747899159" y="-77.5" />
+      <point x="-452.14557990492455" y="-77.5" />
+      <point x="-71.0" y="-115.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Protocol" target="com.example.rma.domain.bidRule.DealObject" relationship="TO_ONE">
+      <point x="-30.0" y="-115.0" />
+      <point x="-411.14557990492455" y="-62.5" />
+      <point x="767.9369747899159" y="-62.5" />
+      <point x="76.5" y="-126.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Transition" target="com.example.rma.domain.bidRule.ActionType" relationship="TO_ONE">
+      <point x="98.5" y="0.0" />
+      <point x="-30.0" y="164.0" />
+      <point x="-82.56477880408357" y="-38.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Protocol" target="com.example.rma.domain.bidRule.DealObject" relationship="DEPENDENCY">
+      <point x="0.0" y="115.00000000000006" />
+      <point x="-381.14557990492455" y="894.4053591790193" />
+      <point x="689.3531663520596" y="894.4053591790193" />
+      <point x="-2.0838084378563053" y="126.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.DealObject" target="com.example.rma.domain.bidRule.Protocol" relationship="DEPENDENCY">
+      <point x="61.5" y="-126.0" />
+      <point x="752.9369747899159" y="-47.5" />
+      <point x="-396.14557990492455" y="-47.5" />
+      <point x="-15.0" y="-115.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.ActionType" target="com.example.rma.domain.bidRule.Transition" relationship="DEPENDENCY">
+      <point x="-116.5" y="15.0" />
+      <point x="-93.07948040366625" y="403.0" />
+      <point x="79.25" y="148.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.Transition" target="com.example.rma.domain.bidRule.ActionType" relationship="DEPENDENCY">
+      <point x="98.5" y="15.0" />
+      <point x="-45.0" y="179.0" />
+      <point x="-97.56477880408357" y="-38.0" />
+    </edge>
+    <edge source="com.example.rma.domain.bidRule.ActionType" target="com.example.rma.domain.bidRule.DealObject" relationship="DEPENDENCY">
+      <point x="-61.81477880408357" y="-38.0" />
+      <point x="-9.25" y="-32.5" />
+      <point x="706.4369747899159" y="-32.5" />
+      <point x="15.0" y="-126.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.46206533192834565" showDependencies="true" x="377.5" y="939.0" />
+  <SelectedNodes>
+    <node>com.example.rma.domain.bidRule.dto</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

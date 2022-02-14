@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.example.rma.domain</OriginalElement>
+  <nodes>
+    <node x="682.7901938426454" y="115.58722919042188">com.example.rma.domain.Role</node>
+    <node x="330.62371721778794" y="614.5746864310149">com.example.rma.domain.WorkScheduleCorrectType</node>
+    <node x="1239.05" y="522.7069555302166">com.example.rma.domain.Position</node>
+    <node x="1047.8045454545454" y="925.5045610034207">com.example.rma.domain.bidRule</node>
+    <node x="1047.8045454545454" y="979.2417331812998">com.example.rma.domain.calendar</node>
+    <node x="344.53135689851774" y="696.9714937286202">com.example.rma.domain.PresenceWork</node>
+    <node x="723.2976054732042" y="189.76396807297604">com.example.rma.domain.Enterprise</node>
+    <node x="850.5590909090909" y="532.0">com.example.rma.domain.Subdivision</node>
+    <node x="871.25" y="104.0">com.example.rma.domain.User</node>
+    <node x="1158.1560498082304" y="263.0">com.example.rma.domain.Post</node>
+    <node x="1301.05" y="104.0">com.example.rma.domain.PostType</node>
+    <node x="511.422496631077" y="916.5188141391106">com.example.rma.domain.Settings</node>
+    <node x="846.5590909090909" y="850.5188141391105">com.example.rma.domain.WorkSchedule</node>
+    <node x="1047.8045454545454" y="871.7673888255416">com.example.rma.domain.dto</node>
+    <node x="1171.7147727272727" y="104.0">com.example.rma.domain.PostLevel</node>
+    <node x="1047.8045454545454" y="532.0">com.example.rma.domain.Message</node>
+    <node x="288.06818181818176" y="313.21778791334106">com.example.rma.domain.WorkScheduleCorrect</node>
+    <node x="648.3136363636363" y="532.0">com.example.rma.domain.Institution</node>
+    <node x="508.6314139110606" y="115.5872291904219">com.example.rma.domain.ActuallyWork</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.example.rma.domain.Post" target="com.example.rma.domain.PostLevel" relationship="TO_ONE">
+      <point x="-11.941277080957661" y="-82.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Institution" target="com.example.rma.domain.Enterprise" relationship="TO_ONE">
+      <point x="68.4843636363637" y="-192.0" />
+      <point x="15.000394526795844" y="48.99999999999997" />
+    </edge>
+    <edge source="com.example.rma.domain.PresenceWork" target="com.example.rma.domain.Institution" relationship="DEPENDENCY">
+      <point x="80.5" y="-76.9714937286202" />
+      <point x="-80.5" y="0.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Institution" target="com.example.rma.domain.User" relationship="TO_ONE">
+      <point x="80.5" y="77.5" />
+      <point x="1028.0590909090909" y="801.5" />
+      <point x="21.809090909090855" y="159.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Position" target="com.example.rma.domain.Institution" relationship="TO_ONE">
+      <point x="-87.5" y="123.79304446978335" />
+      <point x="80.5" y="92.5" />
+    </edge>
+    <edge source="com.example.rma.domain.WorkScheduleCorrectType" target="com.example.rma.domain.WorkScheduleCorrect" relationship="DEPENDENCY">
+      <point x="-57.37371721778794" y="-27.0" />
+      <point x="-66.31818181818176" y="103.99999999999994" />
+    </edge>
+    <edge source="com.example.rma.domain.WorkScheduleCorrect" target="com.example.rma.domain.WorkScheduleCorrectType" relationship="DEPENDENCY">
+      <point x="-23.944464600393815" y="103.99999999999994" />
+      <point x="-15.0" y="-27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.PresenceWork" target="com.example.rma.domain.Institution" relationship="TO_ONE">
+      <point x="80.5" y="0.0" />
+      <point x="-80.5" y="76.9714937286202" />
+    </edge>
+    <edge source="com.example.rma.domain.User" target="com.example.rma.domain.Role" relationship="DEPENDENCY">
+      <point x="-135.0" y="-105.41300000000001" />
+      <point x="65.5" y="14.99977080957811" />
+    </edge>
+    <edge source="com.example.rma.domain.WorkSchedule" target="com.example.rma.domain.Institution" relationship="TO_ONE">
+      <point x="-82.0" y="0.0" />
+      <point x="728.8136363636363" y="976.5188141391105" />
+      <point x="0.0" y="192.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Position" target="com.example.rma.domain.Institution" relationship="DEPENDENCY">
+      <point x="-87.5" y="138.79304446978335" />
+      <point x="80.5" y="107.5" />
+    </edge>
+    <edge source="com.example.rma.domain.Post" target="com.example.rma.domain.PostLevel" relationship="DEPENDENCY">
+      <point x="3.0587229190423386" y="-82.0" />
+      <point x="15.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.User" target="com.example.rma.domain.Role" relationship="TO_ONE">
+      <point x="-135.0" y="-120.41300000000001" />
+      <point x="65.5" y="-2.291904218907348E-4" />
+    </edge>
+    <edge source="com.example.rma.domain.User" target="com.example.rma.domain.Role" relationship="TO_MANY">
+      <point x="-135.0" y="-135.413" />
+      <point x="65.5" y="-15.00022919042189" />
+    </edge>
+    <edge source="com.example.rma.domain.WorkSchedule" target="com.example.rma.domain.Institution" relationship="DEPENDENCY">
+      <point x="-82.0" y="-15.0" />
+      <point x="743.8136363636363" y="961.5188141391105" />
+      <point x="15.0" y="192.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Subdivision" target="com.example.rma.domain.User" relationship="DEPENDENCY">
+      <point x="70.5" y="-126.0" />
+      <point x="-7.190909090909145" y="159.0" />
+    </edge>
+    <edge source="com.example.rma.domain.WorkScheduleCorrect" target="com.example.rma.domain.Institution" relationship="TO_ONE">
+      <point x="57.37371721778794" y="103.99999999999994" />
+      <point x="510.4418990359697" y="597.0746864310149" />
+      <point x="-80.5" y="-126.92531356898508" />
+    </edge>
+    <edge source="com.example.rma.domain.ActuallyWork" target="com.example.rma.domain.Institution" relationship="DEPENDENCY">
+      <point x="80.0" y="0.0" />
+      <point x="705.7976054732042" y="197.5872291904219" />
+      <point x="-23.01603089043215" y="-192.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Post" target="com.example.rma.domain.PostType" relationship="DEPENDENCY">
+      <point x="82.5" y="0.0" />
+      <point x="1357.55" y="345.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Position" target="com.example.rma.domain.Subdivision" relationship="DEPENDENCY">
+      <point x="-87.5" y="35.793044469783354" />
+      <point x="78.0" y="70.5" />
+    </edge>
+    <edge source="com.example.rma.domain.ActuallyWork" target="com.example.rma.domain.Institution" relationship="TO_ONE">
+      <point x="67.18222245257573" y="82.0" />
+      <point x="-73.0" y="-192.0" />
+    </edge>
+    <edge source="com.example.rma.domain.WorkScheduleCorrect" target="com.example.rma.domain.Institution" relationship="DEPENDENCY">
+      <point x="165.0" y="99.90250855188123" />
+      <point x="607.5318181818182" y="517.1202964652223" />
+      <point x="607.5318181818182" y="539.5" />
+      <point x="-80.5" y="-184.5" />
+    </edge>
+    <edge source="com.example.rma.domain.Post" target="com.example.rma.domain.PostType" relationship="TO_ONE">
+      <point x="75.0" y="-82.0" />
+      <point x="-41.89395019176959" y="27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Position" target="com.example.rma.domain.Subdivision" relationship="TO_ONE">
+      <point x="-87.5" y="20.793044469783354" />
+      <point x="78.0" y="55.5" />
+    </edge>
+    <edge source="com.example.rma.domain.Position" target="com.example.rma.domain.Post" relationship="DEPENDENCY">
+      <point x="-80.0" y="-170.0" />
+      <point x="5.893950191769591" y="82.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Message" target="com.example.rma.domain.User" relationship="TO_ONE">
+      <point x="15.000454545454659" y="-82.0" />
+      <point x="131.55500000000006" y="159.0" />
+    </edge>
+    <edge source="com.example.rma.domain.WorkScheduleCorrect" target="com.example.rma.domain.WorkScheduleCorrectType" relationship="TO_ONE">
+      <point x="-8.944464600393815" y="103.99999999999994" />
+      <point x="0.0" y="-27.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Subdivision" target="com.example.rma.domain.User" relationship="TO_ONE">
+      <point x="0.0" y="-126.0" />
+      <point x="-77.69090909090914" y="159.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Institution" target="com.example.rma.domain.Enterprise" relationship="DEPENDENCY">
+      <point x="38.484363636363696" y="-192.0" />
+      <point x="-14.999605473204156" y="48.99999999999997" />
+    </edge>
+    <edge source="com.example.rma.domain.Message" target="com.example.rma.domain.User" relationship="DEPENDENCY">
+      <point x="0.0" y="-82.0" />
+      <point x="116.5545454545454" y="159.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Institution" target="com.example.rma.domain.User" relationship="DEPENDENCY">
+      <point x="1.9839691095678518" y="-192.0" />
+      <point x="730.7976054732042" y="320.71778791334106" />
+      <point x="-135.0" y="57.717787913341056" />
+    </edge>
+    <edge source="com.example.rma.domain.Position" target="com.example.rma.domain.Post" relationship="TO_ONE">
+      <point x="-65.0" y="-170.0" />
+      <point x="20.89395019176959" y="82.0" />
+    </edge>
+    <edge source="com.example.rma.domain.Subdivision" target="com.example.rma.domain.Enterprise" relationship="TO_ONE">
+      <point x="-30.000090909090886" y="-126.0" />
+      <point x="898.559" y="474.5" />
+      <point x="782.298" y="474.5" />
+      <point x="3.945267958442855E-4" y="48.99999999999997" />
+    </edge>
+    <edge source="com.example.rma.domain.Subdivision" target="com.example.rma.domain.Enterprise" relationship="DEPENDENCY">
+      <point x="-78.0" y="0.0" />
+      <point x="826.8136363636363" y="658.0" />
+      <point x="44.51603089043215" y="48.99999999999997" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.8606476938174681" showDependencies="true" x="851.5" y="603.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

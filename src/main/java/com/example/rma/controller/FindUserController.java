@@ -36,35 +36,14 @@ public class FindUserController {
     public String findUserByLastName(@AuthenticationPrincipal User user,
                                      @RequestParam(required = false, name ="userName") String userName,
                                      Model model) {
-        /*
-        if(!StringUtils.isEmpty(userName)) {
-            String[] arrName = userName.trim().split(" ");
-
-            String lastName = arrName[0];
-            String fistName;
-            String secondName;
-            if(arrName.length == 2)
-             fistName = arrName[1];
-            if(arrName.length == 3)
-            secondName = arrName[2];
-
-            List<Institution> institutionList = institutionRepo.findByLastName(lastName);
-            List<InstitutionDto> institutionDtoList = institutionRepo.findInstitutionDtoByParam(0l, userName);
-
-            model.addAttribute("institutions", institutionDtoList );
 
 
-        }
-        else {
-            model.addAttribute("institutions", institutionRepo.findAll());
-        }
-*/
-        if(userName.length()>0) {
             String param = "%" + userName + "%";
             Enterprise enterprise = userService.findInstitutionByUser(user).getEnterprise();
             List<InstitutionDto> institutionDtoList = institutionRepo.findInstitutionDtoByParam(enterprise.getId(), param);
             model.addAttribute("institutions", institutionDtoList );
-        }
+
+
 
         model.addAttribute("findValue", userName);
 
