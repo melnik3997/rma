@@ -41,6 +41,9 @@ public class LeaveEarlyService {
     @Autowired
     private WorkScheduleCorrectService workScheduleCorrectService;
 
+    @Autowired
+    private UtilBidService utilBidService;
+
     public Map<String, String> create(BidRule bidRule, User author, String date, String timeLeave, String comment){
         Map<String, String> errors = new HashMap<>();
 
@@ -48,29 +51,17 @@ public class LeaveEarlyService {
             errors.put("errorCreate", "Правило заявки не корректного типа");
             return errors;
         }
-        boolean error = false;
+        Boolean error = false;
         List<DealObjectAttr> dealObjectAttrList =new ArrayList<>();
 
         Institution institution = userService.findInstitutionByUser(author);
-        LocalDate dateD = null;
-        try {
-            dateD = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        }catch (Exception e){
-            error = true;
-            errors.put("dateError", "Не корректно указана дата");
-        }
-        if(error){
+
+        Calendar calendar = utilBidService.getCalendarAndCheck(date, institution, errors);
+
+        if (errors.size() > 0) {
             return errors;
         }
-        Calendar calendar = calendarService.findCalendarByDateAndInstitution(institution, dateD);
 
-        if(calendar == null){
-            errors.put("dateError", "Не определена дата в активном календаре");
-            error = true;
-        }else if(LocalDate.now().compareTo(dateD) > 0){
-            error = true;
-            errors.put("dateError", "Дата заявки не может быть меньше текущей даты");
-        }
         if(checkTime(timeLeave)){
             error = true;
             errors.put("timeLeaveError", "Не корректное время");
@@ -87,23 +78,12 @@ public class LeaveEarlyService {
 
         bidObjectService.createBidObject(dealObject, dealObjectAttrList);
 
-
         return errors;
     }
 
     public DealObject beforeDoTransitionProcess(DealObject dealObject, Transition transition ){
 
-        Institution institution = dealObject.getEmployee();
-        Institution leader =  institutionService.findInstitutionByInstitutionDto(institutionService.findLeaderByInstitution(institution));
-
-        //если нашли руководителя ставим его ответсвенным
-        if(leader != null){
-            dealObject.setResponsible(leader);
-        }else{
-            dealObject.setResponsible(institution);
-        }
-        dealObject = bidObjectService.saveDealObject(dealObject);
-        return dealObject;
+        return utilBidService.setEmployeeByDealObject(dealObject, transition);
     }
 
     public DealObject beforeDoTransitionClose(DealObject dealObject, Transition transition ) throws BusinessException {
@@ -126,11 +106,7 @@ public class LeaveEarlyService {
         dealObject = bidObjectService.saveDealObject(dealObject);
         return dealObject;
     }
-
-
-
     private boolean checkTime(String time) {
         return time.equals("__:__");
     }
-
 }

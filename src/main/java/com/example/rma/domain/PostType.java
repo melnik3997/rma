@@ -7,7 +7,10 @@ public enum PostType {
     intruder("Внедренец"),
     team_leader("Руководитель команды"),
     analyst("Аналитик"),
-    director("Директор");
+    director("Директор"),
+    accountant("Бухгалтер"),
+    personnel_manager("Менеджер по персоналу"),
+    office_manager("Офис менеджер");
 
     private final String name;
 

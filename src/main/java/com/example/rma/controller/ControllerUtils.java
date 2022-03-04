@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -57,5 +58,33 @@ public class ControllerUtils {
             }
         }
         return model;
+    }
+
+    public static String getQueryUrl(HttpServletRequest request) {
+        String query = request.getQueryString();
+        if (query != null && !query.isEmpty()) {
+            query = deleteParam(query, "size");
+            query = deleteParam(query, "page");
+        }
+        query = query != null && !query.isEmpty() ? "?"+ query : "";
+        return query;
+    }
+
+    private static String deleteParam(String s, String p){
+        String n = "";
+        String k = "";
+        while (s.contains(p)){
+            int beginIndex = s.indexOf(p) == 0 ? s.indexOf(p) : s.indexOf(p) - 1;
+            n = s.substring(0, beginIndex);
+            k = s.substring(beginIndex + 1);
+            int endIndex = k.indexOf("&");
+            if(endIndex != -1) {
+                k = k.substring(endIndex);
+            }else {
+                k = "";
+            }
+            s = n + k;
+        }
+        return s;
     }
 }

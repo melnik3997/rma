@@ -2,6 +2,8 @@ package com.example.rma.repository;
 
 import com.example.rma.domain.User;
 import com.example.rma.domain.dto.UserDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,6 +22,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
                     " on p.institution = i.id" +
                    " and p.active = true" +
                    " and p.general = true" )
-    List<UserDto> findUserDto();
+    Page<UserDto> findUserDto(Pageable pageable);
 
 }

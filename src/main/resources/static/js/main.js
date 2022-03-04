@@ -4,10 +4,11 @@ var workScheduleAPI = Vue.resource( '/getWorkSchedule/{id}');
 var getInstitutionIsWorkNowAPI = Vue.resource( '/getInstitutionIsWorkNow');
 var calendarAPI = Vue.resource( '/calendarEnterprise/now');
 var presenceWorkAPI = Vue.resource( '/getPresenceWork');
-var presenceWorkAPI = Vue.resource( '/getPresenceWork');
 var presenceWorkTimeSumAPI = Vue.resource( '/getPresenceWorkTimeSum');
 var institutionAPI = Vue.resource( '/getInstitution');
-console.log(tocken);
+var getRemainderActuallyWorkAPI = Vue.resource( '/getRemainderActuallyWork');
+var getActuallyWorkListAPI = Vue.resource( '/getActuallyWorkList');
+
 Vue.http.headers.common['X-CSRF-TOKEN'] = tocken;
 
 
@@ -56,11 +57,11 @@ template:
 Vue.component('ActuallyWork',{
 props: ['methodSave'],
 template:
-'<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'+
+'<div class="modal fade" id="actuallyWorkSaveModal" tabindex="-1" role="dialog" aria-labelledby="actuallyWorkSaveModalLabel" aria-hidden="true">'+
   '<div class="modal-dialog" role="document">'+
     '<div class="modal-content">'+
       '<div class="modal-header">'+
-        '<h5 class="modal-title" id="exampleModalLabel">Списание трудозатрат</h5>'+
+        '<h5 class="modal-title" id="actuallyWorkSaveModalLabel">Списание трудозатрат</h5>'+
         '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
           '<span aria-hidden="true">&times;</span>'+
         '</button>'+
@@ -90,7 +91,7 @@ template:
 '</div>',
 methods: {
     save: function(){
-        $('#exampleModal').modal('hide');
+        $('#actuallyWorkSaveModal').modal('hide');
         this.methodSave(this.time,this.comment,this.theme);
         this.time = 0;
         this.comment = "";
@@ -106,6 +107,90 @@ data: function(){
         }
 }
 }
+)
+
+Vue.component('ActuallyWorkListItem',{
+        props: ['actuallyWork', 'setErrorMess', 'openActuallyWork'],
+        template:
+            '<tr>'+
+                '<td>{{actuallyWork.theme}}</td>'+
+                '<td>{{actuallyWork.time}}</td>'+
+                '<td>{{actuallyWork.comment}}</td>'+
+                '<td>'+
+                    '<button @click="deleteActuallyWork" type="button" class="btn btn-danger"  ><strong>⌫</strong></button>'+
+                '</td>'+
+            '</tr>'
+    ,
+    methods: {
+        deleteActuallyWork: function (){
+            this.$http.post('/deleteActuallyWork',   this.actuallyWork ).then(result=>
+                result.json().then(data => {
+                    this.openActuallyWork();
+                })
+            ).catch(error => {
+                this.setErrorMess(error.bodyText)
+            })
+        }
+
+    }
+    }
+)
+
+Vue.component('ActuallyWorkList',{
+        props: ['actuallyWorkList', 'openActuallyWork'],
+        template:
+            '<div class="modal fade bd-example-modal-lg" id="actuallyWorkListModal" tabindex="-1" role="dialog" aria-labelledby="actuallyWorkListModalLabel" aria-hidden="true">'+
+            '<div class="modal-dialog modal-lg" role="document">'+
+            '<div class="modal-content">'+
+            '<div class="modal-header">'+
+            '<h5 class="modal-title" id="actuallyWorkListModalLabel">Списание за день</h5>'+
+            '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+            '<span aria-hidden="true">&times;</span>'+
+            '</button>'+
+            '</div>'+
+            '<div class="modal-body">'+
+            '<div v-if="errorMess != null " class="alert alert-warning alert-dismissible fade show" role="alert">'+
+            '<strong>{{errorMess}}'+
+            '<button type="button" @click = "closeError" class="close" data-dismiss="alert" aria-label="Close">'+
+            '<span aria-hidden="true">&times;</span>'+
+            '</button>'+
+            '</div>'+
+            '<table class="table table-hover mb-3">'+
+                '<thead>'+
+                '<tr>'+
+                    '<th scope="col">Тема</th>'+
+                    '<th scope="col">Время</th>'+
+                    '<th scope="col">Комментарий</th>'+
+                    '<th scope="col"></th>'+
+                '</tr>'+
+                '</thead>'+
+                '<tbody v-if ="actuallyWorkList != null">'+
+                    '<ActuallyWorkListItem v-for="actuallyWork in actuallyWorkList" :key = "actuallyWork.id" :actuallyWork = "actuallyWork" :setErrorMess = "setErrorMess" :openActuallyWork ="openActuallyWork">'+
+                    '</ActuallyWorkListItem>'+
+                '</tbody>'+
+            '</table>'+
+
+            '</div>'+
+            '<div class="modal-footer">'+
+            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>',
+        methods: {
+            closeError: function (){
+                this.errorMess = null;
+            },
+            setErrorMess:function (errorMess){
+                this.errorMess = errorMess;
+            }
+        },
+        data: function(){
+            return {
+                errorMess: null
+            }
+        }
+    }
 )
 
 Vue.component('main-tab',{
@@ -169,11 +254,11 @@ template:
                     '<div @click="startWork" :class="` card-footer text-center ${(isWorkNow == false  ? `bg-success`: `bg-danger`)}  `">'+
                         '{{(isWorkNow == false  ? `Начать`: `Завершить`)}}'+
                     '</div>'+
-                    '<div class="card-footer  text-center" @click="openDitailM"  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" >'+
-                        '{{(openDitail == false  ? `▼`: `▲`)}}'+
+                    '<div class="card-footer  text-center" @click="openWorkPanelM"  data-toggle="collapse" href="#collapseWorkPanel" role="button" aria-expanded="false" aria-controls="collapseWorkPanel" >'+
+                        '{{(openWorkPanel == false  ? `▼`: `▲`)}}'+
                     '</div>'+
                 '</div>'+
-                '<div class="collapse" id="collapseExample">'+
+                '<div class="collapse" id="collapseWorkPanel">'+
                   '<div class="card card-body">'+
                     '<ul  v-if = "presenceWorkList != null " class="list-group list-group-flush">'+
                         '<li v-for="presenceWork in presenceWorkList" :key  = "presenceWork.id"  class="list-group-item"><h6 >Время работы: {{presenceWork.timeBegin}} - {{presenceWork.timeFinish}}</h6></li>' +
@@ -190,20 +275,24 @@ template:
                         '<div class="row mx-2">'+
                             '<div class="col-10">'+
                                 '<div class="progress mt-2">'+
-                                  '<div class="progress-bar" role="progressbar" style="width: 12%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100"></div>'+
+                                  '<div class="progress-bar" role="progressbar" v-bind:style = "{width: remainderActuallyWorkProcent + `%` }" :aria-valuenow="remainderActuallyWorkProcent" aria-valuemin="0" aria-valuemax="100"></div>'+
                                 '</div>'+
                             '</div>'+
                             '<div class="col-2">'+
-                                '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" ><strong>✚</strong></button>'+
+                                '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#actuallyWorkSaveModal" ><strong>✚</strong></button>'+
                             '</div>'+
                         '</div>'+
-                        '<span>Требуется списать: <strong>{{workSchedule.workTime}} </strong> </span>'+
+                        '<span>Требуется списать: <strong>{{remainderActuallyWork}} </strong> </span>'+
+                    '</div>'+
+                    '<div @click="openActuallyWork" data-toggle="modal"  data-target="#actuallyWorkListModal" aria-expanded="false"  class="card-footer  text-center" >'+
+                        'Открыть'+
                     '</div>'+
                 '</div>'+
              '</div>'+
          '</div>'+
     '</div>'+
     '<ActuallyWork :methodSave = "ActuallyWorkSave"> </ActuallyWork>'+
+    '<ActuallyWorkList :actuallyWorkList = "actuallyWorkList"  :openActuallyWork = "openActuallyWork"> </ActuallyWorkList>'+
 '</div>',
     created: function(){
                 calendarAPI.get().then(result=>
@@ -217,8 +306,10 @@ template:
                     )
                 workScheduleAPI.get().then(result=>{
                       result.json().then(data => this.workSchedule = data)
-                      getInstitutionIsWorkNowAPI.get().then(result=>
-                                            result.json().then(data => this.isWorkNow = data)
+                      getInstitutionIsWorkNowAPI.get().then(result=> {
+                              result.json().then(data => this.isWorkNow = data)
+                              this.getRemainderActuallyWork();
+                          }
                                         )
                     }
                 )
@@ -226,6 +317,7 @@ template:
                     result.json().then(data => this.institution = data)
                     )
                 this.getPresenceWorkTimeSum();
+
               },
     methods: {
        select: function(day){
@@ -248,12 +340,12 @@ template:
               }
 
        },
-       openDitailM: function(){
-        this.openDitail = ! this.openDitail  ;
+       openWorkPanelM: function(){
+        this.openWorkPanel = ! this.openWorkPanel  ;
         this.presenceWorkList = []
-        this.openDitailMM();
+        this.openWorkPanelMM();
        },
-       openDitailMM: function(){
+       openWorkPanelMM: function(){
         this.presenceWorkList = []
         presenceWorkAPI.get().then(result=>{
            result.json().then(data =>
@@ -269,6 +361,15 @@ template:
             }
         )
        },
+        openActuallyWork: function (){
+           this.actuallyWorkList = []
+            getActuallyWorkListAPI.get().then(result=>{
+                    result.json().then(data =>
+                        data.forEach(actuallyWork => this.actuallyWorkList.push(actuallyWork))
+                    )
+                }
+            )
+        },
        startWork: function(){
              this.$http.post('/startWork',  {} ).then(result=>
                     result.json().then(data => {
@@ -276,47 +377,57 @@ template:
                            getInstitutionIsWorkNowAPI.get().then(result=>
                                           result.json().then(data => this.isWorkNow = data)
                                        )
-                           this.openDitailMM();
+                           this.openWorkPanelMM();
                            this.getPresenceWorkTimeSum();
                           })
                     )
        },
        ActuallyWorkSave: function(time, comment, theme){
              this.$http.post('/createActuallyWork', {time: time, comment: comment,theme :theme, institution: this.institution } )
-                .then(/*result=>
-                    result.json()
-                        .then(data =>data.forEach(actuallyWork => this.actuallyWorkList.push(actuallyWork)))*/
-                     )
+                .then(data => {
+                    this.getRemainderActuallyWork();
+                }
+                )
                 .catch(error => {
-                    // error.response can be null
-                   // if (error.response && error.response.status === 400) {
                         this.errorMess = error.bodyText
-                  //  }
                 })
        },
        closeError: function(){
-        errorMess = null;
-       }
+        this.errorMess = null;
+       },
+        getRemainderActuallyWork: function(){
+            getRemainderActuallyWorkAPI.get().then(result =>
+                result.json().then(data => {
+                    this.remainderActuallyWork = (this.workSchedule.workTime - data.toFixed(2)).toFixed(2);
+                    this.remainderActuallyWorkProcent = (data / this.workSchedule.workTime *100);
+
+                }
+                )
+            )
+        }
+
     },
-    data: function() {
+    data: function () {
         return {
-          mouth: null,
-          date : "",
-          workSchedule : null,
-          componentKey: 999999999,
-          isWorkNow : false,
-          selectDay : null,
-          dayNow : null,
-          workScheduleDay : null,
-          openDitail: false,
-          presenceWorkList: [],
-          presenceWorkTimeSum : 0.0,
-          time : 0.0,
-          comment : "",
-          theme : "",
-          actuallyWorkList: [],
-          institution: null,
-          errorMess:null
+            mouth: null,
+            date: "",
+            workSchedule: null,
+            componentKey: 999999999,
+            isWorkNow: false,
+            selectDay: null,
+            dayNow: null,
+            workScheduleDay: null,
+            openWorkPanel: false,
+            presenceWorkList: [],
+            presenceWorkTimeSum: 0.0,
+            time: 0.0,
+            comment: "",
+            theme: "",
+            actuallyWorkList: [],
+            institution: null,
+            errorMess: null,
+            remainderActuallyWork: 0.0,
+            remainderActuallyWorkProcent: 0.0
         }
     }
 })

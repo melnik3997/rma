@@ -1,11 +1,10 @@
 package com.example.rma.service;
 
-import com.example.rma.domain.Institution;
-import com.example.rma.domain.WorkSchedule;
-import com.example.rma.domain.WorkScheduleCorrect;
+import com.example.rma.domain.*;
 import com.example.rma.domain.calendar.Calendar;
 import com.example.rma.domain.calendar.CalendarEnterprise;
 import com.example.rma.domain.calendar.CalendarType;
+import com.example.rma.domain.dto.InstitutionDto;
 import com.example.rma.domain.dto.InstitutionWorkScheduleDto;
 import com.example.rma.domain.dto.WorkScheduleDto;
 import com.example.rma.repository.WorkScheduleRepo;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +37,9 @@ public class WorkScheduleService {
 
     @Autowired
     private PresenceWorkService presenceWorkService;
+
+    @Autowired
+    private InstitutionService institutionService;
 
     private void save(WorkSchedule workSchedule){
         workScheduleRepo.save(workSchedule);
@@ -121,12 +124,14 @@ public class WorkScheduleService {
         //находим график работы сотпрудников
         WorkSchedule workSchedule = findActiveByInstitution(institution);
         //находим корректровки по необходимым дням
-        List<WorkScheduleCorrect> workScheduleCorrectList = workScheduleCorrectService.findByCalendarList(calendarList);
+        List<WorkScheduleCorrect> workScheduleCorrectList = workScheduleCorrectService.findByCalendarListAndInstitution(calendarList, institution);
         //обработка графика
-        for (Calendar calendar : calendarList) {
-            //компиляция графика
-            WorkScheduleDto workScheduleDto = getWorkScheduleDto(workSchedule, calendar, workScheduleCorrectList);
-            workScheduleDtoList.add(workScheduleDto);
+        if(workSchedule != null) {
+            for (Calendar calendar : calendarList) {
+                //компиляция графика
+                WorkScheduleDto workScheduleDto = getWorkScheduleDtoForToday(workSchedule, calendar, workScheduleCorrectList);
+                workScheduleDtoList.add(workScheduleDto);
+            }
         }
         return workScheduleDtoList;
     }
@@ -139,7 +144,7 @@ public class WorkScheduleService {
      * @return
      */
 
-    private WorkScheduleDto getWorkScheduleDto(WorkSchedule workSchedule, Calendar calendar, List<WorkScheduleCorrect> workScheduleCorrectList) {
+    private WorkScheduleDto getWorkScheduleDtoForToday(WorkSchedule workSchedule, Calendar calendar, List<WorkScheduleCorrect> workScheduleCorrectList) {
         List<WorkScheduleCorrect> workScheduleCorrectListC = getWorkScheduleCorrectByCalendar(calendar, workScheduleCorrectList);
         WorkScheduleDto workScheduleDto = new WorkScheduleDto(calendar, workSchedule);
         workScheduleDto.setWorkTime(workSchedule.getWorkTime() - (workSchedule.isLunchBreakIn()?  workSchedule.getLunchBreak() : 0));
@@ -166,23 +171,25 @@ public class WorkScheduleService {
     }
 
 
-    public WorkScheduleDto getWorkScheduleDto( Calendar calendar, Institution institution) {
+    public WorkScheduleDto getWorkScheduleDtoForToday(Calendar calendar, Institution institution) {
         WorkSchedule workSchedule = findActiveByInstitution(institution);
+        if (workSchedule == null)
+            return null;
         List<Calendar> calendarList =  new ArrayList<>();
         calendarList.add(calendar);
-        List<WorkScheduleCorrect> workScheduleCorrectList = workScheduleCorrectService.findByCalendarList(calendarList);
-        return getWorkScheduleDto(workSchedule, calendar, workScheduleCorrectList);
+        List<WorkScheduleCorrect> workScheduleCorrectList = workScheduleCorrectService.findByCalendarListAndInstitution(calendarList, institution);
+        return getWorkScheduleDtoForToday(workSchedule, calendar, workScheduleCorrectList);
     }
 
-    public WorkScheduleDto getWorkScheduleDto( LocalDate date, Institution institution) {
+    public WorkScheduleDto getWorkScheduleDtoForToday(LocalDate date, Institution institution) {
         Calendar calendar = calendarService.findCalendarByDateAndInstitution(institution, date);
-        return getWorkScheduleDto(calendar, institution);
+        return getWorkScheduleDtoForToday(calendar, institution);
     }
 
-    public WorkScheduleDto getWorkScheduleDto(  Institution institution) {
+    public WorkScheduleDto getWorkScheduleDtoForToday(Institution institution) {
         LocalDate date = LocalDate.now();
 
-        return getWorkScheduleDto(date, institution);
+        return getWorkScheduleDtoForToday(date, institution);
     }
 
 
@@ -190,6 +197,18 @@ public class WorkScheduleService {
     public List<WorkScheduleCorrect> getWorkScheduleCorrectByCalendar(Calendar calendar, List<WorkScheduleCorrect> workScheduleCorrectList){
         return workScheduleCorrectList.stream().filter(w-> w.getCalendar().getId().equals(calendar.getId())).collect(Collectors.toList());
     }
+
+    public InstitutionDto setWorkScheduleToInstitutionDtoForToDay(InstitutionDto institutionDto){
+        Institution institution = institutionService.findInstitutionByInstitutionDto(institutionDto);
+        institutionDto.setWorkScheduleDto(getWorkScheduleDtoForToday(institution));
+        return institutionDto;
+    }
+
+    public List<InstitutionDto> setWorkScheduleListToInstitutionDtoForToDay(List<InstitutionDto> institutionDtoList){
+        return institutionDtoList.stream().map(i -> i = setWorkScheduleToInstitutionDtoForToDay(i) ).collect(Collectors.toList());
+    }
+
+
 
 
 }

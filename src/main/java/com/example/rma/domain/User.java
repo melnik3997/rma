@@ -1,7 +1,5 @@
 package com.example.rma.domain;
 
-import com.example.rma.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -48,6 +46,10 @@ public class User implements UserDetails {
     public boolean isAdmin(){
 
         return role.contains(Role.ADMIN);
+    }
+
+    public boolean isLieder(){
+        return role.contains(Role.LIEDER);
     }
 
     public Long getId() {
@@ -134,5 +136,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return isActive();
     }
+
+
 
 }

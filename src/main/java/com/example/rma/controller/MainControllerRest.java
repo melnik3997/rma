@@ -63,7 +63,7 @@ public class MainControllerRest {
     @GetMapping("/getWorkSchedule")
     public WorkScheduleDto getWorkSchedule(@AuthenticationPrincipal User user){
         System.out.println("Вызов ");
-        return workScheduleService.getWorkScheduleDto(userService.findInstitutionByUser(user));
+        return workScheduleService.getWorkScheduleDtoForToday(userService.findInstitutionByUser(user));
     }
     @RequestMapping(method = RequestMethod.GET,
             value = "/getWorkSchedule/{calendar}")
@@ -71,7 +71,7 @@ public class MainControllerRest {
                                                        @PathVariable Calendar calendar){
         System.out.println("Вызов id");
 
-        return workScheduleService.getWorkScheduleDto(calendar, userService.findInstitutionByUser(user));
+        return workScheduleService.getWorkScheduleDtoForToday(calendar, userService.findInstitutionByUser(user));
     }
 
     @RequestMapping(method = RequestMethod.POST,
@@ -83,7 +83,7 @@ public class MainControllerRest {
         } catch (BusinessException e) {
             e.printStackTrace();
         }
-        return workScheduleService.getWorkScheduleDto(userService.findInstitutionByUser(user));
+        return workScheduleService.getWorkScheduleDtoForToday(userService.findInstitutionByUser(user));
     }
 
     @GetMapping("/getPresenceWork")
@@ -97,16 +97,10 @@ public class MainControllerRest {
     @GetMapping("/getPresenceWorkTimeSum")
     public double getPresenceWorkTimeSum(@AuthenticationPrincipal User user){
         Institution institution = userService.findInstitutionByUser(user);
-        double sumTime = 0D;
-        List<PresenceWork> presenceWorkList =presenceWorkService.getByInstitutionAndCalendar(institution, calendarService.findCalendarByNowDateAndInstitution(institution));
-
-        for (PresenceWork presenceWork: presenceWorkList) {
-            long duration = Duration.between(presenceWork.getTimeBegin(), presenceWork.getTimeFinish() == null ? LocalTime.now() : presenceWork.getTimeFinish()).getSeconds();
-            sumTime = sumTime +  duration / 60.0 /60.0 ;
-        }
-        System.out.println("sumTime " + sumTime);
-        return  sumTime;
+        return presenceWorkService.getPresenceWorkTimeSumForToday(institution);
     }
+
+
 
     @GetMapping("/getInstitutionIsWorkNow")
     public boolean getInstitutionIsWorkNow(@AuthenticationPrincipal User user){
@@ -125,31 +119,59 @@ public class MainControllerRest {
             value = "/endWork")
     public WorkScheduleDto endWork(@AuthenticationPrincipal User user){
         System.out.println("end");
-        return workScheduleService.getWorkScheduleDto(userService.findInstitutionByUser(user));
+        return workScheduleService.getWorkScheduleDtoForToday(userService.findInstitutionByUser(user));
     }
 
 
     @RequestMapping(method = RequestMethod.POST,
             value = "/createActuallyWork")
-    public ResponseEntity createActuallyWork(@AuthenticationPrincipal User user,
+    public Object createActuallyWork(@AuthenticationPrincipal User user,
                                              @RequestBody(required = false) ActuallyWork actuallyWork) throws Exception {
         Institution institution = userService.findInstitutionByUser(user);
         System.out.println("createActuallyWork " + actuallyWork.getTime() + " " + actuallyWork.getComment() + " " + actuallyWork.getInstitution().getFIO());
         actuallyWork.setCalendar(calendarService.findCalendarByNowDateAndInstitution(institution));
 
+
         try {
-            actuallyWorkService.create(actuallyWork);
+            actuallyWork =actuallyWorkService.create(actuallyWork);
         } catch (BusinessException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity(HttpStatus.OK);
+        return actuallyWork;
     }
-/*
-    @ExceptionHandler(BusinessException.class)
-    public String handleException(BusinessException e) {
-        return e.getMessage();
-    }*/
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/getRemainderActuallyWork")
+    public Double getRemainderActuallyWork(@AuthenticationPrincipal User user){
+        Institution institution = userService.findInstitutionByUser(user);
+        Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
+        return actuallyWorkService.getSumByInstitutionAndCalendar(institution, calendar);
+
+    }
+
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/getActuallyWorkList")
+    public List<ActuallyWork> getActuallyWorkList(@AuthenticationPrincipal User user){
+        Institution institution = userService.findInstitutionByUser(user);
+        Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
+        return actuallyWorkService.findByInstitutionAndCalendar(institution, calendar);
+
+    }
+
+    @RequestMapping(method = RequestMethod.POST,
+            value = "/deleteActuallyWork")
+    public Object getActuallyWorkList(@AuthenticationPrincipal User user,
+                                                  @RequestBody(required = false) ActuallyWork actuallyWork){
+        System.out.println("getInstitution " + actuallyWork.getTime());
+        try {
+            actuallyWorkService.delete(actuallyWork, user);
+        } catch (BusinessException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return actuallyWork;
+
+    }
+
 
 
 }

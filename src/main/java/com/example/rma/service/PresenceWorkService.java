@@ -3,6 +3,7 @@ package com.example.rma.service;
 import com.example.rma.domain.Institution;
 import com.example.rma.domain.PresenceWork;
 import com.example.rma.domain.calendar.Calendar;
+import com.example.rma.domain.dto.InstitutionDto;
 import com.example.rma.exception.BusinessException;
 import com.example.rma.repository.PresenceWorkRepo;
 import com.example.rma.service.calendar.CalendarService;
@@ -10,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PresenceWorkService {
@@ -23,6 +24,10 @@ public class PresenceWorkService {
 
     @Autowired
     private CalendarService calendarService;
+
+
+    @Autowired
+    private InstitutionService institutionService;
 
 
     private PresenceWork save(PresenceWork presenceWork){
@@ -54,16 +59,16 @@ public class PresenceWorkService {
      */
     public PresenceWork action(Institution institution, LocalTime time) throws BusinessException {
         Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
-        // пытаемся найти текущий
+        // ищем текущую запись
         PresenceWork presenceWork = getActiveNow(institution);
-        System.out.println("presenceWork " + presenceWork);
         if (presenceWork == null){
+            //если не нашли создаем новую
             presenceWork = create(institution, calendar, time);
         }else {
+            // если нашли закрываем работу
             presenceWork = close(presenceWork, time);
         }
         return presenceWork;
-
     }
     public List<PresenceWork> getByInstitutionAndCalendar(Institution institution, Calendar calendar){
         return presenceWorkRepo.findByInstitutionAndCalendar(institution, calendar, Sort.by(Sort.Direction.DESC,  "number"));
@@ -72,6 +77,35 @@ public class PresenceWorkService {
     public PresenceWork getActiveNow(Institution institution){
         Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
         return getActive(institution, calendar);
+    }
+
+    public boolean isWorkNow(Institution institution){
+        return getActiveNow(institution) != null;
+    }
+
+    public LocalTime getStartWork(Institution institution, Calendar calendar){
+        List<PresenceWork> presenceWorkList =getByInstitutionAndCalendar(institution, calendar);
+        PresenceWork presenceWork = presenceWorkList.stream().filter(p-> p.getNumber() == 1).findFirst().orElse(null);
+        if(presenceWork == null)
+            return null;
+
+        return presenceWork.getTimeBegin();
+    }
+
+    public LocalTime getStartWorkNow(Institution institution){
+        Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
+        return getStartWork(institution, calendar);
+    }
+
+    public InstitutionDto setPresenceInfoToInstitutionDtoForForToday (InstitutionDto institutionDto) {
+        Institution institution = institutionService.findInstitutionByInstitutionDto(institutionDto);
+        institutionDto.setStartWork(getStartWorkNow(institution));
+        institutionDto.setWorkNow(isWorkNow(institution));
+        return institutionDto;
+    }
+
+    public List<InstitutionDto> setPresenceInfoListToInstitutionDtoForForToday (List<InstitutionDto> institutionDtoList) {
+        return institutionDtoList.stream().map(i -> i = setPresenceInfoToInstitutionDtoForForToday(i) ).collect(Collectors.toList());
     }
 
     public PresenceWork getActive(Institution institution, Calendar calendar){
@@ -87,5 +121,33 @@ public class PresenceWorkService {
         i = presenceWorkRepo.findMaxNumberByInstitutionAndCalendar(institution, calendar);
         i ++;
         return i;
+    }
+
+    public List<InstitutionDto> setPresenceWorkTimeSumListToInstitutionDtoForForToday (List<InstitutionDto> institutionDtoList) {
+        return institutionDtoList.stream().map(i -> i = setPresenceWorkTimeSumToInstitutionDtoForForToday(i) ).collect(Collectors.toList());
+    }
+
+    public InstitutionDto setPresenceWorkTimeSumToInstitutionDtoForForToday (InstitutionDto institutionDto) {
+        Institution institution = institutionService.findInstitutionByInstitutionDto(institutionDto);
+        institutionDto.setPresenceWorkTimeSum(getPresenceWorkTimeSumForToday(institution));
+        return institutionDto;
+    }
+    public double getPresenceWorkTimeSumForToday (Institution institution) {
+
+        Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
+        return getPresenceWorkTimeSum(institution, calendar);
+    }
+
+    public double getPresenceWorkTimeSum (Institution institution, Calendar calendar) {
+
+        double sumTime = 0D;
+        List<PresenceWork> presenceWorkList =getByInstitutionAndCalendar(institution, calendar);
+
+        for (PresenceWork presenceWork: presenceWorkList) {
+            long duration = Duration.between(presenceWork.getTimeBegin(), presenceWork.getTimeFinish() == null ? LocalTime.now() : presenceWork.getTimeFinish()).getSeconds();
+            sumTime = sumTime +  duration / 60.0 /60.0 ;
+        }
+        System.out.println("sumTime " + sumTime);
+        return sumTime;
     }
 }

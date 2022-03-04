@@ -1,10 +1,9 @@
 package com.example.rma.repository;
 
-import com.example.rma.domain.Enterprise;
-import com.example.rma.domain.Institution;
-import com.example.rma.domain.Position;
-import com.example.rma.domain.User;
+import com.example.rma.domain.*;
 import com.example.rma.domain.dto.InstitutionDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,7 +31,7 @@ public interface InstitutionRepo extends JpaRepository<Institution, Long> {
             "and p.active = true " +
             "where (i.enterprise.id = :enterpriseId or :enterpriseId = 0) " +
             "and ((upper(concat(i.lastName , ' ' , i.firstName , ' ' , i.secondName)) like upper(:fullName) or :fullName = '' ))")
-    List<InstitutionDto> findInstitutionDtoByParam(@Param("enterpriseId") Long enterpriseId, @Param("fullName") String fullName);
+    Page<InstitutionDto> findInstitutionDtoByParam(@Param("enterpriseId") Long enterpriseId, @Param("fullName") String fullName, Pageable pageable);
 
     @Query("select new com.example.rma.domain.dto.InstitutionDto(i, p) " +
             "from Institution i " +
@@ -53,5 +52,13 @@ public interface InstitutionRepo extends JpaRepository<Institution, Long> {
             " on i1.id = p1.institution " +
             "where p.id = :position and p.institution = :institution")
     List<InstitutionDto> findInstitutionDtoColleaguesByInstitutionAndPosition(@Param("institution") Institution institution, @Param("position") Long position);
+
+    @Query("select new com.example.rma.domain.dto.InstitutionDto(i1, p) " +
+            "from Position p "+
+            " inner join Institution i1 " +
+            " on i1.id = p.institution " +
+            "where p.subdivision = :subdivision " +
+            "and p.active = true")
+    Page<InstitutionDto> findInstitutionDtoBySubdivision(@Param("subdivision") Subdivision subdivision, Pageable pageable);
 
 }

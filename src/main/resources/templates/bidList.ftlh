@@ -1,4 +1,6 @@
 <#import "parts/common.ftlh" as c >
+<#import "parts/pager.ftlh" as p>
+
 <@c.page>
 <h5 class=" mb-3 ">Заявки</h5>
 
@@ -59,7 +61,7 @@
     </tr>
     </thead>
     <tbody>
-    <#list dealObjectList as dealObject>
+    <#list dealObjectList.content as dealObject>
     <tr data-target="#order${dealObject.id?c}" data-toggle="collapse">
         <td>${dealObject.getBidRuleName()}</td>
         <td>${dealObject.getEmployeeFIO()}</td>
@@ -70,13 +72,16 @@
     <tr>
         <td id="order${dealObject.id?c}" class="card-body  collapse" colspan="6">
             <div class="row align-items-start">
-                <div class="col-4">
+                <div class="col-3">
                     <h6 class=" mb-3 ">Выполнение дейсвия</h6>
                 </div>
-                <div class="col-4">
-                    <a  type="button" class="btn btn-primary mb-3" href="">Откатить дейсвие</a >
+                <div class="col-3">
+                    <a  type="button" class="btn btn-primary mb-3" href="/bid/${dealObject.id?c}/open">Открыть</a >
                 </div>
-                <div class="col-4">
+                <div class="col-3">
+                    <a  type="button" class="btn btn-primary mb-3" href="/bid/${dealObject.id?c}/rollback">Откатить дейсвие</a >
+                </div>
+                <div class="col-3">
                     <div class="dropdown show">
                         <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Выполнить действие
@@ -117,6 +122,7 @@
     </#list>
     </tbody>
 </table>
+    <@p.pager dealObjectList url />
 <script>
         var paramInstitution2 = new Map;
         paramInstitution2.set("enterpriseId", <#if enterprise??> ${enterprise.id?c} <#else> 0 </#if>);

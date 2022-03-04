@@ -12,15 +12,17 @@ public class Node {
     private String name;
     private Long enterpriseId;
     private Institution institution;
+    private int countWork = 0;
 
 
-    public Node(Subdivision subdivision, Institution institution){
+    public Node(Subdivision subdivision, Institution institution, int countWork){
         this.nodeId = subdivision.getId();
         this.pid = subdivision.getParentId();
         this.brief = subdivision.getBrief();
         this.name = subdivision.getName();
         this.enterpriseId = subdivision.getEnterpriseId();
         this.institution = institution;
+        this.countWork = countWork;
     }
 
     public Node(Long nodeId, Long pId, String brief, String name, Long enterpriseId) {
@@ -86,7 +88,16 @@ public class Node {
     public void setInstitution(Institution institution) {
         this.institution = institution;
     }
-/*
+
+    public int getCountWork() {
+        return countWork;
+    }
+
+    public void setCountWork(int countWork) {
+        this.countWork = countWork;
+    }
+
+    /*
     @Override
     public String toString() {
         return "Node{" +

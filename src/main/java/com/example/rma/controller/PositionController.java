@@ -159,6 +159,8 @@ public class PositionController {
         boolean error = ControllerUtils.checkErrorBinding(bindingResult, model);
         position.setInstitution(userService.findInstitutionByUser(user));
         Map<String, String> result = positionService.save(position);
+        System.out.println("result " + result);
+        System.out.println("position " + position);
 
         if (result.size() > 0){
             model.mergeAttributes(result);

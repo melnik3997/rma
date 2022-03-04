@@ -75,6 +75,10 @@ public class SubdivisionService {
         if(subdivision.getLeader() == null)
             send.put("leaderError", "Поле управляющий должно быть заполнено");
 
+        if(subdivision.getLeader() != null && !subdivision.getLeader().isLieder()){
+            send.put("leaderError", "У руководителя должна быть роль Lieder");
+        }
+
         if (send.size() == 0)
             subdivisionRepo.save(subdivision);
 
@@ -83,7 +87,10 @@ public class SubdivisionService {
 
     public List<Node> subdivisionToNode(List<Subdivision> subdivisionList){
 
-        return subdivisionList.stream().map(subdivision -> new Node(subdivision, userService.findInstitutionByUser(subdivision.getLeader()))).collect(Collectors.toList());
+        return subdivisionList.stream().
+                map(subdivision -> new Node(subdivision,
+                userService.findInstitutionByUser(subdivision.getLeader()),
+                positionService.countBySubdivisionAndActive(subdivision, true))).collect(Collectors.toList());
 
     }
 

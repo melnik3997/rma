@@ -22,4 +22,8 @@ public interface PositionRepo extends JpaRepository<Position, Long> {
 
     @Query(value = "select COALESCE( max(p.Number), 0) from t_Position p where p.institution_Id = :institution", nativeQuery = true)
     int findMaxNumberByInstitutionId(@Param("institution")  Long institutionId);
+
+    @Query("select COALESCE( count(p), 0) from Position p where p.subdivision = :subdivision and p.active = :active")
+    int countBySubdivisionAndActive(Subdivision subdivision, boolean active);
+
 }

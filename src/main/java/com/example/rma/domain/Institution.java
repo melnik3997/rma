@@ -77,7 +77,7 @@ public class Institution {
     }
 
     public String getUserName() {
-        return user.getUsername();
+        return user == null? null : user.getUsername();
     }
 
     public void setUser(User user) {
@@ -85,7 +85,7 @@ public class Institution {
     }
 
     public Long getUserId() {
-        return user.getId();
+        return user == null? null : user.getId();
     }
 
     public String getFirstName() {

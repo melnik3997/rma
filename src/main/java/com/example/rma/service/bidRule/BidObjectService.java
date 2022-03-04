@@ -9,6 +9,8 @@ import com.example.rma.exception.BusinessException;
 import com.example.rma.repository.bidRule.DealObjectAttrRepo;
 import com.example.rma.repository.bidRule.DealObjectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,9 @@ public class BidObjectService {
 
     @Autowired
     private ProtocolService protocolService;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Transactional
     public Map<String, String> createBidObject(DealObject dealObject, List<DealObjectAttr> dealObjectAttrList){
@@ -68,8 +73,8 @@ public class BidObjectService {
         return dealObjectRepo.findByResponsible(responsible);
     }
 
-    public List<DealObjectDto> findDealObjectByParam(Institution responsible,  Institution author, State state, Institution employee){
-        List<DealObjectDto> dealObjectDtoList = dealObjectRepo.findDealObjectDtoByParam(responsible, author, state, employee);
+    public Page<DealObjectDto> findDealObjectByParam(Institution responsible,  Institution author, State state, Institution employee, Pageable pageable){
+        Page<DealObjectDto> dealObjectDtoList = dealObjectRepo.findDealObjectDtoByParam(responsible, author, state, employee, pageable);
 
         dealObjectDtoList.forEach(d-> {
             d.setAvailableTransitionList(transitionService.getAvailableTransitionByDealObject(d.getId()));
@@ -97,4 +102,25 @@ public class BidObjectService {
     public List<DealObjectAttr> findDealObjectAttrByDealObject(DealObject dealObject){
         return dealObjectAttrRepo.findByDealObject(dealObject);
     }
+
+
+    public void deleteDealObject(DealObject dealObject){
+        dealObjectRepo.delete(dealObject);
+    }
+
+    public void deleteDealObjectAttr(List<DealObjectAttr> dealObjectAttrList){
+        dealObjectAttrRepo.deleteAll(dealObjectAttrList);
+    }
+
+    public void deleteDealObjectAttr(DealObject dealObject){
+        List<DealObjectAttr> dealObjectAttrList =  findDealObjectAttrByDealObject(dealObject);
+        deleteDealObjectAttr(dealObjectAttrList);
+    }
+
+    public void delete(DealObject dealObject){
+        deleteDealObjectAttr(dealObject);
+        deleteDealObject(dealObject);
+    }
+
+
 }

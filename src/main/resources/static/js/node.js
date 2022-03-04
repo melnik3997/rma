@@ -1,6 +1,14 @@
 var nodeAPI = Vue.resource( '/subdivisionNode/{pNode}/enterprise/{enterprise}');
 
 
+var enterpriseID = false;
+
+if (typeof enterpriseParam !== 'undefined') {
+    enterpriseID = enterpriseParam;
+}else {
+    enterpriseID = param('subdivisionTree');
+}
+console.log(enterpriseID);
 function param(patch){
 var url_string = window.location.href
 var ii = url_string.indexOf(patch)+patch.length +1
@@ -19,14 +27,16 @@ template:
                     '<th>Сокращение</th>'+
                     '<th>Наименование</th>'+
                     '<th>Руководитель</th>'+
+                    '<th>Количество <br> сотрудников</th>'+
                     '<th></th>'+
                 '</tr>'+
                 '</thead>'+
     '<tbody>'+
       '<tr  v-for="node in nodes" :data-tt-id ="node.nodeId" :data-tt-parent-id= "node.pid">'+
-      '<td>{{node.brief}}</td>'+
-      '<td>{{node.name}} </td>'+
-      '<td>{{node.institutionFIO}} </td>'+
+      '<td >{{node.brief}}</td>'+
+      '<td >{{node.name}} </td>'+
+      '<td >{{node.institutionFIO}} </td>'+
+      '<td class="text-center">{{node.countWork}} </td>'+
         '<td>'+
             '<div class="dropdown show">'+
                 '<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
@@ -35,6 +45,7 @@ template:
                 '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">'+
                     '<a class="dropdown-item"  :href="`/subdivisionEnterprise/${node.enterpriseId}/edit/${node.nodeId}`" >Редактировать</a>'+
                     '<a class="dropdown-item"  :href="`/subdivisionEnterprise/add/${node.enterpriseId}/sub/${node.nodeId}`" >Добавить</a>'+
+                    '<a class="dropdown-item"  :href="`/subdivisionEnterprise/${node.enterpriseId}/employee/${node.nodeId}`" >Сотрудники</a>'+
                '</div>'+
             '</div>'+
         '</td>'+
@@ -42,7 +53,7 @@ template:
     '</tbody>'+
     '</table>',
     created: function(){
-    nodeAPI.get({pNode: this.pNode, enterprise: this.enterprise }).then(result=>
+    nodeAPI.get({pNode: this.pNode, enterprise: enterpriseID }).then(result=>
        result.json().then(data =>{
                 data.forEach(node => this.nodes.push(node))
                 time = 1;

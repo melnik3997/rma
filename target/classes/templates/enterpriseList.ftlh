@@ -23,8 +23,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" href="/enterprise/${enterprise.id?c}">Редактировать</a>
-                    <a class="dropdown-item" href="/subdivisionEnterprise/${enterprise.id?c}">Подразделения</a>
-                    <a class="dropdown-item" href="/subdivisionTree/${enterprise.id?c}">Дерево</a>
+                    <a class="dropdown-item" href="/subdivisionTree/${enterprise.id?c}">Подразделения</a>
                     <a class="dropdown-item" href="/calendarListEnterprise/${enterprise.id?c}">Календари</a>
                     <a class="dropdown-item" href="/enterprise/${enterprise.id?c}/bidRuleList">Правила заявок</a>
                 </div>

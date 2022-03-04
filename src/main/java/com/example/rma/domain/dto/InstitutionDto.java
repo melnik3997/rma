@@ -4,7 +4,9 @@ import com.example.rma.domain.Enterprise;
 import com.example.rma.domain.Institution;
 import com.example.rma.domain.Position;
 import com.example.rma.domain.User;
+import com.example.rma.domain.calendar.DayType;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 public class InstitutionDto {
@@ -19,7 +21,11 @@ public class InstitutionDto {
     private String skypeName;
     private String fileName;
     private Position position;
-
+    private WorkScheduleDto workScheduleDto;
+    private Double presenceWorkTimeSum;
+    private boolean workNow;
+    private LocalTime startWork;
+    private double sumActualluWork;
 
     public InstitutionDto(Institution institution, Position position) {
         this.id = institution.getId();
@@ -134,6 +140,71 @@ public class InstitutionDto {
         return position == null ? "" : position.getSubdivisionName();
     }
     public String getEnterpriseBrief(){return enterprise == null ? "" : enterprise.getBrief();}
+
+    public WorkScheduleDto getWorkScheduleDto() {
+        return workScheduleDto;
+    }
+
+    public void setWorkScheduleDto(WorkScheduleDto workScheduleDto) {
+        this.workScheduleDto = workScheduleDto;
+    }
+
+    public DayType getWorkScheduleDtoDayType() {
+        return workScheduleDto == null ? DayType.WORK: workScheduleDto.getDayType();
+    }
+
+    public LocalTime getWorkScheduleDtoTimeBegin() {
+        return workScheduleDto == null ? null: workScheduleDto.getTimeBegin();
+    }
+
+    public LocalTime getWorkScheduleDtoTimeFinish() {
+        return workScheduleDto == null ? null: workScheduleDto.getTimeFinish();
+    }
+
+    public Double getWorkScheduleDtoWorkTime() {
+        return workScheduleDto == null ? null: workScheduleDto.getWorkTime();
+    }
+
+    public Double getWorkScheduleDtoLunchBreak() {
+        return workScheduleDto == null ? null: workScheduleDto.getLunchBreak();
+    }
+
+    public Double getWorkScheduleDtoObligatoryWorkTime() {
+        return workScheduleDto == null ? null: workScheduleDto.getObligatoryWorkTime();
+    }
+
+    public Double getPresenceWorkTimeSum() {
+        return presenceWorkTimeSum;
+    }
+
+    public void setPresenceWorkTimeSum(Double presenceWorkTimeSum) {
+        this.presenceWorkTimeSum = presenceWorkTimeSum;
+    }
+
+    public boolean isWorkNow() {
+        return workNow;
+    }
+
+    public void setWorkNow(boolean workNow) {
+        this.workNow = workNow;
+    }
+
+    public LocalTime getStartWork() {
+        return startWork;
+    }
+
+    public void setStartWork(LocalTime startWork) {
+        this.startWork = startWork;
+    }
+
+
+    public double getSumActualluWork() {
+        return sumActualluWork;
+    }
+
+    public void setSumActualluWork(double sumActualluWork) {
+        this.sumActualluWork = sumActualluWork;
+    }
 
     @Override
     public String toString() {

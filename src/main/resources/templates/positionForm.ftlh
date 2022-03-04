@@ -21,7 +21,7 @@
 <#list postList as postL>
 <option <#if positionModel??> <#if postL.id == positionModel.getPostId()> selected </#if> </#if>
 <#if post??> <#if postL.id == post.id> selected </#if> </#if>
-value="${postL.id } ">${postL.name}</option>
+value="${postL.id?c} ">${postL.name}</option>
 </#list>
 </#if>
 </select>

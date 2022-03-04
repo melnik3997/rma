@@ -3,7 +3,10 @@
 
 <div class="row align-items-start">
     <div class="col-8">
-        <h5 class="mb-3 ">График работы </h5>
+        <h3 class="mb-3 ">График работы </h3>
+    </div>
+    <div class="col-8">
+        <h5 class="mb-3 ">Подразделение ${subdivision.name} </h5>
     </div>
 </div>
 

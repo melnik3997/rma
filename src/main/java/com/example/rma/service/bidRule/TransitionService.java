@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -105,5 +106,25 @@ public class TransitionService {
         action.afterDoTransition(dealObject, transition, protocol);
 
         return protocol;
+    }
+
+    public void rollback(DealObject dealObject) throws BusinessException  {
+        //находим текущего пользователя
+        User user = userService.getCurrentUser();
+
+        Protocol protocol =  protocolService.findLastByDealObjectId(dealObject.getId());
+        if (protocol == null)
+            throw new BusinessException("Не найден протокол объекта");
+
+        if(!protocol.getUser().getId().equals(user.getId()))
+            throw new BusinessException("Отменить дейсвие может только тот пользователь что его и создал");
+
+        Transition transition =  protocol.getTransition();
+
+        ActionType actionType = transition.getActionType();
+
+        actionType.rollbackAction(dealObject, protocol);
+
+
     }
 }

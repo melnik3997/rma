@@ -102,4 +102,7 @@ public class Protocol {
     public void setResponsible(Institution responsible) {
         this.responsible = responsible;
     }
+
+
+
 }

@@ -10,6 +10,9 @@ import com.example.rma.service.SettingsService;
 import com.example.rma.service.UserService;
 import com.example.rma.service.calendar.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,9 +76,12 @@ public class CalendarController {
     }
 
     @GetMapping("/calendarListEnterprise/{enterprise}")
-    public String getCalendarListEnterprise(@PathVariable Enterprise enterprise, Model model){
-        model.addAttribute("calendarList", calendarService.findCalendarEnterpriseByEnterprise(enterprise));
+    public String getCalendarListEnterprise(@PathVariable Enterprise enterprise,
+                                            Model model,
+                                            @PageableDefault(sort = { "active","yearInt" }, direction = Sort.Direction.DESC) Pageable pageable){
+        model.addAttribute("calendarList", calendarService.findCalendarEnterpriseByEnterprise(enterprise, pageable));
         model.addAttribute("enterprise", enterprise);
+        model.addAttribute("url", "/calendarListEnterprise/" +enterprise.getId() );
 
         return "calendarList";
     }

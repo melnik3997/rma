@@ -6,6 +6,8 @@ import com.example.rma.domain.Subdivision;
 import com.example.rma.domain.dto.InstitutionDto;
 import com.example.rma.repository.InstitutionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +28,15 @@ public class InstitutionService {
     @Autowired
     private SubdivisionService subdivisionService;
 
+    @Autowired
+    private WorkScheduleService workScheduleService;
+
+    @Autowired
+    private PresenceWorkService presenceWorkService;
+
+    @Autowired
+    private ActuallyWorkService actuallyWorkService;
+
     public List<InstitutionDto> findColleaguesByInstitution(Institution institution){
 
         Position position = positionService.findActiveByInstitutionAndGeneral(institution);
@@ -40,6 +51,13 @@ public class InstitutionService {
             }
             return institutionDtoList;
         }
+        // ищем коллег по своему подр. не обязательно должность должна быть основной
+        return institutionRepo.findInstitutionDtoColleaguesByInstitutionAndPosition(institution, position.getId() );
+    }
+
+    public List<InstitutionDto> findColleaguesPositionByInstitution(Institution institution){
+
+        Position position = positionService.findActiveByInstitutionAndGeneral(institution);
         // ищем коллег по своему подр. не обязательно должность должна быть основной
         return institutionRepo.findInstitutionDtoColleaguesByInstitutionAndPosition(institution, position.getId() );
     }
@@ -61,6 +79,11 @@ public class InstitutionService {
         return institutionDto;
     }
 
+    /**
+     * Поиск подчиненных
+     * @param institution
+     * @return
+     */
     public List<InstitutionDto> findSubordinatesByInstitution(Institution institution){
         List<InstitutionDto> institutionDtoList = new ArrayList<>();
         Position position = positionService.findActiveByInstitutionAndGeneral(institution);
@@ -68,7 +91,7 @@ public class InstitutionService {
             //добавляем всх в его подразделении
             institutionDtoList.addAll(institutionRepo.findInstitutionDtoColleaguesByInstitutionAndPosition(institution, position.getId() ));
             System.out.println("под " + institutionDtoList);
-            //добавляем либеров подченненных подразделений
+            //добавляем лидеров подченненных подразделений
             List<Subdivision> subdivisionList = subdivisionService.getSubdivisionByParent(position.getSubdivision());
             for (Subdivision s: subdivisionList) {
                 institutionDtoList.add( findInstitutionDtoByInstitution( userService.findInstitutionByUser(s.getLeader())));
@@ -117,5 +140,18 @@ public class InstitutionService {
 
     public Institution findInstitutionByInstitutionDto(InstitutionDto institutionDto){
         return institutionRepo.findById(institutionDto.getId()).orElse(null);
+    }
+
+    public Page<InstitutionDto> findInstitutionBySubdivision(Subdivision subdivision, Pageable pageable){
+        return institutionRepo.findInstitutionDtoBySubdivision(subdivision, pageable);
+    }
+
+    public List<InstitutionDto> enrichmentInstitutionDto(List<InstitutionDto> institutionDtoList){
+        institutionDtoList = workScheduleService.setWorkScheduleListToInstitutionDtoForToDay(institutionDtoList);
+        institutionDtoList = presenceWorkService.setPresenceWorkTimeSumListToInstitutionDtoForForToday(institutionDtoList);
+        institutionDtoList = presenceWorkService.setPresenceInfoListToInstitutionDtoForForToday(institutionDtoList);
+        institutionDtoList = actuallyWorkService.setSumActToListInstitutionDtoForForToday(institutionDtoList);
+
+        return institutionDtoList;
     }
 }

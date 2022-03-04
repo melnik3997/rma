@@ -1,5 +1,6 @@
 package com.example.rma.service;
 
+import com.example.rma.domain.Institution;
 import com.example.rma.domain.WorkScheduleCorrect;
 import com.example.rma.domain.calendar.Calendar;
 import com.example.rma.exception.BusinessException;
@@ -31,7 +32,7 @@ public class WorkScheduleCorrectService {
         return workScheduleCorrectRepo.save(workScheduleCorrect);
     }
 
-    public List<WorkScheduleCorrect> findByCalendarList(List<Calendar> calendarList){
-        return workScheduleCorrectRepo.findByCalendarIn(calendarList);
+    public List<WorkScheduleCorrect> findByCalendarListAndInstitution(List<Calendar> calendarList, Institution institution){
+        return workScheduleCorrectRepo.findByCalendarInAndInstitution(calendarList, institution);
     }
 }

@@ -8,6 +8,8 @@ import com.example.rma.domain.dto.UserDto;
 import com.example.rma.repository.InstitutionRepo;
 import com.example.rma.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -128,8 +130,8 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public List<UserDto> findAllUserDto() {
-        return userRepo.findUserDto();
+    public Page<UserDto> findAllUserDto(Pageable pageable) {
+        return userRepo.findUserDto(pageable);
 
     }
 

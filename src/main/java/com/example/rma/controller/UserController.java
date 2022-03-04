@@ -4,6 +4,9 @@ import com.example.rma.domain.Role;
 import com.example.rma.domain.User;
 import com.example.rma.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -21,9 +24,11 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public String getUserList(Model model){
+    public String getUserList(Model model,
+                              @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable){
        // model.addAttribute("userList",userService.findAll());
-        model.addAttribute("userList", userService.findAllUserDto());
+        model.addAttribute("userList", userService.findAllUserDto(pageable));
+        model.addAttribute("url", "/user");
         return "userList";
     }
 

@@ -3,13 +3,17 @@ package com.example.rma.controller;
 import com.example.rma.domain.Enterprise;
 import com.example.rma.domain.Subdivision;
 import com.example.rma.domain.User;
+import com.example.rma.domain.dto.InstitutionDto;
 import com.example.rma.service.EnterpriseService;
+import com.example.rma.service.InstitutionService;
 import com.example.rma.service.SubdivisionService;
 import com.example.rma.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +33,9 @@ public class SubdivisionController {
     private EnterpriseService enterpriseService;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private InstitutionService institutionService;
 
 
 
@@ -88,6 +95,19 @@ public class SubdivisionController {
         model.addAttribute("subdivisionModelId", subdivision.getId());
 
         return "subdivisionForm";
+    }
+
+    @GetMapping("/subdivisionEnterprise/{enterprise}/employee/{subdivision}")
+    public String getEmployeeBySubdivision(@PathVariable(name = "enterprise") Enterprise enterprise,
+                                           @PathVariable(name = "subdivision") Subdivision subdivision,
+                                           Model model,
+                                           Pageable pageable){
+        Page<InstitutionDto> institutionDtoList = institutionService.findInstitutionBySubdivision(subdivision, pageable);
+        model.addAttribute("enterprise", enterprise);
+        model.addAttribute("institutionDtoList", institutionDtoList);
+        model.addAttribute("url","/subdivisionEnterprise/" + enterprise.getId() +"/employee/" +subdivision.getId()   );
+
+        return "employeeList";
     }
 
 
@@ -160,7 +180,7 @@ public class SubdivisionController {
             getDataForError(enterprise, subdivision, model);
             return "subdivisionForm";
         }
-        return "redirect:/subdivisionEnterprise/" + enterprise.getId() ;
+        return "redirect:/subdivisionTree/" + enterprise.getId() ;
     }
 
 
@@ -200,7 +220,7 @@ public class SubdivisionController {
             return "subdivisionForm";
         }
 
-        return "redirect:/subdivisionEnterprise/" + enterprise.getId() ;
+        return "redirect:/subdivisionTree/" + enterprise.getId() ;
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("subdivisionEnterprise/{enterprise}/delete/{subdivision}")
@@ -215,7 +235,7 @@ public class SubdivisionController {
             getDataForError(enterprise, subdivision, model);
             return "subdivisionForm";
         }
-        return "redirect:/subdivisionEnterprise/" + enterprise.getId() ;
+        return "redirect:/subdivisionTree/" + enterprise.getId() ;
     }
 
 

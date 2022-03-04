@@ -5,6 +5,8 @@ import com.example.rma.domain.Institution;
 import com.example.rma.domain.bidRule.DealObject;
 import com.example.rma.domain.bidRule.State;
 import com.example.rma.domain.bidRule.dto.DealObjectDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +18,7 @@ public interface DealObjectRepo extends JpaRepository<DealObject, Long> {
 
     List<DealObject> findByResponsible(Institution responsible);
 
-    @Query("select new com.example.rma.domain.bidRule.dto.DealObjectDto(d) " +
+    @Query("select   new com.example.rma.domain.bidRule.dto.DealObjectDto(d, p, t) " +
             " from DealObject d " +
             " inner join Protocol p" +
             " on p.id = d.protocol " +
@@ -26,9 +28,11 @@ public interface DealObjectRepo extends JpaRepository<DealObject, Long> {
             "   and (d.author      = :author      or :author      = null)" +
             "   and (t.targetState = :state       or :state       = null)" +
             "   and (d.employee    = :employee    or :employee    = null)")
-    List<DealObjectDto> findDealObjectDtoByParam(@Param("responsible") Institution responsible,
+    Page<DealObjectDto> findDealObjectDtoByParam(@Param("responsible") Institution responsible,
                                                  @Param("author") Institution author,
                                                  @Param("state") State state,
-                                                 @Param("employee") Institution employee);
+                                                 @Param("employee") Institution employee,
+                                                 Pageable pageable
+                                                 );
 
 }

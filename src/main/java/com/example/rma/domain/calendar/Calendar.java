@@ -3,6 +3,7 @@ package com.example.rma.domain.calendar;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "tCalendar")
@@ -86,6 +87,11 @@ public class Calendar {
     public LocalDate getDateD() {
         return dateD;
     }
+
+    public String getDateS() {
+        return dateD.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+
 
     public void setDateD(LocalDate dateD) {
         this.dateD = dateD;

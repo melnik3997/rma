@@ -44,11 +44,14 @@ public class ScheduleController {
         List<WorkScheduleDto> workScheduleDtoList = workScheduleService.getScheduleByWeek(institution, date);
 
         model.addAttribute("workScheduleDtoList", workScheduleDtoList);
-        List<InstitutionDto> institutionDtoList = institutionService.findColleaguesByInstitution(institution);
+        List<InstitutionDto> institutionDtoList = institutionService.findColleaguesPositionByInstitution(institution);
         List<Institution> institutionList = institutionDtoList.stream().map(institutionDto -> institutionService.findInstitutionByInstitutionDto(institutionDto)).collect(Collectors.toList());
 
         institutionList.add(institution);
         List<InstitutionWorkScheduleDto> institutionWorkScheduleDtoList = workScheduleService.getInstitutionListScheduleByWeek(institutionList, date);
+        model.addAttribute("subdivision" , subdivisionService.findSubdivisionByInstitution(institution));
+
+        model.addAttribute("institution", institution);
 
         model.addAttribute("institutionWorkScheduleDtoList", institutionWorkScheduleDtoList);
 

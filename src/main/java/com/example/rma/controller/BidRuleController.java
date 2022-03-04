@@ -86,6 +86,7 @@ public class BidRuleController {
     @GetMapping(path = "/bidRule/{bidRule}/stateMachineList")
     public String getStateMachineList(@PathVariable BidRule bidRule,
                                       Model model){
+        model.addAttribute("enterprise", bidRule.getEnterprise());
 
         model.addAttribute("bidRule", bidRule);
         model.addAttribute("stateList", stateMachineService.findStateDtoByBidRule(bidRule));

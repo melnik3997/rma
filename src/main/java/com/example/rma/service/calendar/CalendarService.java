@@ -11,6 +11,8 @@ import com.example.rma.repository.calendar.CalendarEnterpriseRepo;
 import com.example.rma.repository.calendar.CalendarRepo;
 import com.example.rma.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -199,8 +201,8 @@ public class CalendarService {
         return calendarEnterpriseRepo.findByEnterpriseAndCalendarTypeAndActive(enterprise, calendarType, active);
     }
 
-    public List<CalendarEnterprise> findCalendarEnterpriseByEnterprise(Enterprise enterprise){
-        return calendarEnterpriseRepo.findByEnterprise(enterprise, Sort.by(Sort.Direction.DESC, "active","yearInt"));
+    public Page<CalendarEnterprise> findCalendarEnterpriseByEnterprise(Enterprise enterprise, Pageable pageable){
+        return calendarEnterpriseRepo.findByEnterprise(enterprise, pageable);
     }
 
     public List<Calendar> findByCalendarEnterprise (CalendarEnterprise calendarEnterprise){

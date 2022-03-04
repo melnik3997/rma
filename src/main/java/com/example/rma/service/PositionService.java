@@ -56,6 +56,10 @@ public class PositionService {
         return positionRepo.findMaxNumberByInstitutionId(institution.getId());
     }
 
+    public int countBySubdivisionAndActive(Subdivision subdivision, boolean active){
+        return positionRepo.countBySubdivisionAndActive(subdivision, active);
+    }
+
     public Map<String,String> save(Position position){
         Map<String, String> errors = new HashMap<>();
         boolean error = false;

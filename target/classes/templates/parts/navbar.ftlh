@@ -28,50 +28,58 @@ margin-right: .1rem;
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/main">Сообщения</a>
-            </li>
             <#if isAdmin>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Пользователи
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/user">Список пользователей</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/userCreate">Добавление пользователя</a>
-                </div>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Пользователи
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user">Список пользователей</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/userCreate">Добавление пользователя</a>
+                    </div>
+                </li>
+            </#if>
+            <#if isAdmin>
+                <li class="nav-item">
+                    <a class="nav-link" href="/enterprise">Предприятия</a>
+                </li>
+            </#if>
+            <#if isAdmin>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Настройки
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="/settings">Системные настройки</a></li>
+                        <li class="dropdown-divider"></li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#">Системные справочники</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="/post">Должности</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </#if>
+            <#if isAdmin>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calendar">Календарь</a>
+                </li>
+            </#if>
+            <li class="nav-item">
+                <a class="nav-link" href="/bid">Заявки</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/enterprise">Предприятия</a>
+                <a class="nav-link" href="/schedule">График работы</a>
             </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Настройки
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="/settings">Системные настройки</a></li>
-                    <li class="dropdown-divider"></li>
-                    <li class="dropdown-submenu">
-                        <a class="dropdown-item dropdown-toggle" href="#">Системные справочники</a>
-                        <ul class="dropdown-menu">
-                            <li> <a class="dropdown-item" href="/post">Должности</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </#if>
-        <li class="nav-item">
-            <a class="nav-link" href="/calendar">Календарь</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/bid">Заявки</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/schedule">График работы</a>
-        </li>
+            <#if isLieder>
+                <li class="nav-item">
+                    <a class="nav-link" href="/leaderPanel">Панель руководителя</a>
+                </li>
+            </#if>
         </ul>
         <form action='/findUserByLastName' class="form-inline my-2 my-lg-0" method="get" enctype='multipart/form-data'>
             <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search" name="userName" <#if findValue??>value="${findValue}" </#if> >

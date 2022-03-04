@@ -20,7 +20,7 @@ public class DealObjectDto {
     private List<Transition> availableTransitionList = new ArrayList<>();
     private List<Protocol> protocolList = new ArrayList<>();
 
-    public DealObjectDto(DealObject dealObject) {
+    public DealObjectDto(DealObject dealObject, Protocol protocol, Transition transition) {
         this.id = dealObject.getId();
         this.bidRule = dealObject.getBidRule();
         this.author = dealObject.getAuthor();

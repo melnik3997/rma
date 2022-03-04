@@ -2,6 +2,9 @@ package com.example.rma.domain.bidRule;
 
 import com.example.rma.exception.BusinessException;
 import com.example.rma.service.bid.LeaveEarlyService;
+import com.example.rma.service.bid.TimeOffService;
+import com.example.rma.service.bidRule.BidObjectService;
+import com.example.rma.service.bidRule.ProtocolService;
 import com.example.rma.service.bidRule.StateMachineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,15 +14,34 @@ import java.util.EnumSet;
 
 public enum ActionType {
 
-    VERIFY("верифицировать"),
-    CREATE("создать"),
+    VERIFY("верифицировать"){
+        @Override
+        public DealObject beforeDoTransition(DealObject dealObject, Transition transition) throws BusinessException {
+            switch (dealObject.getBidRule().getBidType()){
+                case TIME_OFF:
+                    dealObject = timeOffService.beforeDoTransitionVERIFY(dealObject, transition);
+                    break;
+            }
+            return dealObject;
+        }
+    },
+    CREATE("создать"){
+        @Override
+        public void rollbackAction(DealObject dealObject, Protocol protocol)throws BusinessException {
+            bidObjectService.delete(dealObject);
+            protocolService.delete(protocol);
+        }
+    },
     PROCESS("обработать"){
         @Override
-        public DealObject beforeDoTransition(DealObject dealObject, Transition transition) {
+        public DealObject beforeDoTransition(DealObject dealObject, Transition transition) throws BusinessException {
 
             switch (dealObject.getBidRule().getBidType()){
                 case LEAVE_EARLY:
-                    leaveEarlyService.beforeDoTransitionProcess(dealObject,transition);
+                    dealObject = leaveEarlyService.beforeDoTransitionProcess(dealObject,transition);
+                    break;
+                case TIME_OFF:
+                    dealObject = timeOffService.beforeDoTransitionPROCESS(dealObject, transition);
                     break;
             }
             return dealObject;
@@ -31,7 +53,7 @@ public enum ActionType {
 
             switch (dealObject.getBidRule().getBidType()){
                 case LEAVE_EARLY:
-                    leaveEarlyService.beforeDoTransitionClose(dealObject,transition);
+                    dealObject = leaveEarlyService.beforeDoTransitionClose(dealObject,transition);
                     break;
             }
 
@@ -43,6 +65,12 @@ public enum ActionType {
     private final String name;
 
     public LeaveEarlyService leaveEarlyService;
+
+    public BidObjectService bidObjectService;
+
+    public ProtocolService protocolService;
+
+    public TimeOffService timeOffService;
 
     ActionType(String name) {
         this.name = name;
@@ -60,8 +88,24 @@ public enum ActionType {
         return dealObject;
     }
 
+    public void rollbackAction(DealObject dealObject, Protocol protocol) throws BusinessException{
+
+    }
+
     public void setLeaveEarlyService(LeaveEarlyService leaveEarlyService) {
         this.leaveEarlyService = leaveEarlyService;
+    }
+
+    public void setBidObjectService(BidObjectService bidObjectService) {
+        this.bidObjectService = bidObjectService;
+    }
+
+    public void setProtocolService(ProtocolService protocolService) {
+        this.protocolService = protocolService;
+    }
+
+    public void setTimeOffService(TimeOffService timeOffService) {
+        this.timeOffService = timeOffService;
     }
 
     @Component
@@ -69,10 +113,23 @@ public enum ActionType {
         @Autowired
         private LeaveEarlyService leaveEarlyService;
 
+        @Autowired
+        private BidObjectService bidObjectService;
+
+        @Autowired
+        private ProtocolService protocolService;
+
+        @Autowired
+        private TimeOffService timeOffService;
+
         @PostConstruct
         public void postConstruct() {
-            for (ActionType rt : EnumSet.allOf(ActionType.class))
+            for (ActionType rt : EnumSet.allOf(ActionType.class)) {
                 rt.setLeaveEarlyService(leaveEarlyService);
+                rt.setBidObjectService(bidObjectService);
+                rt.setProtocolService(protocolService);
+                rt.setTimeOffService(timeOffService);
+            }
         }
     }
 }

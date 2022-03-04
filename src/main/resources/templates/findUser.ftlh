@@ -1,7 +1,8 @@
 <#import "parts/common.ftlh" as c >
+<#import "parts/pager.ftlh" as p>
 <@c.page>
 <div class="card-columns">
-    <#list institutions as institution>
+    <#list institutions.content as institution>
     <div class="card my-3">
         <#if institution.fileName??>
         <img class="card-img-top" src="/img/${institution.fileName}">
@@ -27,4 +28,5 @@
 Данные не найдены
 </#list>
 </div>
+    <@p.pager institutions url />
 </@c.page>
