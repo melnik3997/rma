@@ -36,7 +36,9 @@ public class ActuallyWorkService {
     public ActuallyWork create(ActuallyWork actuallyWork) throws BusinessException {
 
         double sum = getSumByInstitutionAndCalendar(actuallyWork.getInstitution(), actuallyWork.getCalendar());
-
+        if(calendarService.checkCalendarClose(actuallyWork.getCalendar())){
+            throw new BusinessException("День закрыт");
+        }
         if(actuallyWork.getTime() <= 0)
             throw new BusinessException("Не корректное значение отработанных часов");
 
@@ -60,16 +62,33 @@ public class ActuallyWorkService {
         return byInstitutionAndCalendar.stream().mapToDouble(ActuallyWork::getTime).sum();
     }
 
-    public InstitutionDto setSumActToInstitutionDtoForForToday (InstitutionDto institutionDto) {
+    public Double[] getSumByInstitutionAndCalendar(Institution institution, List<Calendar> calendarList){
+        Double[] sumArr = new Double[calendarList.size()];
 
+        for (int i = 0; i < calendarList.size(); i++) {
+            sumArr[i] = getSumByInstitutionAndCalendar(institution, calendarList.get(i));
+        }
+        return sumArr;
+    }
+
+    public InstitutionDto setSumActToInstitutionDto(InstitutionDto institutionDto, Calendar calendar) {
         Institution institution = institutionService.findInstitutionByInstitutionDto(institutionDto);
-        Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
         institutionDto.setSumActualluWork(getSumByInstitutionAndCalendar(institution, calendar ));
         return institutionDto;
     }
 
-    public List<InstitutionDto> setSumActToListInstitutionDtoForForToday (List<InstitutionDto> institutionDtoList) {
-        return institutionDtoList.stream().map(i -> i = setSumActToInstitutionDtoForForToday(i) ).collect(Collectors.toList());
+    public InstitutionDto setSumActToInstitutionDtoForToday(InstitutionDto institutionDto) {
+        Institution institution = institutionService.findInstitutionByInstitutionDto(institutionDto);
+        Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
+        return setSumActToInstitutionDto(institutionDto, calendar);
+    }
+
+    public List<InstitutionDto> setSumActToListInstitutionDtoForToday(List<InstitutionDto> institutionDtoList) {
+        return institutionDtoList.stream().map(i -> i = setSumActToInstitutionDtoForToday(i) ).collect(Collectors.toList());
+    }
+
+    public List<InstitutionDto> setSumActToListInstitutionDto(List<InstitutionDto> institutionDtoList, Calendar calendar) {
+        return institutionDtoList.stream().map(i -> i = setSumActToInstitutionDto(i, calendar) ).collect(Collectors.toList());
     }
 
 

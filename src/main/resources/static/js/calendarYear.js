@@ -110,7 +110,7 @@ template:
                             '<th style="width: 12%" class="text-center">Вс</th>'+
                         '</tr>'+
                     '</thead>'+
-                    '<week-list :key="mouth.number" :key = "componentKey" :weekList = "mouth.weekList" :selectMethod = "select" />'+
+                    '<week-list :key="mouth.number + componentKey"  :weekList = "mouth.weekList" :selectMethod = "select" />'+
                  '</table>'+
              '</div>'+
          '</div>'+

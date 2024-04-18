@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@RestController
 @Controller
 public class BidController {
 
@@ -62,8 +62,6 @@ public class BidController {
                          @RequestParam(name = "author", required = false) Institution author,
                          Model model,
                          @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable,
-                         RedirectAttributes redirectAttributes,
-                         @RequestHeader(required = false) String referer,
                          HttpServletRequest request){
         Page<DealObjectDto> dealObjectList ;
         Institution institution = userService.findInstitutionByUser(principal);

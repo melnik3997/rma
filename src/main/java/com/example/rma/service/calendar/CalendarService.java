@@ -2,18 +2,23 @@ package com.example.rma.service.calendar;
 
 import com.example.rma.domain.Enterprise;
 import com.example.rma.domain.Institution;
+import com.example.rma.domain.PresenceWork;
 import com.example.rma.domain.calendar.*;
 import com.example.rma.domain.calendar.Calendar;
 import com.example.rma.domain.calendar.dto.Day;
 import com.example.rma.domain.calendar.dto.Month;
 import com.example.rma.domain.calendar.dto.Week;
+import com.example.rma.exception.BusinessException;
+import com.example.rma.repository.calendar.CalendarCloseRepo;
 import com.example.rma.repository.calendar.CalendarEnterpriseRepo;
 import com.example.rma.repository.calendar.CalendarRepo;
+import com.example.rma.service.PresenceWorkService;
 import com.example.rma.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -34,6 +39,12 @@ public class CalendarService {
 
     @Autowired
     private SettingsService settingsService;
+
+    @Autowired
+    private CalendarCloseRepo calendarCloseRepo;
+
+    @Autowired
+    private PresenceWorkService presenceWorkService;
 
 
     public List<LocalDate> getDateForYear(String year){
@@ -312,6 +323,7 @@ public class CalendarService {
         CalendarEnterprise calendarEnterprise = findCalendarEnterpriseByInstitution(institution);
         return calendarRepo.findByCalendarEnterpriseAndDateD(calendarEnterprise, date);
     }
+
     public Calendar findCalendarByDateAndInstitution(Institution institution, LocalDate date){
         if(date == null){
             return null;
@@ -323,6 +335,11 @@ public class CalendarService {
     public CalendarEnterprise findCalendarEnterpriseByInstitution(Institution institution){
         return findByEnterpriseAndCalendarTypeAndActive(institution.getEnterprise(), CalendarType.getDefault(), true);
     }
+
+    public CalendarEnterprise findCalendarEnterpriseByEnterprise(Enterprise enterprise){
+        return findByEnterpriseAndCalendarTypeAndActive(enterprise, CalendarType.getDefault(), true);
+    }
+
 
     public Calendar findCalendarById(Long id){
         return  calendarRepo.findById(id).orElse(null);
@@ -341,4 +358,48 @@ public class CalendarService {
     public void saveAll(List<Calendar> calendarList){
         calendarRepo.saveAll(calendarList);
     }
+
+    public List<Calendar> getCalenderListWeekByDay(CalendarEnterprise calendarEnterprise, LocalDate date){
+        WeekFields weekFields = WeekFields.ISO;
+        //находим номер недели
+        int numberWeek = date.get(weekFields.weekOfWeekBasedYear());
+        //ноходим дни в календаре в текущей неделе
+        return  findByCalendarEnterpriseAndNumberWeek(calendarEnterprise, numberWeek);
+    }
+
+
+    private CalendarClose calendarCloseSave(CalendarClose calendarClose){
+        return calendarCloseRepo.save(calendarClose);
+    }
+
+    public CalendarClose calendarCloseCreate(CalendarClose calendarClose) throws BusinessException {
+        Calendar calendar = calendarClose.getCalendar();
+
+        if(checkCalendarClose(calendar)){
+            throw new BusinessException("День уже закрыт");
+        }
+        if(!calendarClose.getInstitution().getUser().isManager()){
+            throw new BusinessException("Закрыть день может только управляющий организацией");
+        }
+        presenceWorkService.closePresenceWorkByCalendar(calendar);
+        calendarCloseSave(calendarClose);
+        return calendarClose;
+    }
+
+    public boolean checkCalendarClose(Calendar calendar){
+        return findCalendarCloseByCalendar(calendar) != null;
+    }
+
+
+    public CalendarClose findCalendarCloseByCalendar(Calendar calendar){
+        return calendarCloseRepo.findByCalendar(calendar);
+    }
+
+    public Page<CalendarCloseDto> findByCalendarEnterpriseAndDateBeginAndDateEnd(CalendarEnterprise calendarEnterprise,
+                                                                                 LocalDate dateBegin,
+                                                                                 LocalDate dateEnd,
+                                                                                 Pageable pageable){
+        return calendarCloseRepo.findByCalendarEnterpriseAndDateBeginAndDateEnd(calendarEnterprise, dateBegin, dateEnd, pageable);
+    }
+
 }

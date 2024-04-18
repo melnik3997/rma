@@ -52,6 +52,8 @@ public class User implements UserDetails {
         return role.contains(Role.LIEDER);
     }
 
+    public boolean isManager(){return role.contains(Role.MANAGER);}
+
     public Long getId() {
         return id;
     }

@@ -113,14 +113,11 @@ public class WorkScheduleService {
     }
 
     public List<WorkScheduleDto> getScheduleByWeek(Institution institution, LocalDate date){
-        WeekFields weekFields = WeekFields.ISO;
         List<WorkScheduleDto> workScheduleDtoList = new ArrayList<>();
         //находим рабочий календарь по дате
         CalendarEnterprise calendarEnterprise = calendarService.findByEnterpriseAndCalendarTypeAndYear(institution.getEnterprise(), CalendarType.getDefault(), date.getYear());
-        //находим номер недели
-        int numberWeek = date.get(weekFields.weekOfWeekBasedYear());
         //ноходим дни в календаре в текущей неделе
-        List<Calendar> calendarList = calendarService.findByCalendarEnterpriseAndNumberWeek(calendarEnterprise, numberWeek);
+        List<Calendar> calendarList = calendarService.getCalenderListWeekByDay(calendarEnterprise, date);
         //находим график работы сотпрудников
         WorkSchedule workSchedule = findActiveByInstitution(institution);
         //находим корректровки по необходимым дням
@@ -202,6 +199,16 @@ public class WorkScheduleService {
         Institution institution = institutionService.findInstitutionByInstitutionDto(institutionDto);
         institutionDto.setWorkScheduleDto(getWorkScheduleDtoForToday(institution));
         return institutionDto;
+    }
+
+    public InstitutionDto setWorkScheduleToInstitutionDto(InstitutionDto institutionDto, Calendar calendar){
+        Institution institution = institutionService.findInstitutionByInstitutionDto(institutionDto);
+        institutionDto.setWorkScheduleDto(getWorkScheduleDtoForToday(calendar, institution));
+        return institutionDto;
+    }
+
+    public List<InstitutionDto> setWorkScheduleListToInstitutionDto(List<InstitutionDto> institutionDtoList, Calendar calendar){
+        return institutionDtoList.stream().map(i -> i = setWorkScheduleToInstitutionDto(i, calendar) ).collect(Collectors.toList());
     }
 
     public List<InstitutionDto> setWorkScheduleListToInstitutionDtoForToDay(List<InstitutionDto> institutionDtoList){

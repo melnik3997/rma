@@ -162,7 +162,7 @@ public class InstitutionDto {
     }
 
     public Double getWorkScheduleDtoWorkTime() {
-        return workScheduleDto == null ? null: workScheduleDto.getWorkTime();
+        return workScheduleDto == null ? 0 : workScheduleDto.getWorkTime();
     }
 
     public Double getWorkScheduleDtoLunchBreak() {
@@ -204,6 +204,18 @@ public class InstitutionDto {
 
     public void setSumActualluWork(double sumActualluWork) {
         this.sumActualluWork = sumActualluWork;
+    }
+
+    public Double getWorkTime() {
+        return this.workScheduleDto == null ? 0 : workScheduleDto.getWorkTime();
+    }
+
+    public Double getObligatoryWorkTime() {
+        return this.workScheduleDto == null ? 0 : workScheduleDto.getObligatoryWorkTime();
+    }
+
+    public boolean isNormActualWork() {
+        return this.getSumActualluWork() >= getObligatoryWorkTime();
     }
 
     @Override

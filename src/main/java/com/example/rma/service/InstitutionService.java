@@ -1,5 +1,6 @@
 package com.example.rma.service;
 
+import com.example.rma.domain.Enterprise;
 import com.example.rma.domain.Institution;
 import com.example.rma.domain.Position;
 import com.example.rma.domain.Subdivision;
@@ -148,10 +149,23 @@ public class InstitutionService {
 
     public List<InstitutionDto> enrichmentInstitutionDto(List<InstitutionDto> institutionDtoList){
         institutionDtoList = workScheduleService.setWorkScheduleListToInstitutionDtoForToDay(institutionDtoList);
-        institutionDtoList = presenceWorkService.setPresenceWorkTimeSumListToInstitutionDtoForForToday(institutionDtoList);
+        institutionDtoList = presenceWorkService.setPresenceWorkTimeSumListToInstitutionDtoForToday(institutionDtoList);
         institutionDtoList = presenceWorkService.setPresenceInfoListToInstitutionDtoForForToday(institutionDtoList);
-        institutionDtoList = actuallyWorkService.setSumActToListInstitutionDtoForForToday(institutionDtoList);
+        institutionDtoList = actuallyWorkService.setSumActToListInstitutionDtoForToday(institutionDtoList);
 
         return institutionDtoList;
     }
+
+    public List<InstitutionDto> findInstitutionDtoListByInstitutions(List<Institution> institutionList){
+        List<InstitutionDto> institutionDtoList = new ArrayList<>();
+        for (Institution institution: institutionList) {
+            institutionDtoList.add(findInstitutionDtoByInstitution(institution));
+        }
+        return institutionDtoList;
+    }
+
+    public List<Institution> findInstitutionByEnterprise(Enterprise enterprise){
+        return institutionRepo.findByEnterprise(enterprise);
+    }
+
 }

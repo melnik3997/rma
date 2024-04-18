@@ -8,6 +8,7 @@
         name = user.getUsername()
         isAdmin = user.isAdmin()
         isLieder = user.isLieder()
+        isManager = user.isManager()
         isAut = true
     >
 
@@ -16,6 +17,7 @@
         name = "unknown"
         isAdmin = false
         isLieder = false
+        isManager = false
         isAut = false
     >
 </#if>

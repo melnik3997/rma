@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,6 +60,9 @@ public class PresenceWorkService {
      */
     public PresenceWork action(Institution institution, LocalTime time) throws BusinessException {
         Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
+        if(calendarService.checkCalendarClose(calendar)){
+            throw new BusinessException("День закрыт");
+        }
         // ищем текущую запись
         PresenceWork presenceWork = getActiveNow(institution);
         if (presenceWork == null){
@@ -123,15 +127,26 @@ public class PresenceWorkService {
         return i;
     }
 
-    public List<InstitutionDto> setPresenceWorkTimeSumListToInstitutionDtoForForToday (List<InstitutionDto> institutionDtoList) {
-        return institutionDtoList.stream().map(i -> i = setPresenceWorkTimeSumToInstitutionDtoForForToday(i) ).collect(Collectors.toList());
+    public List<InstitutionDto> setPresenceWorkTimeSumListToInstitutionDtoForToday(List<InstitutionDto> institutionDtoList) {
+        return institutionDtoList.stream().map(i -> i = setPresenceWorkTimeSumToInstitutionDtoForToday(i) ).collect(Collectors.toList());
     }
 
-    public InstitutionDto setPresenceWorkTimeSumToInstitutionDtoForForToday (InstitutionDto institutionDto) {
+    public InstitutionDto setPresenceWorkTimeSumToInstitutionDtoForToday(InstitutionDto institutionDto) {
         Institution institution = institutionService.findInstitutionByInstitutionDto(institutionDto);
         institutionDto.setPresenceWorkTimeSum(getPresenceWorkTimeSumForToday(institution));
         return institutionDto;
     }
+
+    public InstitutionDto setPresenceWorkTimeSumToInstitutionDto(InstitutionDto institutionDto, Calendar calendar) {
+        Institution institution = institutionService.findInstitutionByInstitutionDto(institutionDto);
+        institutionDto.setPresenceWorkTimeSum(getPresenceWorkTimeSum(institution, calendar));
+        return institutionDto;
+    }
+
+    public List<InstitutionDto> setPresenceWorkTimeSumListToInstitutionDto(List<InstitutionDto> institutionDtoList, Calendar calendar) {
+        return institutionDtoList.stream().map(i -> i = setPresenceWorkTimeSumToInstitutionDto(i, calendar) ).collect(Collectors.toList());
+    }
+
     public double getPresenceWorkTimeSumForToday (Institution institution) {
 
         Calendar calendar = calendarService.findCalendarByNowDateAndInstitution(institution);
@@ -139,15 +154,45 @@ public class PresenceWorkService {
     }
 
     public double getPresenceWorkTimeSum (Institution institution, Calendar calendar) {
-
         double sumTime = 0D;
         List<PresenceWork> presenceWorkList =getByInstitutionAndCalendar(institution, calendar);
+        boolean today = calendar.getDateD().equals(LocalDate.now());
 
         for (PresenceWork presenceWork: presenceWorkList) {
-            long duration = Duration.between(presenceWork.getTimeBegin(), presenceWork.getTimeFinish() == null ? LocalTime.now() : presenceWork.getTimeFinish()).getSeconds();
+            long duration = Duration.between(presenceWork.getTimeBegin(), presenceWork.getTimeFinish() == null ?
+                    today? LocalTime.now() : presenceWork.getTimeBegin()
+                    : presenceWork.getTimeFinish()).getSeconds();
             sumTime = sumTime +  duration / 60.0 /60.0 ;
         }
-        System.out.println("sumTime " + sumTime);
         return sumTime;
     }
+
+    public Double[] getPresenceWorkTimeSumByCalenderList(Institution institution, List<Calendar> calendarList){
+        Double[] sums = new Double[calendarList.size()];
+        for (int i = 0; i < calendarList.size(); i++) {
+            sums[i] = getPresenceWorkTimeSum(institution, calendarList.get(i));
+        }
+        return sums;
+    }
+
+    public List<PresenceWork> findByCalendarAndTimeFinish(Calendar calendar, LocalTime timeFinish){
+        return presenceWorkRepo.findByCalendarAndTimeFinish(calendar, timeFinish);
+    }
+
+    public List<PresenceWork> findNotCloseByCalendar(Calendar calendar){
+        return findByCalendarAndTimeFinish(calendar, null);
+    }
+
+
+    public void closePresenceWorkByCalendar(Calendar calendar) throws BusinessException {
+        List<PresenceWork> presenceWorkList = findNotCloseByCalendar(calendar);
+        for (PresenceWork presenceWork: presenceWorkList) {
+            close(presenceWork, presenceWork.getTimeBegin());
+        }
+        presenceWorkRepo.saveAll(presenceWorkList);
+    }
+
+
+
+
 }

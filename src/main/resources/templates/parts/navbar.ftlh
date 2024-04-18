@@ -80,6 +80,11 @@ margin-right: .1rem;
                     <a class="nav-link" href="/leaderPanel">Панель руководителя</a>
                 </li>
             </#if>
+            <#if isManager>
+                <li class="nav-item">
+                    <a class="nav-link" href="/managerPanel">Управление организацией</a>
+                </li>
+            </#if>
         </ul>
         <form action='/findUserByLastName' class="form-inline my-2 my-lg-0" method="get" enctype='multipart/form-data'>
             <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search" name="userName" <#if findValue??>value="${findValue}" </#if> >

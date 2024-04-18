@@ -110,7 +110,7 @@ data: function(){
 )
 
 Vue.component('ActuallyWorkListItem',{
-        props: ['actuallyWork', 'setErrorMess', 'openActuallyWork'],
+        props: ['actuallyWork', 'setErrorMess', 'openActuallyWork', 'getRemainderActuallyWork'],
         template:
             '<tr>'+
                 '<td>{{actuallyWork.theme}}</td>'+
@@ -126,6 +126,7 @@ Vue.component('ActuallyWorkListItem',{
             this.$http.post('/deleteActuallyWork',   this.actuallyWork ).then(result=>
                 result.json().then(data => {
                     this.openActuallyWork();
+                    this.getRemainderActuallyWork();
                 })
             ).catch(error => {
                 this.setErrorMess(error.bodyText)
@@ -137,7 +138,7 @@ Vue.component('ActuallyWorkListItem',{
 )
 
 Vue.component('ActuallyWorkList',{
-        props: ['actuallyWorkList', 'openActuallyWork'],
+        props: ['actuallyWorkList', 'openActuallyWork', 'getRemainderActuallyWork'],
         template:
             '<div class="modal fade bd-example-modal-lg" id="actuallyWorkListModal" tabindex="-1" role="dialog" aria-labelledby="actuallyWorkListModalLabel" aria-hidden="true">'+
             '<div class="modal-dialog modal-lg" role="document">'+
@@ -150,7 +151,7 @@ Vue.component('ActuallyWorkList',{
             '</div>'+
             '<div class="modal-body">'+
             '<div v-if="errorMess != null " class="alert alert-warning alert-dismissible fade show" role="alert">'+
-            '<strong>{{errorMess}}'+
+            '<strong>{{errorMess}} </strong>'+
             '<button type="button" @click = "closeError" class="close" data-dismiss="alert" aria-label="Close">'+
             '<span aria-hidden="true">&times;</span>'+
             '</button>'+
@@ -165,7 +166,7 @@ Vue.component('ActuallyWorkList',{
                 '</tr>'+
                 '</thead>'+
                 '<tbody v-if ="actuallyWorkList != null">'+
-                    '<ActuallyWorkListItem v-for="actuallyWork in actuallyWorkList" :key = "actuallyWork.id" :actuallyWork = "actuallyWork" :setErrorMess = "setErrorMess" :openActuallyWork ="openActuallyWork">'+
+                    '<ActuallyWorkListItem v-for="actuallyWork in actuallyWorkList" :key = "actuallyWork.id" :actuallyWork = "actuallyWork" :setErrorMess = "setErrorMess" :openActuallyWork ="openActuallyWork" :getRemainderActuallyWork = "getRemainderActuallyWork">'+
                     '</ActuallyWorkListItem>'+
                 '</tbody>'+
             '</table>'+
@@ -198,7 +199,7 @@ template:
 '<div>'+
     '<div class="container">'+
         '<div v-if="errorMess != null " class="alert alert-warning alert-dismissible fade show" role="alert">'+
-          '<strong>{{errorMess}}'+
+          '<strong>{{errorMess}} </strong>'+
           '<button type="button" @click = "closeError" class="close" data-dismiss="alert" aria-label="Close">'+
             '<span aria-hidden="true">&times;</span>'+
           '</button>'+
@@ -221,7 +222,7 @@ template:
                            '<th style="width: 12%" class="text-center">Вс</th>'+
                        '</tr>'+
                    '</thead>'+
-                   '<week-list :key="mouth.number" :key = "componentKey" :weekList = "mouth.weekList" :selectMethod = "select" :dayNow = "dayNow" />'+
+                   '<week-list :key="mouth.number + componentKey"  :weekList = "mouth.weekList" :selectMethod = "select" :dayNow = "dayNow" />'+
                 '</table>'+
                 '<div  v-if = "workScheduleDay != null" class="card">'+
                     '<ul class="list-group list-group-flush">'+
@@ -292,7 +293,7 @@ template:
          '</div>'+
     '</div>'+
     '<ActuallyWork :methodSave = "ActuallyWorkSave"> </ActuallyWork>'+
-    '<ActuallyWorkList :actuallyWorkList = "actuallyWorkList"  :openActuallyWork = "openActuallyWork"> </ActuallyWorkList>'+
+    '<ActuallyWorkList :actuallyWorkList = "actuallyWorkList"  :openActuallyWork = "openActuallyWork" :getRemainderActuallyWork = "getRemainderActuallyWork"> </ActuallyWorkList>'+
 '</div>',
     created: function(){
                 calendarAPI.get().then(result=>
